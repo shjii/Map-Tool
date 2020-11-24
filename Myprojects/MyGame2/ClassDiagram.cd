@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="myWin" Collapsed="true">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAgAAAgAAAAAAQAAAgAAgQ=</HashCode>
+      <FileName>myWin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="main" Collapsed="true">
+    <Position X="0.75" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="Core">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="0.058" Y="0.175" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>main.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TImer" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>TImer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core" Collapsed="true">
+    <Position X="0.75" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="myWin">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="0.068" Y="0.102" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAQAAAAAAAAAAAAAAAABACABCIAAM=</HashCode>
+      <FileName>Core.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

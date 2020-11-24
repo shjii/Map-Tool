@@ -1,0 +1,33 @@
+4
+
+0 //BACKGROUND
+../../data/bitmap/kgcabk.bmp
+nullptr
+0 0
+-1 -1 -1 -1
+-1 -1
+0 255 0 255
+
+300 //UICONTROL
+../../data/bitmap/go.bmp
+nullptr
+400 0
+-1 -1 -1 -1
+-1 -1
+1 255 0 255
+
+300 //UICONTROL
+../../data/bitmap/font.bmp
+nullptr
+100 100
+-1 -1 -1 -1
+-1 -1
+1 255 0 255
+
+300 //UICONTROL
+../../data/bitmap/go.bmp
+nullptr
+0 300
+-1 -1 -1 -1
+-1 -1
+1 255 0 255

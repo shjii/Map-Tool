@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="main" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAEAAAAEAAAAAAARACABAAAAE=</HashCode>
+      <FileName>main.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sGameUser" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>sGameUser.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sNpcObject" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>sNpcObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sObject" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAiAAgBICCAAAAEBAAAAAAAgBAABACgRAAAAE=</HashCode>
+      <FileName>sObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sUserInterface" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAIAAA=</HashCode>
+      <FileName>sUserInterface.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sButton" Collapsed="true">
+    <Position X="5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAE=</HashCode>
+      <FileName>sUserInterface.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sScene" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAgQAIAAAAAAAAAAAEKAAAAAAAQAAAABACABBAAAE=</HashCode>
+      <FileName>sScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sCollision" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>sCollision.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sSceneInGame" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>sSceneInGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sSceneIntro" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>sSceneIntro.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sSceneLobby" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>sSceneLobby.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="sObjAttribute" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAEABiAAAAAAIgACBAAAAAAAAAAAAAABEA=</HashCode>
+      <FileName>sObject.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="sObjectType" Collapsed="true">
+    <Position X="7.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAEAAAAEAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>sObject.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

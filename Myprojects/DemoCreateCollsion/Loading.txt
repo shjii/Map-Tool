@@ -1,0 +1,23 @@
+2
+
+300 //BACKGROUND
+../../data/bitmap/Loading800x600.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+0 0
+-1 -1 -1 -1
+-1 -1
+0 255 0 255
+
+301 //BUTTON & UICONTROL
+../../data/bitmap/main_start_nor.bmp
+../../data/bitmap/main_start_pus.bmp
+../../data/bitmap/main_start_sel.bmp
+../../data/bitmap/main_start_dis.bmp
+nullptr
+233 400
+-1 -1 -1 -1
+-1 -1
+0 255 255 255

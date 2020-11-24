@@ -1,0 +1,11 @@
+﻿  main.cpp
+c:\users\kgca39a\desktop\sjh\myprojects\testm\main.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sCore.h': No such file or directory
+  sSceneEnd.cpp
+c:\users\kgca39a\desktop\sjh\myprojects\testm\ssceneend.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sScene.h': No such file or directory
+  sSceneInGame.cpp
+c:\users\kgca39a\desktop\sjh\myprojects\testm\ssceneingame.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sScene.h': No such file or directory
+  sSceneIntro.cpp
+c:\users\kgca39a\desktop\sjh\myprojects\testm\ssceneintro.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sScene.h': No such file or directory
+  sSceneLobby.cpp
+c:\users\kgca39a\desktop\sjh\myprojects\testm\sscenelobby.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sScene.h': No such file or directory
+  코드를 생성하고 있습니다...

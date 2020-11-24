@@ -1,0 +1,12 @@
+1
+
+300 BACKGROUND
+../../data/bitmap/in.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+100 50
+1517	244	319	192
+961 528
+0 255 0 255

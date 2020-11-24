@@ -1,0 +1,12 @@
+1
+
+300 BACKGROUND
+../../data/bitmap/END.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+0 0
+-1 -1 -1 -1
+-1 -1
+0 255 0 255

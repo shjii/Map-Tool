@@ -1,0 +1,34 @@
+3
+
+300 //BACKGROUND
+../../data/bitmap/kgcabk.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+0 0
+-1 -1 -1 -1
+-1 -1
+0 255 0 255
+
+301 //UICONTROL
+../../data/bitmap/go.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+400 0
+-1 -1 -1 -1
+-1 -1
+1 255 0 255
+
+301 //BUTTON & UICONTROL
+../../data/bitmap/main_start_nor.bmp
+../../data/bitmap/main_start_pus.bmp
+../../data/bitmap/main_start_sel.bmp
+../../data/bitmap/main_start_dis.bmp
+nullptr
+233 400
+-1 -1 -1 -1
+-1 -1
+0 255 255 255

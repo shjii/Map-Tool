@@ -1,0 +1,122 @@
+11
+
+300 BACKGROUND_LOBBY
+../../data/bitmap/LOb.bmp
+nullptr
+../../data/bitmap/main_start_sel.bmp
+nullptr
+nullptr
+0 5
+3	117	302	215
+1280 680
+0 255 0 255
+
+300 BACKGROUND_LOBBY
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+80 190
+309	2	266	121
+1130	400
+1 255 0 255
+
+300 MarcoW
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+310	126	64	120
+268	400
+1 255 0 255
+
+300 eriW
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+377	126	64	120
+268	400
+1 255 0 255
+
+300 TarmaW
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+444	126	64	120
+268	400
+1 255 0 255
+
+300 FioW
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+511	126	64	120
+268	400
+1 255 0 255
+
+300 MarcoC
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+310	249	64	120
+268	400
+1 255 0 255
+
+300 EriC
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+377	249	64	120
+268	400
+1 255 0 255
+
+300 TarmaC
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+444	249	64	120
+268	400
+1 255 0 255
+
+300 FioC
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+511	249	64	120
+268	400
+1 255 0 255
+
+300 P1
+../../data/bitmap/LOb.bmp
+nullptr
+nullptr
+nullptr
+nullptr
+1000 1000
+12	45	34	19
+130	50
+1 255 0 255
