@@ -103,6 +103,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetWork", "NetWork", "{615D
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketkeySample", "SocketkeySample\SocketkeySample.vcxproj", "{43B69561-FAAD-46E7-B5C4-FD692FB1DA73}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SeocketEcho", "SeocketEcho\SeocketEcho.vcxproj", "{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -543,6 +545,16 @@ Global
 		{43B69561-FAAD-46E7-B5C4-FD692FB1DA73}.Release|x64.Build.0 = Release|x64
 		{43B69561-FAAD-46E7-B5C4-FD692FB1DA73}.Release|x86.ActiveCfg = Release|Win32
 		{43B69561-FAAD-46E7-B5C4-FD692FB1DA73}.Release|x86.Build.0 = Release|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Debug|x64.ActiveCfg = Debug|x64
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Debug|x64.Build.0 = Debug|x64
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Debug|x86.ActiveCfg = Debug|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Debug|x86.Build.0 = Debug|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Release|x64.ActiveCfg = Release|x64
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Release|x64.Build.0 = Release|x64
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Release|x86.ActiveCfg = Release|Win32
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -593,6 +605,7 @@ Global
 		{A30660A6-9EC3-4D3D-82AD-01D9579ACECC} = {421144B9-1994-459F-AAC9-A1D1235EEE89}
 		{C300D24C-C33B-43B0-8F6F-3A37D3D62EF6} = {21C65776-340C-4FA5-8E91-CD320DCDF439}
 		{43B69561-FAAD-46E7-B5C4-FD692FB1DA73} = {615D3E82-92B6-4EAC-B987-FC221C616435}
+		{386B2CD5-40F3-4EF7-9BEB-EDE29F79F0EF} = {615D3E82-92B6-4EAC-B987-FC221C616435}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E7D3EC00-4913-4E48-AD17-8F2CE34B8846}
