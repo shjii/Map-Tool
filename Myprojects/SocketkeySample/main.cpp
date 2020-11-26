@@ -68,7 +68,7 @@ void main()
 		//vector<sMsg> recvlist;
 		char recvBuf[10000] = { 0, };
 
-		while (e - s < 1000 && bConnect)
+		while (e - s < 10000 && bConnect)
 		{
 			while (iSendSize < iPacketSize)
 			{
@@ -97,7 +97,7 @@ void main()
 				if (sizeof(sMsg) == iRecvSize)
 				{
 					memcpy(&msg, recvBuf, sizeof(msg));
-					printf("%n%d : %s", msg.iCnt, msg.buffer);
+					printf("\n%d : %s", msg.iCnt, msg.buffer);
 				}
 			}
 			iRecvSize = 0;

@@ -54,8 +54,8 @@ void main()
 		return;
 	}
 
-	// 다수 프로세스에서 ip & port 재사용 가능
-	// SO_EXCLUSIVEADDRUSE 와 SO_REUSEADDR 동시 사용 불가 // 먼저 사용된 설정만 사용됨.
+	 //다수 프로세스에서 ip & port 재사용 가능
+	 //SO_EXCLUSIVEADDRUSE 와 SO_REUSEADDR 동시 사용 불가 // 먼저 사용된 설정만 사용됨.
 	//iRet = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval));
 	//if (iRet == SOCKET_ERROR)
 	//{
@@ -119,7 +119,8 @@ void main()
 			}
 			while (iSendSize < iPacketSize && bConnect)
 			{
-				iSendSize += recv(Client, recvBuf, iPacketSize - iSendSize, 0);
+				memcpy(&msg, recvBuf, sizeof(sMsg));
+				iSendSize += send(Client, recvBuf, iPacketSize - iSendSize, 0);
 				if (iSendSize == 0 || iSendSize == SOCKET_ERROR)
 				{
 					bConnect = false;
