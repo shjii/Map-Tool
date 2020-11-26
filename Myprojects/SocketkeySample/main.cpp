@@ -18,80 +18,96 @@ void main()
 	{
 		return;
 	}
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	SOCKADDR_IN sa;
-	USHORT jValue = 10000;
-	sa.sin_family = AF_INET;
-	sa.sin_addr.s_addr = inet_addr("192.168.0.155");
-	sa.sin_port = htons(10000);
-
-	int iRet = connect(sock, (SOCKADDR*)&sa, sizeof(sa));
-	if (iRet == SOCKET_ERROR)
+	while (1)
 	{
-		return;
-	}
+		SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
 
-
-
-	//iRet = listen(sock, SOMAXCONN);
-	//SOCKADDR_IN clientAddr;
-	//int len = sizeof(clientAddr);
-	//SOCKET Client = accept(sock, (SOCKADDR*)&clientAddr, &len);
-	//printf("\n%s : %d", inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
-
-	int iCount = 0;
-	clock_t s = clock();
-	clock_t e = clock();
-	sMsg msg;
-
-	//vector<sMsg> recvlist;
-	//char recvBuf[10000] = { 0, };
-	//char* pRecv = recvBuf;
-	//int iRecvSize = 0;
-	//int iPacketSize = sizeof(sMsg);
-	while (e - s < 1000)
-	{
-		/*iRecvSize += recv(Client, recvBuf, iPacketSize - iRecvSize, 0);
-		if (iRecvSize == 0 || iRecvSize == SOCKET_ERROR)
+		int optval = 1;
+		if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval)) != 0)
 		{
-			break;
+			return;
 		}
-		if (sizeof(sMsg) == iRecvSize)
+
+		//linger optLinger;
+		//int iLingerLen = sizeof(optLinger);
+		//optLinger.l_onoff = 1;
+		//optLinger.l_linger = 1000;
+		//if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optLinger, iLingerLen) != 0)
+		//{
+		//	return;
+		//}
+
+		SOCKADDR_IN sa;
+		USHORT jValue = 10000;
+		sa.sin_family = AF_INET;
+		sa.sin_addr.s_addr = inet_addr("192.168.0.155");
+		sa.sin_port = htons(10000);
+
+		int iRet = connect(sock, (SOCKADDR*)&sa, sizeof(sa));
+		if (iRet == SOCKET_ERROR)
 		{
-			memcpy(&msg, recvBuf, sizeof(sMsg));
-			iRet = send(Client, (char*)&msg, iRecvSize, 0);
-			if (iRet == 0 || iRet == SOCKET_ERROR)
+			return;
+		}
+
+
+
+		//iRet = listen(sock, SOMAXCONN);
+		//SOCKADDR_IN clientAddr;
+		//int len = sizeof(clientAddr);
+		//SOCKET Client = accept(sock, (SOCKADDR*)&clientAddr, &len);
+		//printf("\n%s : %d", inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
+
+		int iCount = 0;
+		clock_t s = clock();
+		clock_t e = clock();
+		sMsg msg;
+		bool bConnect = true;
+		int iRecvSize = 0;
+		int iSendSize = 0;
+		int iPacketSize = sizeof(sMsg);
+		//vector<sMsg> recvlist;
+		char recvBuf[10000] = { 0, };
+
+		while (e - s < 1000 && bConnect)
+		{
+			while (iSendSize < iPacketSize)
 			{
-				break;
+				memset(&msg, 0, sizeof(msg));
+				strcpy_s(msg.buffer, 32, "¾È³ç");
+				msg.iCnt = iCount;
+				char recvBuf[3001] = { 0, };
+				clock_t t1 = clock();
+				iSendSize = send(sock, (char*)&msg, iPacketSize - iSendSize, 0);
+				if (iSendSize == 0 || iSendSize == SOCKET_ERROR)
+				{
+					bConnect = false;
+					break;
+				}
 			}
-			recvlist.push_back(msg);
-			printf("\n%d : %s", msg.iCnt, msg.buffer);
+			memset(recvBuf, 0, sizeof(char) * 10000);
+			while (iRecvSize < iPacketSize && bConnect)
+			{
+
+				iRecvSize += recv(sock, recvBuf, iPacketSize - iRecvSize, 0);
+				if (iRecvSize == 0 || iRecvSize == SOCKET_ERROR)
+				{
+					bConnect = false;
+					break;
+				}
+				if (sizeof(sMsg) == iRecvSize)
+				{
+					memcpy(&msg, recvBuf, sizeof(msg));
+					printf("%n%d : %s", msg.iCnt, msg.buffer);
+				}
+			}
 			iRecvSize = 0;
-		}*/
-		memset(&msg, 0, sizeof(msg));
-		strcpy_s(msg.buffer, 32, "¾È³ç");
-		msg.iCnt = iCount;
-		char recvBuf[3001] = { 0, };
-		int iLen = sizeof(msg);
-		clock_t t1 = clock();
-		iRet = send(sock, (char*)&msg, iLen, 0);
-		if (iRet == 0 || iRet == SOCKET_ERROR)
-		{
-			break;
+			iSendSize = 0;
+			e = clock();
+			clock_t t = e - s;
+			iCount++;
 		}
-		iRet = recv(sock, recvBuf, 3001, 0);
-		if (iRet == 0 || iRet == SOCKET_ERROR)
-		{
-			break;
-		}
-		memcpy(&msg, recvBuf, sizeof(sMsg));
-		e = clock();
-		clock_t t = e - t1;
-		printf("%d ", t);
-		iCount++;
+		closesocket(sock);
+		Sleep(2000);
 	}
-	closesocket(sock);
-	/*closesocket(Client);*/
 	WSACleanup();
-	/*recvlist.clear();*/
 }
