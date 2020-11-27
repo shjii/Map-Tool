@@ -10,6 +10,30 @@ struct sMsg
 	int iCnt;
 	char buffer[3000];
 };
+void Error(const CHAR* msg = 0, const char* IpData = 0)
+{
+	LPVOID* IpMsg = 0;
+	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+					NULL, WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+					(CHAR*)&IpMsg, 0, NULL);
+	string szBuffer = (IpData != nullptr) ? IpData : "";
+	szBuffer += "\n";
+	szBuffer += (CHAR*)IpMsg;
+
+	MessageBoxA(NULL, szBuffer.c_str(), msg, MB_ICONERROR);
+	LocalFree(IpMsg);
+}
+
+void Check(int iRet, int line)
+{
+	if (iRet == SOCKET_ERROR)
+	{
+		CHAR szBuffer[256] = { 0 , };
+		sprintf_s(szBuffer, "%s[%d]", __FILE__, line);
+		Error("ERROR", szBuffer);
+		exit(1);
+	}
+}
 
 void main()
 {
@@ -48,11 +72,7 @@ void main()
 	int optval = 1;
 	//1개의 프로세스에서만IP & PORT 재사용 가능
 	//bind함수에서 오류를 얻는다.
-	iRet = setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (char*)&optval, sizeof(optval));
-	if (iRet == SOCKET_ERROR)
-	{
-		return;
-	}
+	Check(setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (char*)&optval, sizeof(optval)), __LINE__);
 
 	 //다수 프로세스에서 ip & port 재사용 가능
 	 //SO_EXCLUSIVEADDRUSE 와 SO_REUSEADDR 동시 사용 불가 // 먼저 사용된 설정만 사용됨.

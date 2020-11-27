@@ -11,13 +11,22 @@ struct sMsg
 	char buffer[3000];
 };
 
-void main()
+void main(int argc, char* argv[])
 {
+	// 서버 IP 및 포트 입력 받아서 접속 
+	//if (argc != 3)
+	//{
+	//	return;
+	//}
+
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
 		return;
 	}
+	const char* ipAddress = "1912.168.0.155"; // argv[1];
+	unsigned short iPort = 10000; // atoi(argv[2]);
+
 	while (1)
 	{
 		SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -40,8 +49,8 @@ void main()
 		SOCKADDR_IN sa;
 		USHORT jValue = 10000;
 		sa.sin_family = AF_INET;
-		sa.sin_addr.s_addr = inet_addr("192.168.0.155");
-		sa.sin_port = htons(10000);
+		sa.sin_addr.s_addr = inet_addr(ipAddress);
+		sa.sin_port = htons(iPort);
 
 		int iRet = connect(sock, (SOCKADDR*)&sa, sizeof(sa));
 		if (iRet == SOCKET_ERROR)
@@ -73,7 +82,7 @@ void main()
 			while (iSendSize < iPacketSize)
 			{
 				memset(&msg, 0, sizeof(msg));
-				strcpy_s(msg.buffer, 32, "안녕");
+				strcpy_s(msg.buffer, 32, "안녕하세요....");
 				msg.iCnt = iCount;
 				char recvBuf[3001] = { 0, };
 				clock_t t1 = clock();
