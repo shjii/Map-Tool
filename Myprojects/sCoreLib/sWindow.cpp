@@ -76,6 +76,11 @@ bool sWindow::SetWindow(HINSTANCE hInstance)
 	return true;
 }
 
+void sWindow::MsgEvent(MSG msg)
+{
+
+}
+
 sWindow::sWindow()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
