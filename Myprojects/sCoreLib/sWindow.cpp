@@ -30,6 +30,7 @@ bool sWindow::MsgProcess()
 		{
 			return false;
 		}
+		MsgEvent(m_msg);
 	}
 	return true;
 }
@@ -74,6 +75,11 @@ bool sWindow::SetWindow(HINSTANCE hInstance)
 	ShowWindow(m_hWnd, SW_SHOW);
 	
 	return true;
+}
+
+void sWindow::MsgEvent(MSG msg)
+{
+
 }
 
 sWindow::sWindow()
