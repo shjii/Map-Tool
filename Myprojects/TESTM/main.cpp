@@ -32,13 +32,13 @@ bool	main::Frame()
 {
 	if (sScene::m_pCurrentScene->m_bSceneChange == true)
 	{
-		sScene::m_pCurrentScene->ReSet();
 		sScene::m_pCurrentScene->m_bSceneChange = false;
-		if (m_iCurrenScene == 3)
-		{
-			m_iCurrenScene = 0;
-		}
-		sScene::m_pCurrentScene = m_SceneList[m_iCurrenScene++];
+		sScene::m_pCurrentScene->ReSet();
+		//if (m_iCurrenScene == 3)
+		//{
+		//	m_iCurrenScene = 0;
+		//}
+		sScene::m_pCurrentScene = m_SceneList[sScene::m_pCurrentScene->NextScene()];
 	}
 	sScene::m_pCurrentScene->Frame();
 	return true;

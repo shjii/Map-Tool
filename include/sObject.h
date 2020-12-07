@@ -77,6 +77,7 @@ public:
 	virtual void Attack(sObject* pPlayer) {};
 	virtual void BAttack(sObject* pPlayer) {};
 	virtual void AddEffect(wstring name, sPoint pos) {};
+	virtual bool    death() { return true; };
 public:
 	virtual void SetTransition(DWORD dwEevnt) {};
 	virtual void Damage(int a) {};

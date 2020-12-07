@@ -7,6 +7,8 @@ class sGameUser : public sObject
 public:
 	int Gun;
 	int Bomb;
+	int life;
+	float InvincibleTime;
 	bool m_EventScens;
 	bool m_EventNPC;
 	sPoint EventNPCP;
@@ -16,6 +18,7 @@ public:
 	sEffect* m_psbomb;
 	vector<sProjectileInfo> m_ProjectileList;
 	vector<sbombInfo> m_sbombInfoList;
+	bool death();
 public:
 	void GetGun()override;
 	bool Init()override;
@@ -23,6 +26,8 @@ public:
 	bool Render()override;
 	sGameUser()
 	{
+		InvincibleTime = 0;
+		life = 999999;
 		Bomb = 10;
 		 jump = false;
 		 surface = false;

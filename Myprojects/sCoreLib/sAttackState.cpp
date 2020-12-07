@@ -14,6 +14,7 @@ void sAttackState::Process(sObject* pPlayer, sAnimation& animat)
 			{
 				Delay = 1.0f;
 				animat.SetAnimation(L"BOSSAT");
+				pPlayer->death();
 			}
 			else
 			{
@@ -44,7 +45,7 @@ void sAttackState::Process(sObject* pPlayer, sAnimation& animat)
 						animat.SetAnimation(L"humanMeleeAttack");
 						if (sCollision::Rect2Rect(m_pOwner->m_rtCollide, pPlayer->m_rtCollide))
 						{
-							int a = 0;
+							pPlayer->death();
 						}
 						EVENT = EVENT_LOSTTARGET;
 						EVENTC = true;

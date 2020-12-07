@@ -23,18 +23,18 @@ nullptr
 0 255 0 255
 
 100 USER
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr
 nullptr
 130 400
-100 100 20 100
+100 100 50 80
 40 80
 0 255 0 255
 
 200 NPC
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr
@@ -45,7 +45,7 @@ nullptr
 0 255 0 255
 
 200 human
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr
@@ -56,7 +56,7 @@ nullptr
 0 255 0 255
 
 304 GUN
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr
@@ -67,7 +67,7 @@ nullptr
 0 255 0 255
 
 200 Boos
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr
@@ -78,7 +78,7 @@ nullptr
 0 255 0 255
 
 200 Tank
-../../data/bitmap/void.bmp
+../../data/bitmap/Back.bmp
 nullptr
 nullptr
 nullptr

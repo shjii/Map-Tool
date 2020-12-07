@@ -5,6 +5,8 @@ bool sSceneLobby::ReSet()
 	t = 0.0f;
 	a = 0;
 	return true;
+	m_bSceneChange = false;
+	
 }
 bool	sSceneLobby::Frame()
 {
@@ -70,7 +72,7 @@ bool	sSceneLobby::Frame()
 					obj->m_rtDesk.left = CW[a].x;
 					obj->m_rtDesk.top = CW[a].y;
 				}
-				if (g_KeyMap.bSpace >= 1)
+				if (g_KeyMap.bZKey >= 1)
 				{
 					c = true;
 					for (auto objc : m_BackobjList)
@@ -98,7 +100,7 @@ bool	sSceneLobby::Frame()
 					obj->m_rtDesk.left = CW[a].x;
 					obj->m_rtDesk.top = CW[a].y;
 				}
-				if (g_KeyMap.bSpace > 0)
+				if (g_KeyMap.bZKey > 0)
 				{
 					c = true;
 					for (auto objc : m_BackobjList)
@@ -126,7 +128,7 @@ bool	sSceneLobby::Frame()
 					obj->m_rtDesk.left = CW[a].x;
 					obj->m_rtDesk.top = CW[a].y;
 				}
-				if (g_KeyMap.bSpace > 0)
+				if (g_KeyMap.bZKey > 0)
 				{
 					c = true;
 					for (auto objc : m_BackobjList)
@@ -154,7 +156,7 @@ bool	sSceneLobby::Frame()
 					obj->m_rtDesk.left = CW[a].x;
 					obj->m_rtDesk.top = CW[a].y;
 				}
-				if (g_KeyMap.bSpace > 0)
+				if (g_KeyMap.bZKey > 0)
 				{
 					c = true;
 					for (auto objc : m_BackobjList)
@@ -174,6 +176,7 @@ bool	sSceneLobby::Frame()
 	{
 		if (t > 1.0f)
 		{
+			iNextScene = 2;
 			m_bSceneChange = true;
 		}
 	}

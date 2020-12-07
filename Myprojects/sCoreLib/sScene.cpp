@@ -3,6 +3,9 @@
 sGameUser*	 sScene::m_pGamePlayer = nullptr;
 sScene*	sScene::m_pCurrentScene = nullptr;
 
+int sScene::NextScene()
+{ return iNextScene; }
+
 bool sScene::ReSet()
 {
 	return true;
@@ -435,7 +438,8 @@ bool	sScene::Frame()
 		}
 		if (pObj->CollisionCheck == true && pObj->m_szName == L"Boos")
 		{
-			m_bSceneChange = true;
+			pObj->CollisionCheck = false;
+			return false;
 			// 게임 엔딩
 		}
 		pObj->surface = false;

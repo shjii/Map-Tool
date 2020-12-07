@@ -6,13 +6,14 @@ bool sSceneInGame::ReSet()
 	m_pGamePlayer->SetPos(m_pGamePlayer->m_ptPos);
 	m_pGamePlayer->surface = false;
 	m_pGamePlayer->m_EventScens = false;
+	m_bSceneChange = false;
 	for (sObject* pObj : m_BackobjList)
 	{
 		pObj->m_rtDesk.left = 0;
 	}
 	for (sObject* pObj : m_objList)
 	{
-		pObj->m_bDead = true;
+		pObj->m_bDead = false;
 	}
 	return true;
 }
@@ -37,6 +38,7 @@ bool sSceneInGame::Render()
 
 bool sSceneInGame::Frame()
 {
+	//TEST 몬스터 소환용
 	if (g_KeyMap.bLeftClick > 2)
 	{
 		if (g_KeyMap.bSKey > 1)
@@ -53,11 +55,10 @@ bool sSceneInGame::Frame()
 			a.y = g_InPut.GetPos().y;
 			Create(L"human", a);
 		}
-	}
-	
+	}	
 	if (g_KeyMap.bRightClick > 2)
 	{
-		if (g_KeyMap.bSKey > 1)
+		if (g_KeyMap.bSKey > 0)
 		{
 			sPoint a;
 			a.x = g_InPut.GetPos().x;
@@ -74,9 +75,12 @@ bool sSceneInGame::Frame()
 
 	}
 
-
-	sScene::Frame();
 	//
+	if (!sScene::Frame())
+	{
+		m_bSceneChange = true;
+		iNextScene = 3;
+	}
 	m_pGamePlayer->surface = false;
 	for (sObject* pObj : m_FloorList)
 	{
@@ -128,7 +132,7 @@ bool sSceneInGame::Frame()
 				if (pObj->m_rtDesk.left < -1100.0f)
 				{
 					m_pGamePlayer->m_EventScens = true;
-					//Create(L"Boos", { 1200 , 100});
+					
 				}
 				pObj->m_rtDesk.left -= m_pGamePlayer->m_fSpeed * g_fSecondPerFrame;
 			}

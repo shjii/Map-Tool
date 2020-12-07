@@ -22,7 +22,7 @@ public:
 	bool	Frame();
 	bool	Render();
 	bool	Release();
-	DWORD KeyCheck(DWORD dwKey);
+	int KeyCheck(DWORD dwKey);
 	POINT   GetPos() { return m_MousePos; }
 private:
 	sInPut();

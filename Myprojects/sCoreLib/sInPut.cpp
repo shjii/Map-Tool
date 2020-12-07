@@ -1,6 +1,6 @@
 #include "sInPut.h"
 TInputActionMap g_KeyMap;
-DWORD sInPut::KeyCheck(DWORD dwKey)
+int sInPut::KeyCheck(DWORD dwKey)
 {
 	//ºñµ¿±â
 	SHORT sKey = GetAsyncKeyState(dwKey);
@@ -20,15 +20,15 @@ DWORD sInPut::KeyCheck(DWORD dwKey)
 	{
 		if (m_dwKeyState[dwKey] == KEY_HOLD || m_dwKeyState[dwKey] == KEY_PUSH)
 		{
-			m_dwKeyState[dwKey] = KEY_UP;
+ 			m_dwKeyState[dwKey] = KEY_UP;
 		}
 		else
 		{
 			m_dwKeyState[dwKey] = KEY_FREE;
 		}
 	}
-
-	return m_dwKeyState[dwKey];
+	int a = m_dwKeyState[dwKey];
+	return a;
 }
 
 bool sInPut::Init()
@@ -42,10 +42,14 @@ bool sInPut::Frame()
 	GetCursorPos(&m_MousePos);
 	ScreenToClient(g_hWnd, &m_MousePos);
 	
-	g_KeyMap.bWKey = max(KeyCheck('W'), KeyCheck(VK_UP));
-	g_KeyMap.bAKey = max(KeyCheck('A'), KeyCheck(VK_LEFT));
-	g_KeyMap.bSKey = max(KeyCheck('S'), KeyCheck(VK_DOWN));
-	g_KeyMap.bDKey = max(KeyCheck('D'), KeyCheck(VK_RIGHT));
+	//g_KeyMap.bWKey = max(KeyCheck('W'), KeyCheck(VK_UP));
+	//g_KeyMap.bAKey = max(KeyCheck('A'), KeyCheck(VK_LEFT));
+	//g_KeyMap.bSKey = max(KeyCheck('S'), KeyCheck(VK_DOWN));
+	//g_KeyMap.bDKey = max(KeyCheck('D'), KeyCheck(VK_RIGHT));
+	g_KeyMap.bWKey = KeyCheck(VK_UP);
+	g_KeyMap.bAKey = KeyCheck(VK_LEFT);
+	g_KeyMap.bSKey = KeyCheck(VK_DOWN);
+	g_KeyMap.bDKey = KeyCheck(VK_RIGHT);
 	g_KeyMap.bZKey = KeyCheck('Z');
 	g_KeyMap.bXKey = KeyCheck('X');
 	g_KeyMap.bExit = KeyCheck(VK_ESCAPE);

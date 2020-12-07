@@ -114,6 +114,7 @@ bool sNpcObject::Frame()
 		{
 			sScene::m_pCurrentScene->AddEffect(L"rtExplosion", project.p);
 			project.m_bDead = true;
+			sScene::m_pGamePlayer->death();
 		}
 	}
 	for (sbombInfo& project : m_sbombInfoList)
@@ -124,8 +125,19 @@ bool sNpcObject::Frame()
 		{
 			sScene::m_pCurrentScene->AddEffect(L"rtExplosion", project.p);
 			project.m_bDead = true;
+			sScene::m_pGamePlayer->death();
 		}
 	}
+	sPoint vDir = sScene::m_pGamePlayer->m_ptPos - m_ptPos;
+	if (vDir.x > 0)
+	{
+		m_direction.x = 1;
+	}
+	else
+	{
+		m_direction.x = -1;
+	}
+	m_NPCAnimation->SetP(m_direction);
 	m_NPCAnimation->Frame();
 	return true;
 }

@@ -12,13 +12,18 @@ public:
 	sEffect* Body;
 	int m_BodyIndex;
 	HDC a;
-	int pos;
+	sPoint pos;
+	int x;
+	int Upx;
+	int Lox;
+	int y;
 public:
 	void SetOwner(sObject* _Owner);
 	bool SetAnimationUP(wstring _name);
 	bool SetAnimationLO(wstring _name);
 	bool SetAnimation(wstring _name);
-	bool SetP(float a);
+	bool SetP(sPoint a);
+	
 public:
 	bool Frame();
 	bool Render();

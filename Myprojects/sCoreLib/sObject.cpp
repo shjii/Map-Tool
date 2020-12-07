@@ -74,9 +74,6 @@ void	sObject::SetPos(sPoint p)
 {
 
 	m_ptPos = p;
-	
-
-
 	Set(m_ptPos, m_rtSrc, m_fSpeed);
 }
 void	sObject::Set(sPoint p, RECT rtSrc, float fSpeed)

@@ -16,6 +16,7 @@ struct sSpriteInfo
 class sScene
 {
 public:
+	int iNextScene;
 	static sScene*				m_pCurrentScene;
 	vector<sObjAttribute> m_ObjAttribute;
 	vector<sObject*> m_objList;
@@ -37,11 +38,13 @@ public:
 	int m_iSceneID;
 	bool m_bSceneChange;
 public:
+	virtual int NextScene();
 	virtual bool	Init()		;
 	virtual bool	Frame()		;
 	virtual bool	Render()	;
 	virtual bool	Release()	;
 	virtual bool	ReSet()		;
+	
 	void	GetBitmapLoad(FILE* fp, wstring& ret);
 	bool	Load(const TCHAR* filename);
 	void    Create(wstring name, sPoint pos);

@@ -92,12 +92,82 @@ bool sAnimation::Frame()
 		Body->m_ptPos = m_Owner->m_ptPos;
 		Body->m_rtCollide = m_Owner->m_rtCollide;
 	}
+
+	// 애니매이션을 깔끔하게 하기 위해서 각 모션마다 보정이 필요함..... 시발 
+	y = m_pUpperBody->m_rtList[m_pUpperBody->m_iRectIndex].bottom * 2;
+	if (y >= 60)
+	{
+		y -= 10;
+	}
+
+	
+
+	if (pos.x > 0)
+	{
+		if (Body == nullptr)
+		{
+			Upx = m_Owner->m_rtCollide.left;
+			Lox = m_Owner->m_rtCollide.left;
+		}
+		else
+		{
+			x = m_Owner->m_rtCollide.left;
+		}
+		x = m_Owner->m_rtCollide.left;
+	}
+	else if (pos.x < 0)
+	{
+		if (Body == nullptr)
+		{
+			Upx = m_Owner->m_rtCollide.right - m_pUpperBody->m_rtList[m_pUpperBody->m_iRectIndex].right * 2;
+			Lox = m_Owner->m_rtCollide.right - m_pLowerBody->m_rtList[m_pLowerBody->m_iRectIndex].right * 2;
+		}
+		else
+		{
+			x = m_Owner->m_rtCollide.right - Body->m_rtList[Body->m_iRectIndex].right;
+		}
+		
+	}
 	return true;
 }
 
 bool sAnimation::Render()
 {
-	//if (pos > 0)
+
+	//m_BlendFunction.BlendOp = AC_SRC_OVER;
+	//m_BlendFunction.BlendFlags = 0;
+	//m_BlendFunction.SourceConstantAlpha = 255;
+	//m_BlendFunction.AlphaFormat = AC_SRC_ALPHA;
+	//if (Body == nullptr)
+	//{
+	//	AlphaBlend(g_hOffScreenDC,
+	//		m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.bottom - (m_Owner->m_rtDesk.bottom / 2),
+	//		m_pLowerBody->m_rtDesk.right * 2, m_pLowerBody->m_rtDesk.bottom * 2,
+	//		m_pLowerBody->m_pColorBmp->m_hMemDC,
+	//		m_pLowerBody->m_rtSrc.left, m_pLowerBody->m_rtSrc.top,
+	//		m_pLowerBody->m_rtSrc.right, m_pLowerBody->m_rtSrc.bottom,
+	//		m_BlendFunction);
+
+	//	AlphaBlend(g_hOffScreenDC,
+	//		m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top + (m_pLowerBody->m_rtDesk.bottom / 2),
+	//		m_pUpperBody->m_rtDesk.right * 2, m_pUpperBody->m_rtDesk.bottom * 2,
+	//		m_pUpperBody->m_pColorBmp->m_hMemDC,
+	//		m_pUpperBody->m_rtSrc.left, m_pUpperBody->m_rtSrc.top,
+	//		m_pUpperBody->m_rtSrc.right, m_pUpperBody->m_rtSrc.bottom,
+	//		m_BlendFunction);
+	//}
+	//else
+	//{
+	//	AlphaBlend(g_hOffScreenDC,
+	//		m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top,
+	//		Body->m_rtDesk.right * 2, Body->m_rtDesk.bottom * 2,
+	//		Body->m_pColorBmp->m_hMemDC,
+	//		Body->m_rtSrc.left, Body->m_rtSrc.top,
+	//		Body->m_rtSrc.right, Body->m_rtSrc.bottom,
+	//		m_BlendFunction);
+	//}
+
+	
 	{
 		m_BlendFunction.BlendOp = AC_SRC_OVER;
 		m_BlendFunction.BlendFlags = 0;
@@ -106,15 +176,24 @@ bool sAnimation::Render()
 		if (Body == nullptr)
 		{
 			AlphaBlend(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.bottom - (m_Owner->m_rtDesk.bottom / 2),
+				Lox, m_Owner->m_rtCollide.bottom - (m_Owner->m_rtDesk.bottom / 2) - 5,
 				m_pLowerBody->m_rtDesk.right * 2, m_pLowerBody->m_rtDesk.bottom * 2,
 				m_pLowerBody->m_pColorBmp->m_hMemDC,
 				m_pLowerBody->m_rtSrc.left, m_pLowerBody->m_rtSrc.top,
 				m_pLowerBody->m_rtSrc.right, m_pLowerBody->m_rtSrc.bottom,
 				m_BlendFunction);
 
+
+			//AlphaBlend(g_hOffScreenDC,
+			//	Upx, m_Owner->m_rtCollide.top + (m_pLowerBody->m_rtDesk.bottom / 2),
+			//	m_pUpperBody->m_rtDesk.right * 2, m_pUpperBody->m_rtDesk.bottom * 2,
+			//	m_pUpperBody->m_pColorBmp->m_hMemDC,
+			//	m_pUpperBody->m_rtSrc.left, m_pUpperBody->m_rtSrc.top,
+			//	m_pUpperBody->m_rtSrc.right, m_pUpperBody->m_rtSrc.bottom,
+			//	m_BlendFunction);
+
 			AlphaBlend(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top + (m_pLowerBody->m_rtDesk.bottom / 2) + 8,
+				Upx, m_Owner->m_rtCollide.bottom - ((m_Owner->m_rtCollide.bottom - m_Owner->m_rtCollide.top) / 2) - y + 15,
 				m_pUpperBody->m_rtDesk.right * 2, m_pUpperBody->m_rtDesk.bottom * 2,
 				m_pUpperBody->m_pColorBmp->m_hMemDC,
 				m_pUpperBody->m_rtSrc.left, m_pUpperBody->m_rtSrc.top,
@@ -124,7 +203,7 @@ bool sAnimation::Render()
 		else
 		{
 			AlphaBlend(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top,
+				x, m_Owner->m_rtCollide.top,
 				Body->m_rtDesk.right * 2, Body->m_rtDesk.bottom * 2,
 				Body->m_pColorBmp->m_hMemDC,
 				Body->m_rtSrc.left, Body->m_rtSrc.top,
@@ -132,49 +211,9 @@ bool sAnimation::Render()
 				m_BlendFunction);
 		}
 	}
-	/*else
-	{
-		if (Body == nullptr)
-		{
-			BitBlt(a, 0, 0, g_rtClient.right, g_rtClient.bottom, m_pUpperBody->m_pColorBmp->m_hMemDC, 0, 0, NOTSRCCOPY);
-			TransparentBlt(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.bottom - (m_Owner->m_rtDesk.bottom / 2),
-				m_pLowerBody->m_rtDesk.right * 2, m_pLowerBody->m_rtDesk.bottom * 2,
-				a,
-				m_pLowerBody->m_rtSrc.left, m_pLowerBody->m_rtSrc.top,
-				m_pLowerBody->m_rtSrc.right, m_pLowerBody->m_rtSrc.bottom,
-				RGB(255,255,255));
-			
-
-			AlphaBlend(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top + (m_pLowerBody->m_rtDesk.bottom / 2) + 8,
-				m_pUpperBody->m_rtDesk.right * 2, m_pUpperBody->m_rtDesk.bottom * 2,
-				m_pUpperBody->m_pColorBmp->m_hMemDC,
-				m_pUpperBody->m_rtSrc.left, m_pUpperBody->m_rtSrc.top,
-				m_pUpperBody->m_rtSrc.right, m_pUpperBody->m_rtSrc.bottom,
-				m_BlendFunction);
-		}
-		else
-		{
-			StretchBlt(a,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top,
-				Body->m_rtDesk.right * 2, Body->m_rtDesk.bottom * 2,
-				Body->m_pColorBmp->m_hMemDC,
-				Body->m_rtSrc.left, Body->m_rtSrc.top,
-				Body->m_rtSrc.right, Body->m_rtSrc.bottom,
-				SRCCOPY);
-			AlphaBlend(g_hOffScreenDC,
-				m_Owner->m_rtCollide.left, m_Owner->m_rtCollide.top,
-				Body->m_rtDesk.right * 2, Body->m_rtDesk.bottom * 2,
-				a,
-				Body->m_rtSrc.left, Body->m_rtSrc.top,
-				Body->m_rtSrc.right, Body->m_rtSrc.bottom,
-				m_BlendFunction);
-		}
-	}*/
 		return true;
 }
-bool sAnimation::SetP(float a)
+bool sAnimation::SetP(sPoint a)
 {
 	pos = a;
 	return 0;

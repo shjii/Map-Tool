@@ -5,7 +5,9 @@
 class sSceneIntro :
 	public sScene
 {
+public:
 	bool	Frame();
+	bool ReSet();
 
 };
 
