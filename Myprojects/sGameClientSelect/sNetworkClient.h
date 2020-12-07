@@ -17,6 +17,6 @@ public:
 	bool SendData(sUser& user, UPACKET &msg);
 public:
 	sNetworkClient();
-	~sNetworkClient();
+	virtual ~sNetworkClient();
 };
 

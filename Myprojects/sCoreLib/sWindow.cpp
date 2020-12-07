@@ -30,6 +30,7 @@ bool sWindow::MsgProcess()
 		{
 			return false;
 		}
+		MsgEvent(m_msg);
 	}
 	return true;
 }

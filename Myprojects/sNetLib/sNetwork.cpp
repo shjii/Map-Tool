@@ -1,4 +1,7 @@
 #include "sNetwork.h"
+
+bool sNetwork::g_bConnect = false;
+
 bool sNetwork::MakePacket(UPACKET& packet, char* msg, int iLen, uint16_t type)
 {
 	packet.ph.iotype = 0;
@@ -240,6 +243,10 @@ bool sNetwork::Broadcastting()
 }
 bool sNetwork::InitSocket(string ip, int iPort)
 {
+	//넌블로킹 소켓으로 전환
+	unsigned long iMode = 1;
+	ioctlsocket(m_Sock, FIONBIO, &iMode);
+
 	SOCKADDR_IN sa;
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = htonl(INADDR_ANY); // 자신의 모든 IP 값 사용
@@ -258,11 +265,11 @@ bool sNetwork::InitNetwork(string ip, int iPort)
 {
 	InitializeCriticalSection(&m_cs);
 	WSADATA wsa;
-	int iRet;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
 		return false;
 	}
+	int iRet;
 	m_Sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_Sock == INVALID_SOCKET)
 	{
@@ -271,16 +278,17 @@ bool sNetwork::InitNetwork(string ip, int iPort)
 	}
 	int sockType;
 	int sockTypeLen = sizeof(int);
-
-	int iSendBuffer = 100000;
-	setsockopt(m_Sock, SOL_SOCKET, SO_SNDBUF,
-		(char*)&iSendBuffer, sockTypeLen);
 	getsockopt(m_Sock, SOL_SOCKET, SO_TYPE,
 		(char*)&sockType, &sockTypeLen);
 	if (sockType == SOCK_STREAM)
 		printf("%s\r\n", "SOCK_STREAM.");
 	else
 		printf("%s\r\n", "SOCK_DGRAM");
+
+	//송수신 버퍼 크기 확인	
+	int iSendBuffer = 100000;
+	setsockopt(m_Sock, SOL_SOCKET, SO_SNDBUF,
+		(char*)&iSendBuffer, sockTypeLen);
 
 	getsockopt(m_Sock, SOL_SOCKET, SO_SNDBUF,
 		(char*)&sockType, &sockTypeLen);
@@ -305,9 +313,6 @@ bool sNetwork::InitNetwork(string ip, int iPort)
 	{
 		return false;
 	}
-	//넌블로킹 소켓으로 전환
-	unsigned long iMode = 1;
-	ioctlsocket(m_Sock, FIONBIO, &iMode);
 
 	return true;
 }

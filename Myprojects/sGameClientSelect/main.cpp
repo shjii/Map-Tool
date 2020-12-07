@@ -1,7 +1,7 @@
 #include "main.h"
 #include "sObjectManager.h"
-
-void	main::MsgEvent(MSG msg)
+static int iCount = 0;
+void main::MsgEvent(MSG msg)
 {
 	m_Network.MsgEvent(msg);
 }
@@ -37,6 +37,7 @@ bool	main::Frame()
 			sChatMsg* pMsg = (sChatMsg*)&packet->msg;
 			sMsg msg;
 			msg.msg = to_mw(pMsg->buffer);
+			msg.msg += to_wstring(iCount);
 			msg.rt = { 100,100, g_rtClient.right, g_rtClient.bottom };
 			g_Write.push(msg);
 		}

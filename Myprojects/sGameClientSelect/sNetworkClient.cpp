@@ -2,7 +2,6 @@
 #include "sStd.h"
 #define NETWORK_MSG WM_USER+80
 static int	g_iChatCount = 0;
-bool		g_bConnect = false;
 
 void sNetworkClient::MsgEvent(MSG msg)
 {
@@ -12,7 +11,7 @@ void sNetworkClient::MsgEvent(MSG msg)
 	{
 		if (WSAGETSELECTERROR(msg.lParam) != 0)
 		{
-			g_bConnect = false;
+			sNetwork::g_bConnect = false;
 			return;
 		}
 		WORD dwSelect = WSAGETSELECTERROR(msg.lParam);
@@ -20,12 +19,12 @@ void sNetworkClient::MsgEvent(MSG msg)
 		{
 		case FD_CONNECT:
 		{
-			g_bConnect = true;
+			sNetwork::g_bConnect = true;
 			SendLoginData(m_Sock, "kgca", "game");
 		}break;
 		case FD_CLOSE:
 		{
-			g_bConnect = false;
+			sNetwork::g_bConnect = false;
 		}break;
 		case FD_READ:
 		{
@@ -46,7 +45,7 @@ bool sNetworkClient::SendPackets(sUser& user)
 	{
 		if (SendData(user, * senditer) == false)
 		{
-			g_bConnect = false;
+			sNetwork::g_bConnect = false;
 			return false;
 		}
 	}
@@ -78,32 +77,7 @@ bool sNetworkClient::SendData(sUser& user, UPACKET &msg)
 	}
 	return true;
 }
-DWORD WINAPI SendThread(LPVOID arg)
-{
-	sNetwork* net = (sNetwork*)arg;
-	sChatMsg chatmsg;
-	while (g_bConnect)
-	{
-		//printf("\nmsg=");
-		memset(&chatmsg, 0, sizeof(chatmsg));
-		//fgets(chatmsg.buffer, 128, stdin);
-		strcpy_s(chatmsg.szName, "ȫ�浿");
-		strcpy_s(chatmsg.buffer, "kgca");
-		chatmsg.buffer[strlen(chatmsg.buffer) - 1] = 0;
-		chatmsg.iCnt = g_iChatCount++;
-		EnterCriticalSection(&net->m_cs);
-		if (net->SendMsg(net->m_Sock, (char*)&chatmsg,
-			sizeof(sChatMsg),
-			PACKET_CHAT_MSG) < 0)
-		{
-			LeaveCriticalSection(&net->m_cs);
-			break;
-		}
-		LeaveCriticalSection(&net->m_cs);
-		Sleep(1000);
-	}
-	return 0;
-}
+
 bool sNetworkClient::RecvData(sUser& user)
 {
 	if (user.iRecvSize < PACKET_HEADER_SIZE)
