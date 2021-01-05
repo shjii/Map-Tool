@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sNetworkClient.cpp" />
+    <ClCompile Include="sNetworkEventSelect.cpp" />
+    <ClCompile Include="sNetworkSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />

@@ -11,6 +11,7 @@ bool sAnimation::SetAnimationUP(wstring _name)
 {
 	if (_name != m_pUpperBody->m_szName)
 	{
+		m_pUpperBody->m_iRectIndex = 0;
 		m_pUpperBody = (sEffect*)g_objectMgr.GetPtr(_name);
 		return true;
 	}
@@ -21,6 +22,7 @@ bool sAnimation::SetAnimationLO(wstring _name)
 {
 	if (_name != m_pLowerBody->m_szName)
 	{
+		m_pLowerBody->m_iRectIndex = 0;
 		m_pLowerBody = (sEffect*)g_objectMgr.GetPtr(_name);
 		return true;
 	}
@@ -29,8 +31,17 @@ bool sAnimation::SetAnimationLO(wstring _name)
 
 bool sAnimation::SetAnimation(wstring _name)
 {
-	Body = (sEffect*)g_objectMgr.GetPtr(_name);
-	return true;
+	//if (Body != nullptr)
+	//{
+	//	if (_name != m_pLowerBody->m_szName)
+	//	{
+			//Body->m_iRectIndex = 0;
+			Body = (sEffect*)g_objectMgr.GetPtr(_name);
+			return true;
+	//	}
+	//}
+	
+	return false;
 }
 
 bool sAnimation::Frame()
@@ -217,6 +228,19 @@ bool sAnimation::SetP(sPoint a)
 {
 	pos = a;
 	return 0;
+}
+
+bool sAnimation::Completion()
+{
+	if (Body != nullptr)
+	{
+		if (Body->m_rtList.size() <= Body->m_iRectIndex) return true;	
+	}
+	if (m_pLowerBody->m_rtList.size() <= m_pLowerBody->m_iRectIndex || m_pUpperBody->m_rtList.size() <= m_pUpperBody->m_iRectIndex)
+	{
+		return true;
+	}
+	return false;
 }
 
 sAnimation::sAnimation()

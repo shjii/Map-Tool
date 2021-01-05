@@ -43,7 +43,7 @@ bool sNetworkClient::SendPackets(sUser& user)
 	vector<UPACKET>::iterator senditer;
 	for (senditer = m_sendPacket.begin(); senditer != m_sendPacket.end(); senditer++)
 	{
-		if (SendData(user, * senditer) == false)
+		if (SendData(user, *senditer) == false)
 		{
 			sNetwork::g_bConnect = false;
 			return false;
@@ -56,7 +56,7 @@ bool sNetworkClient::SendData(sUser& user, UPACKET &msg)
 {
 	while (user.iSendSize < msg.ph.len)
 	{
-		user.iSendSize += send(m_Sock, (char *)&msg, msg.ph.len - user.iSendSize, 0);
+		user.iSendSize += send(m_Sock, (char*)&msg, msg.ph.len - user.iSendSize, 0);
 		if (user.iSendSize == 0)
 		{
 			return false;

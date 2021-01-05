@@ -1,8 +1,9 @@
 #include "sWindow.h"
-
+#include  "sWrite.h"
 HINSTANCE g_hInstance;
 HWND g_hWnd = 0;
 RECT g_rtClient;
+
 LRESULT CALLBACK WndProc(
 	HWND hWnd,
 	UINT message,

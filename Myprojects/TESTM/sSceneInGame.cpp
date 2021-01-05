@@ -1,5 +1,7 @@
 #include "sSceneInGame.h"
 
+
+
 bool sSceneInGame::ReSet()
 {
 	m_pGamePlayer->m_ptPos = { 130, 400 };
@@ -81,6 +83,12 @@ bool sSceneInGame::Frame()
 		m_bSceneChange = true;
 		iNextScene = 3;
 	}
+	if (m_pGamePlayer->life <= 0)
+	{
+		// 라이프가 0 이도 ㅣ면 죽음 ㅇㅋ? ㅇㅋ
+		//DeadCountDown();
+		return false;
+	}
 	m_pGamePlayer->surface = false;
 	for (sObject* pObj : m_FloorList)
 	{
@@ -88,8 +96,7 @@ bool sSceneInGame::Frame()
 		{
 				if (sCollision::Rect2Rect(pObj->m_rtCollide, m_pGamePlayer->m_rtCollide))
 				{
-					if (m_pGamePlayer->m_ptPos.y + (m_pGamePlayer->m_rtSrc.bottom / 2)
-						<= pObj->m_ptPos.y + 5)
+					//if (m_pGamePlayer->m_ptPos.y + (m_pGamePlayer->m_rtSrc.bottom / 2) <= pObj->m_ptPos.y + 5)
 				{
 					m_pGamePlayer->surface = true;
 				}

@@ -1,0 +1,109 @@
+﻿  Floor.cpp
+  sAnimation.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sAttackState.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sBitmap.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sbitmap.cpp(23): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sBitmapManager.cpp
+  sCollision.cpp
+  sCore.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssound.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'fmod.h': No such file or directory
+  sDeadState.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sEcentScene.cpp
+  sEffect.cpp
+  sEnemyState.cpp
+  sFiniteState.cpp
+  sFiniteStateMachine.cpp
+  sGameUser.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssound.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'fmod.h': No such file or directory
+  sGraphicAPI.cpp
+  sInPut.cpp
+  SItem.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sMoveState.cpp
+  sNpcObject.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\snpcobject.cpp(14): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\snpcobject.cpp(169): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\snpcobject.cpp(196): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sObject.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(51): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(52): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(68): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(69): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(87): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sobject.cpp(88): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  컴파일하고 있습니다...
+  sObjectManager.cpp
+  sProjectile.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sScene.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(22): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(60): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(64): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(68): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): warning C4477: 'swscanf_s' : 서식 문자열 '%s'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'unsigned __int64'입니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): note: 이 인수는 버퍼 크기로 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): warning C4473: 'swscanf_s': 서식 문자열에 대한 인수가 충분하게 전달되지 않았습니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): note: 자리 표시자 및 해당 매개 변수에는 variadic 인수가 5개 필요하지만 3개가 제공되었습니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): note: 누락된 variadic 인수 4이(가) 서식 문자열 '%s'에 필요합니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(114): note: 이 인수는 변환 지정자에서 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(121): warning C4477: 'swscanf_s' : 서식 문자열 '%s'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'unsigned __int64'입니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(121): note: 이 인수는 버퍼 크기로 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(127): warning C4477: 'swscanf_s' : 서식 문자열 '%s'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'unsigned __int64'입니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(127): note: 이 인수는 버퍼 크기로 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(176): warning C4477: 'swscanf_s' : 서식 문자열 '%s'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 3의 형식이 'unsigned __int64'입니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(176): note: 이 인수는 버퍼 크기로 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(190): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(191): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(230): warning C4477: 'swscanf_s' : 서식 문자열 '%s'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'unsigned __int64'입니다.
+  c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(230): note: 이 인수는 버퍼 크기로 사용됩니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(271): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(275): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sscene.cpp(279): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+  sSceneInGame.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(30): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(79): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\sprojectile.h(128): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssceneingame.cpp(39): warning C4244: '-=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssceneingame.cpp(47): warning C4244: '-=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sSound.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssound.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'fmod.h': No such file or directory
+  sSoundManager.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\ssound.h(3): fatal error C1083: 포함 파일을 열 수 없습니다. 'fmod.h': No such file or directory
+  sStandState.cpp
+  sTime.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\stime.cpp(12): warning C4244: '=': 'DWORD'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\stime.cpp(18): warning C4244: '초기화 중': 'DWORD'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  sUserInterface.cpp
+  sWindow.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\swindow.cpp(28): warning C4244: '인수': 'WPARAM'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Elem=wchar_t
+          ]
+  sWrite.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\scorelib\swrite.cpp(102): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.

@@ -5,6 +5,7 @@ class sNetworkClient : public sNetwork
 public:
 	sUser	m_User;
 	std::vector<UPACKET>	m_sendPacket;
+	bool					m_bLogin;
 public:
 	virtual bool RecvData(sUser& user)override;
 	virtual void PacketProcess()override;
@@ -20,3 +21,31 @@ public:
 	virtual ~sNetworkClient();
 };
 
+class sNetworkClientSelect : public sNetworkClient
+{
+public:
+	FD_SET m_rSet;
+	FD_SET m_wSet;
+	FD_SET m_eSet;
+public:
+	virtual bool Frame()override;
+	virtual bool InitNetwork(string ip, int iPort)override;
+	virtual bool InitSocket(string ip, int iPort)override;
+public:
+	sNetworkClientSelect();
+	virtual ~sNetworkClientSelect();
+};
+
+class sNetworkClientEventSelect : public sNetworkClient
+{
+public:
+	HANDLE		m_EventArray[WSA_MAXIMUM_WAIT_EVENTS];
+	int			m_iArrayCount;
+public:
+	virtual bool Frame()override;
+	virtual bool InitNetwork(string ip, int iPort)override;
+	virtual bool InitSocket(string ip, int iPort)override;
+public:
+	sNetworkClientEventSelect() { m_iArrayCount = 0; };
+	virtual ~sNetworkClientEventSelect() {};
+};

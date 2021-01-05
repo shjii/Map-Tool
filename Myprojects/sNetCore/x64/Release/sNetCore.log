@@ -1,0 +1,13 @@
+﻿  sAcceptor.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\snetcore\sacceptor.cpp(7): warning C4101: 'iRet' :참조되지 않은 지역 변수입니다.
+  sIocp.cpp
+  sLock.cpp
+  sNetUser.cpp
+  sServerObj.cpp
+  sSessionMgr.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\snetcore\ssessionmgr.cpp(127): warning C4244: '=': 'time_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\snetcore\ssessionmgr.cpp(189): warning C4553: '==': 식의 결과가 사용되지 않습니다. '='을(를) 의도했습니까?
+  sThread.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\snetcore\sthread.cpp(6): warning C4244: '=': 'uintptr_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\신지훈\desktop\sjh\sjh\myprojects\snetcore\sthread.cpp(23): warning C4312: '형식 캐스트': 'unsigned int'에서 더 큰 'HANDLE'(으)로의 변환입니다.
+  sNetCore.vcxproj -> C:\Users\신지훈\Desktop\SJH\SJH\Myprojects\x64\Release\sNetCore.lib

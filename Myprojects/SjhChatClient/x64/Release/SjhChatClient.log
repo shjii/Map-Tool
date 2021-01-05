@@ -1,0 +1,10 @@
+﻿  main.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\sjhchatclient\snetworkclient.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sNetwork.h': No such file or directory
+  sNetMain.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\sjhchatclient\snetworkclient.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sNetwork.h': No such file or directory
+  sNetworkClient.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\sjhchatclient\snetworkclient.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sNetwork.h': No such file or directory
+  sNetworkEventSelect.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\sjhchatclient\snetworkclient.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sNetwork.h': No such file or directory
+  sNetworkSelect.cpp
+c:\users\신지훈\desktop\sjh\sjh\myprojects\sjhchatclient\snetworkclient.h(2): fatal error C1083: 포함 파일을 열 수 없습니다. 'sNetwork.h': No such file or directory
