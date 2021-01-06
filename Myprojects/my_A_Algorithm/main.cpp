@@ -16,6 +16,7 @@ typedef struct Pos
 typedef class AStarNode
 {
 public:
+
 	int m_iParentIndex;
 	int m_iNodeIndex;
 	bool m_bObstacle;
