@@ -14,7 +14,11 @@
 #include "sProtocol.h"
 
 #pragma comment (lib, "ws2_32.lib")
-#pragma comment (lib, "sNetCore.lib")
+#if NDEBUG
+#pragma comment (lib, "TNetCore_R.lib")
+#else
+#pragma comment (lib, "TNetCore_D.lib")
+#endif
 using namespace std;
 
 typedef std::basic_string<TCHAR>		T_STR;
