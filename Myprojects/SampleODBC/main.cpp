@@ -12,8 +12,8 @@ SQLHENV g_hStmt = SQL_NULL_HSTMT;
 
 TCHAR g_szInputUserID[32] = { 0, };
 SQLHENV g_hUserIDStmt = SQL_NULL_HSTMT;
-SQLTCHAR g_userid[30] = { 0, };
-SQLTCHAR g_userps[30] = { 0, };
+SQLTCHAR g_userid[32] = { 0, };
+SQLTCHAR g_userps[32] = { 0, };
 SQLINTEGER g_iID;
 SQLLEN lID, IUserID, IUSerPS;
 SQLRETURN ret;
@@ -113,7 +113,8 @@ SQLRETURN GetDescribeCol(SQLHSTMT stmt)
 	{
 		Check(stmt);
 	}
-
+	SQLSMALLINT colCount;
+	SQLNumResultCols(stmt, &colCount);
 	m_ColumnList.clear();
 	m_ColumnResultList.clear();
 	m_RecordResultList.clear();
@@ -139,8 +140,12 @@ SQLRETURN GetColData(SQLHSTMT stmt, int column, std::wstring& rt)
 	SQLRETURN ret;
 	if (m_ColumnList[column - 1].pfSqlType != SQL_VARBINARY)
 	{
-		if (ret = SQLGetData(stmt, m_ColumnList[column - 1].icol, SQL_WCHAR, m_ColumnList[column - 1].bindData,
-							sizeof(m_ColumnList[column - 1].bindData), NULL) == SQL_SUCCESS)
+		if (ret = SQLGetData(stmt,
+			m_ColumnList[column - 1].icol,
+			SQL_WCHAR,
+			m_ColumnList[column - 1].bindData,
+			sizeof(m_ColumnList[column - 1].bindData),
+			NULL) == SQL_SUCCESS)
 		{
 			rt = m_ColumnList[column - 1].bindData;
 		}
@@ -154,25 +159,26 @@ SQLRETURN GetColData(SQLHSTMT stmt, int column, std::wstring& rt)
 			ret = SQLGetData(stmt, m_ColumnList[column - 1].icol, SQL_WCHAR, buf, sizeof(buf), &cb);
 			if (ret == SQL_NULL_DATA) break;
 			rt += buf;
-		} while (ret == SQL_SUCCESS);
+		} while (ret == SQL_SUCCESS_WITH_INFO);
+
 	}
 	return ret;
 }
 
-bool GetRecordData(SQLHSTMT hSmt)
+bool GetRecordData(SQLHSTMT	hStmt)
 {
-	GetDescribeCol(hSmt);
-
+	GetDescribeCol(hStmt);
+	// SQL데이터 형에 따른 바인딩으로 처리 할 수 있다.
 	SQLRETURN ret;
 	while (1)
 	{
-		ret = SQLFetch(hSmt);
+		ret = SQLFetch(hStmt);
 		if (ret == SQL_NO_DATA) break;
 		if (ret != SQL_SUCCESS)
 		{
-			if (GetDiagRec(hSmt) == false)
+			if (GetDiagRec(hStmt) == false)
 			{
-				SQLCloseCursor(hSmt);
+				SQLCloseCursor(hStmt);
 				return false;
 			}
 		}
@@ -181,7 +187,7 @@ bool GetRecordData(SQLHSTMT hSmt)
 		for (int iCol = 0; iCol < m_ColumnList.size(); iCol++)
 		{
 			std::wstring retString;
-			ret = GetColData(hSmt, m_ColumnList[iCol].icol, retString);
+			ret = GetColData(hStmt, m_ColumnList[iCol].icol, retString);
 			if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
 			{
 				record.push_back(retString);
@@ -189,13 +195,12 @@ bool GetRecordData(SQLHSTMT hSmt)
 		}
 		m_RecordResultList.push_back(record);
 	}
-	while (ret = SQLMoreResults(hSmt) != SQL_NO_DATA);
-	// ???
-	SQLCloseCursor(hSmt);
-	SQLFreeStmt(hSmt, SQL_CLOSE);
+	while (ret = SQLMoreResults(hStmt) != SQL_NO_DATA);
+
+	SQLCloseCursor(hStmt);
+	SQLFreeStmt(hStmt, SQL_CLOSE);
 	return true;
 }
-
 void ExecPrepare(SQLHSTMT stmt)
 {
 	_tcscpy_s(g_szInputUserID,L"kgca");
@@ -214,39 +219,39 @@ void ExecPrepare(SQLHSTMT stmt)
 
 void SelectQuery()
 {
-	SQLTCHAR szUerID[30] = { 0, };
-	SQLTCHAR szUerPS[30] = { 0, };
+	SQLTCHAR  szUserID[30] = { 0, };
+	SQLTCHAR  szUserPS[30] = { 0, };
 	SQLINTEGER iID;
-	SQLLEN IID, IUserID, iUserPS;
-
-	SQLBindCol(g_hStmt, 1, SQL_INTEGER, &iID, 0, &IID);
-	SQLBindCol(g_hStmt, 2, SQL_INTEGER, (SQLPOINTER)szUerID, sizeof(szUerID), &IUserID);
-	SQLBindCol(g_hStmt, 2, SQL_INTEGER, (SQLPOINTER)szUerPS, sizeof(szUerPS), &iUserPS);
+	SQLLEN  lID, lUserID, lUserPS;
+	SQLBindCol(g_hStmt, 1, SQL_INTEGER, &iID, 0, &lID);
+	SQLBindCol(g_hStmt, 2, SQL_UNICODE, (SQLPOINTER)szUserID, sizeof(szUserID), &lUserID);
+	SQLBindCol(g_hStmt, 3, SQL_UNICODE, (SQLPOINTER)szUserPS, sizeof(szUserPS), &lUserPS);
 	TCHAR sql[] = L"select * from DemoGame";
 	ret = SQLExecDirect(g_hStmt, (SQLTCHAR*)sql, SQL_NTS);
 	SQLLEN iNumRow;
-	SQLSMALLINT iNumCOl;
-	SQLRowCount(g_hStmt, &iNumRow);
-	SQLNumResultCols(g_hStmt, &iNumCOl);
+	SQLSMALLINT iNumCol;
+	SQLRowCount(g_hStmt, &iNumRow); // sql 영향을 받는 레코드 수
+	SQLNumResultCols(g_hStmt, &iNumCol); // 반환 컬럼 수
 
 	while (SQLFetch(g_hStmt) != SQL_NO_DATA)
 	{
-		std::wcout << "g_iID" << iID << " " << szUerID << " " << szUerPS << std::endl;
+		std::wcout << "g_iID=" << iID << " " << szUserID << " " << szUserPS << std::endl;
 	}
 	SQLCloseCursor(g_hStmt);
 }
 
 void InsertQuery()
 {
-	TCHAR sql[] = L"insert into DemoGame (g_szUserID, g_szUserPS) VALUES ('5555' , '1111' )";
+	TCHAR sql[] =
+		L"insert into DemoGame (userid, userps) VALUES ('5555','1111')";
 	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)sql, SQL_NTS) != SQL_SUCCESS)
 	{
 		return;
 	}
 	SQLLEN iNumRow;
 	SQLSMALLINT iNumCol;
-	SQLRowCount(g_hStmt, &iNumRow);
-	SQLNumResultCols(g_hStmt, &iNumCol);
+	SQLRowCount(g_hStmt, &iNumRow); // sql 영향을 받는 레코드 수
+	SQLNumResultCols(g_hStmt, &iNumCol); // 반환 컬럼 수
 	SQLCloseCursor(g_hStmt);
 }
 
@@ -265,15 +270,16 @@ void DeleteQuery()
 }
 void UpdateQuerty()
 {
-	TCHAR sql[] = L"update DemoGame set g_szUer='3333' wher g_szUserID='코로나'";
+	TCHAR sql[] =
+		L"update DemoGame set g_szUserPS='3333' where g_szUserID='코로나'";
 	if (SQLExecDirect(g_hStmt, (SQLTCHAR*)sql, SQL_NTS) != SQL_SUCCESS)
 	{
 		return;
 	}
 	SQLLEN iNumRow;
 	SQLSMALLINT iNumCol;
-	SQLRowCount(g_hStmt, &iNumRow);
-	SQLNumResultCols(g_hStmt, &iNumCol);
+	SQLRowCount(g_hStmt, &iNumRow); // sql 영향을 받는 레코드 수
+	SQLNumResultCols(g_hStmt, &iNumCol); // 반환 컬럼 수
 	SQLCloseCursor(g_hStmt);
 }
 void main()
@@ -281,14 +287,16 @@ void main()
 	setlocale(LC_ALL, "KOREAN");
 
 	ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &g_hEnv);
-	ret = SQLSetEnvAttr(g_hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+	ret = SQLSetEnvAttr(g_hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3_80, SQL_IS_INTEGER);
 	ret = SQLAllocHandle(SQL_HANDLE_DBC, g_hEnv, &g_hDbc);
 
 	TCHAR InCon[256] = {0,};
 	TCHAR Dir[MAX_PATH];
 	SQLSMALLINT cbCon;
 	GetCurrentDirectory(MAX_PATH, Dir);
-	wsprintf(InCon, _T("DRIVER=[Microsoft Access Driver (*.mdb *.accdb)};DBQ=%s\\%s;"), Dir, L"DemoGame.accdb");
+	wsprintf(InCon, _T("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s\\%s;"), Dir, L"DemoGame.accdb");
+	ret = SQLDriverConnect(g_hDbc, NULL, InCon, _countof(InCon), NULL, 0,
+		&cbCon, SQL_DRIVER_NOPROMPT);
 	ret = SQLAllocHandle(SQL_HANDLE_STMT, g_hDbc, &g_hStmt);
 	if (ret != SQL_SUCCESS)
 	{
@@ -300,9 +308,11 @@ void main()
 
 	_tcscpy_s(g_szInputUserID, L"kgca");
 	ExecPrepare(g_hUserIDStmt);
-	std::wcout << "id=" << g_iID << "userid = " << g_userid << "PS=" << g_userps << std::endl;
+	std::wcout << "id=" << g_iID << " userid=" << g_userid << " userps=" << g_userps << std::endl;
+
+
 	{
-		_tcscpy_s(g_szInputUserID, L"kgca");
+		_tcscpy_s(g_szInputUserID, L"코로나");
 		ret = SQLExecute(g_hUserIDStmt);
 		while (1)
 		{
@@ -312,14 +322,12 @@ void main()
 			{
 				break;
 			}
-			std::wcout << "id=" << g_iID << "userid = " << g_userid << "PS=" << g_userps << std::endl;
+			std::wcout << "id=" << g_iID << " userid=" << g_userid << " userps=" << g_userps << std::endl;
 		}
 		while (ret = SQLMoreResults(g_hUserIDStmt) != SQL_NO_DATA);
-		//?
 		SQLCloseCursor(g_hUserIDStmt);
 		SQLFreeStmt(g_hUserIDStmt, SQL_CLOSE);
 	}
-
 	SelectQuery();
 	InsertQuery();
 	DeleteQuery();
