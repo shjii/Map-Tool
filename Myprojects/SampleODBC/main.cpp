@@ -4,24 +4,26 @@
 #include <sqlext.h>
 #include <tchar.h>
 #include <vector>
-#pragma comment(lib, "odbc32.lib")
+#pragma comment(lib,"odbc32.lib")
 
-SQLHENV g_hEnv = SQL_NULL_HENV;
-SQLHENV g_hDbc = SQL_NULL_HDBC;
-SQLHENV g_hStmt = SQL_NULL_HSTMT;
 
-TCHAR g_szInputUserID[32] = { 0, };
-SQLHENV g_hUserIDStmt = SQL_NULL_HSTMT;
-SQLTCHAR g_userid[32] = { 0, };
-SQLTCHAR g_userps[32] = { 0, };
-SQLINTEGER g_iID;
-SQLLEN lID, IUserID, IUSerPS;
+// 1)핸들선언
+SQLHENV  g_hEnv = SQL_NULL_HENV; // 환경핸들
+SQLHENV  g_hDbc = SQL_NULL_HDBC; // 연결핸들
+SQLHENV  g_hStmt = SQL_NULL_HSTMT;// 명령핸들
+
+TCHAR		g_szInputUserID[32] = { 0, };
+SQLHENV		g_hUserIDStmt = SQL_NULL_HSTMT;// 명령핸들
+SQLTCHAR	g_szUserID[32] = { 0, };
+SQLTCHAR	g_szUserPS[32] = { 0, };
+SQLINTEGER  g_iID;
+SQLLEN		lID, lUserID, lUserPS;
+
+int		g_iNameLength = 0;
+SQLLEN	g_cbColumn = SQL_NTS;
+typedef std::vector< std::wstring> RECORD;
+
 SQLRETURN ret;
-
-int iNameLength = 0;
-SQLLEN cbColumn = SQL_NTS;
-typedef std::vector<std::wstring> RECORD;
-
 struct ColDescription
 {
 	SQLUSMALLINT icol;
@@ -88,12 +90,12 @@ void CreatePrepare()
 	{
 		return;
 	}
-	iNameLength = sizeof(g_szInputUserID);
-	ZeroMemory(g_szInputUserID, iNameLength);
-	cbColumn = SQL_NTS;
+	g_iNameLength = sizeof(g_szInputUserID);
+	ZeroMemory(g_szInputUserID, g_iNameLength);
+	g_cbColumn = SQL_NTS;
 
-	ret = SQLBindParameter(g_hUserIDStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE, SQL_CHAR, iNameLength, 0, g_szInputUserID
-							, iNameLength, &cbColumn);
+	ret = SQLBindParameter(g_hUserIDStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE, SQL_CHAR, g_iNameLength, 0, g_szInputUserID
+							, g_iNameLength, &g_cbColumn);
 	if (ret != SQL_SUCCESS)
 	{
 		Check(g_hUserIDStmt);
@@ -101,8 +103,8 @@ void CreatePrepare()
 	}
 
 	ret = SQLBindCol(g_hUserIDStmt, 1, SQL_INTEGER, &g_iID, 0, &lID);
-	ret = SQLBindCol(g_hUserIDStmt, 2, SQL_INTEGER, (SQLPOINTER)g_userid, sizeof(g_userid), &IUserID);
-	ret = SQLBindCol(g_hUserIDStmt, 2, SQL_INTEGER, (SQLPOINTER)g_userps, sizeof(g_userps), &IUSerPS);
+	ret = SQLBindCol(g_hUserIDStmt, 2, SQL_INTEGER, (SQLPOINTER)g_szUserID, sizeof(g_szUserID), &lUserID);
+	ret = SQLBindCol(g_hUserIDStmt, 2, SQL_INTEGER, (SQLPOINTER)g_szUserPS, sizeof(g_szUserPS), &lUserPS);
 }
 
 SQLRETURN GetDescribeCol(SQLHSTMT stmt)
@@ -268,7 +270,7 @@ void DeleteQuery()
 	SQLNumResultCols(g_hStmt, &iNumCOl);
 	SQLCloseCursor(g_hStmt);
 }
-void UpdateQuerty()
+void UpdateQuery()
 {
 	TCHAR sql[] =
 		L"update DemoGame set g_szUserPS='3333' where g_szUserID='코로나'";
@@ -285,18 +287,19 @@ void UpdateQuerty()
 void main()
 {
 	setlocale(LC_ALL, "KOREAN");
-
+	// 2)핸들 할당 -> 설정
 	ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &g_hEnv);
 	ret = SQLSetEnvAttr(g_hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3_80, SQL_IS_INTEGER);
 	ret = SQLAllocHandle(SQL_HANDLE_DBC, g_hEnv, &g_hDbc);
 
-	TCHAR InCon[256] = {0,};
-	TCHAR Dir[MAX_PATH];
+	TCHAR  InCon[256] = { 0, };
+	TCHAR  Dir[MAX_PATH];
 	SQLSMALLINT cbCon;
 	GetCurrentDirectory(MAX_PATH, Dir);
 	wsprintf(InCon, _T("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s\\%s;"), Dir, L"DemoGame.accdb");
 	ret = SQLDriverConnect(g_hDbc, NULL, InCon, _countof(InCon), NULL, 0,
 		&cbCon, SQL_DRIVER_NOPROMPT);
+
 	ret = SQLAllocHandle(SQL_HANDLE_STMT, g_hDbc, &g_hStmt);
 	if (ret != SQL_SUCCESS)
 	{
@@ -308,7 +311,7 @@ void main()
 
 	_tcscpy_s(g_szInputUserID, L"kgca");
 	ExecPrepare(g_hUserIDStmt);
-	std::wcout << "id=" << g_iID << " userid=" << g_userid << " userps=" << g_userps << std::endl;
+	std::wcout << "id=" << g_iID << " userid=" << g_szUserID << " userps=" << g_szUserPS << std::endl;
 
 
 	{
@@ -322,16 +325,17 @@ void main()
 			{
 				break;
 			}
-			std::wcout << "id=" << g_iID << " userid=" << g_userid << " userps=" << g_userps << std::endl;
+			std::wcout << "id=" << g_iID << " userid=" << g_szUserID << " userps=" << g_szUserPS << std::endl;
 		}
 		while (ret = SQLMoreResults(g_hUserIDStmt) != SQL_NO_DATA);
 		SQLCloseCursor(g_hUserIDStmt);
 		SQLFreeStmt(g_hUserIDStmt, SQL_CLOSE);
 	}
+
 	SelectQuery();
 	InsertQuery();
 	DeleteQuery();
-	UpdateQuerty();
+	UpdateQuery();
 
 	SQLFreeHandle(SQL_HANDLE_STMT, g_hUserIDStmt);
 	SQLFreeHandle(SQL_HANDLE_STMT, g_hStmt);
