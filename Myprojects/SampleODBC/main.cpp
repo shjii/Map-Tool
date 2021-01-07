@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Windows.h>
+#include <windows.h>
 #include <sql.h>
 #include <sqlext.h>
 #include <tchar.h>
