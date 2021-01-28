@@ -16,6 +16,7 @@ struct sEffectInfo
 	int m_iRectIndex;
 	RECT m_rtSrc;
 	RECT m_rtDesk;
+	bool m_Completion;
 	void Frame()
 	{
 		m_fLifeTime -= g_fSecondPerFrame;
@@ -27,7 +28,13 @@ struct sEffectInfo
 		
 		if (iMaxCount - 1 <= m_iRectIndex)
 		{
+			m_Completion = true;
 			m_iRectIndex = 0.0f;
+			return;
+		}
+		else
+		{
+			m_Completion = false;
 		}
 
 		if (m_fTimer >= m_fStep)
@@ -36,9 +43,9 @@ struct sEffectInfo
 			m_fTimer -= m_fStep;
 		}
 	}
-
 	sEffectInfo()
 	{
+		m_Completion = false;
 		m_bDead = false;
 		m_fLifeTime = 1.0f;
 		m_fTimer = 0.0f;

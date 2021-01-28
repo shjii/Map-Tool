@@ -8,6 +8,7 @@ public:
 	int Gun;
 	int Bomb;
 	int life;
+	bool m_Dead;
 	float InvincibleTime;
 	bool m_EventScens;
 	bool m_EventNPC;
@@ -26,6 +27,7 @@ public:
 	bool Render()override;
 	sGameUser()
 	{
+		m_Dead = false;
 		InvincibleTime = 0;
 		life = 999999;
 		Bomb = 10;
