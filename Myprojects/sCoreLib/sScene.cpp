@@ -308,6 +308,7 @@ bool	sScene::Load(const TCHAR* filename)
 			m_EventList.push_back(pObj);
 		}
 	}
+
 	GameDataLoad(L"rtSprite.txt", m_rtSpriteList);
 	for (int iEffect = 0; iEffect < m_rtSpriteList.size(); iEffect++)
 	{
@@ -319,6 +320,20 @@ bool	sScene::Load(const TCHAR* filename)
 		sPoint p = { 0,0 };
 		pEffect->Set(p, rtSrc);
 		pEffect->SetSprite(m_rtSpriteList[iEffect].rtArray);
+		g_objectMgr.Add(pEffect);
+	}
+
+	GameDataLoad(L"UICnt.txt", UIinfoList);
+	for (int iEffect = 0; iEffect < UIinfoList.size(); iEffect++)
+	{
+		sEffect* pEffect = new sEffect;
+		pEffect->Init();
+		pEffect->m_szName = UIinfoList[iEffect].szName;
+		pEffect->Load(L"../../data/bitmap/UI.bmp");
+		RECT rtSrc = UIinfoList[iEffect].rtArray[0];
+		sPoint p = { 0,0 };
+		pEffect->Set(p, rtSrc);
+		pEffect->SetSprite(UIinfoList[iEffect].rtArray);
 		g_objectMgr.Add(pEffect);
 	}
 

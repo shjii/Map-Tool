@@ -154,6 +154,50 @@ struct sbombInfo
 	}
 };
 
+struct UIInfo
+{
+	wstring m_csNmae;
+	sPoint p;
+	sPoint m_vDir;
+	float gravity;
+	int id;
+	int iMaxCount;
+	int gravityCount;
+	bool m_bDead;
+	float m_fLifeTime;
+	float m_fTimer;
+	float m_fStep;
+	int m_iRectIndex;
+	RECT m_rtSrc;
+	RECT m_rtDesk;
+	RECT m_rtCollide;
+	void Frame()
+	{
+		m_fTimer += g_fSecondPerFrame;
+		if (m_fTimer >= m_fStep)
+		{
+			m_iRectIndex++;
+			if (iMaxCount - 1 <= m_iRectIndex)
+			{
+				m_bDead = true;
+			}
+			m_fTimer -= m_fStep;
+		}
+	}
+
+	UIInfo()
+	{
+		gravityCount = 0;
+		gravity = 0;
+		m_vDir = { 1,1 };
+		m_bDead = false;
+		m_fLifeTime = 10.0f;
+		m_fTimer = 0.0f;
+		m_fStep = 1.0f;
+		m_iRectIndex = 0;
+	}
+};
+
 class sProjectile : public sEffect
 {
 

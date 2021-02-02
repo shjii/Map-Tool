@@ -29,7 +29,7 @@ public:
 	{
 		m_Dead = false;
 		InvincibleTime = 0;
-		life = 999999;
+		life = 3;
 		Bomb = 10;
 		 jump = false;
 		 surface = false;

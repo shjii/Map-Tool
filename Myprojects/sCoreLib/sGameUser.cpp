@@ -41,6 +41,16 @@ bool sGameUser::death()
 
 bool sGameUser::Frame()
 {
+	if (m_Dead == true)
+	{
+		if (!m_Animation->Completion())
+		{
+			m_Animation->SetP(m_direction);
+			m_Animation->Frame();
+		}
+		return false;
+	}
+
 	Middlecheck = false;
 	m_fSpeed = 200.0f;
 	InvincibleTime -= g_fSecondPerFrame;

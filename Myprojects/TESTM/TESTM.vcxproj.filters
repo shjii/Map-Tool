@@ -27,6 +27,7 @@
     <Text Include="Item.txt" />
     <Text Include="END.txt" />
     <Text Include="Tank.txt" />
+    <Text Include="UICnt.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

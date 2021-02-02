@@ -37,6 +37,10 @@ bool sAnimation::SetAnimation(wstring _name)
 	//	{
 			//Body->m_iRectIndex = 0;
 			Body = (sEffect*)g_objectMgr.GetPtr(_name);
+			if (Body != nullptr)
+			{
+				Body->m_iRectIndex = 0;
+			}
 			return true;
 	//	}
 	//}
@@ -234,13 +238,23 @@ bool sAnimation::Completion()
 {
 	if (Body != nullptr)
 	{
-		if (Body->m_rtList.size() <= Body->m_iRectIndex) return true;	
+		if (Body->m_rtList.size() - 1 <= Body->m_iRectIndex) return true;	
 	}
 	if (m_pLowerBody->m_rtList.size() <= m_pLowerBody->m_iRectIndex || m_pUpperBody->m_rtList.size() <= m_pUpperBody->m_iRectIndex)
 	{
 		return true;
 	}
 	return false;
+}
+
+void sAnimation::ReSet()
+{
+	if (Body != nullptr)
+	{
+		Body->m_iRectIndex = 0;
+	}
+	m_pUpperBody->m_iRectIndex = 0;
+	m_pLowerBody->m_iRectIndex = 0;
 }
 
 sAnimation::sAnimation()

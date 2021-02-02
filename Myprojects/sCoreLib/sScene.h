@@ -34,6 +34,8 @@ public:
 	vector<sSpriteInfo> BossList;
 	vector<sSpriteInfo> NPCList;
 	vector<sSpriteInfo> ItemList;
+	// 인포 추가
+	vector<sSpriteInfo> UIinfoList;
 	vector<sEffectInfo> m_EffectList;
 	int m_iSceneID;
 	bool m_bSceneChange;

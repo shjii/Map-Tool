@@ -23,7 +23,8 @@ public:
 	bool SetAnimationLO(wstring _name);
 	bool SetAnimation(wstring _name);
 	bool SetP(sPoint a);
-	
+	bool Completion();
+	void ReSet();
 public:
 	bool Frame();
 	bool Render();

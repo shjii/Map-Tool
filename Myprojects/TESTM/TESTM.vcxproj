@@ -159,6 +159,7 @@
     <Text Include="rtSprite.txt" />
     <Text Include="Tank.txt" />
     <Text Include="Tankanimation.txt" />
+    <Text Include="UICnt.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

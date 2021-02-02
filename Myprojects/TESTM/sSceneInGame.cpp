@@ -86,8 +86,9 @@ bool sSceneInGame::Frame()
 	if (m_pGamePlayer->life <= 0)
 	{
 		// 라이프가 0 이도 ㅣ면 죽음 ㅇㅋ? ㅇㅋ
+		m_pGamePlayer->m_Dead = true;
 		//DeadCountDown();
-		return false;
+		//return false;
 	}
 	m_pGamePlayer->surface = false;
 	for (sObject* pObj : m_FloorList)
