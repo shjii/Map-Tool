@@ -4,7 +4,7 @@
 class SItem : public sObject
 {
 public:
-	sAnimation* m_sAnimation;
+	/*sAnimation* m_sAnimation;*/
 public:
 	bool Init();
 	bool Frame();

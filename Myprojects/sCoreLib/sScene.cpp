@@ -54,7 +54,7 @@ void    sScene::Create(wstring name, sPoint pos)
 					info.dwColor);
 			}
 
-			pObj->m_StateBitmap.resize(4);
+			/*pObj->m_StateBitmap.resize(4);
 			pObj->m_StateBitmap[DEFAULT] = pObj->m_pColorBmp;
 
 			if (!info.pushbitmap.empty());
@@ -68,7 +68,7 @@ void    sScene::Create(wstring name, sPoint pos)
 			if (!info.disbitmap.empty());
 			{
 				pObj->m_StateBitmap[DISABLE] = (g_BitMapMar.Load(info.disbitmap.c_str()));
-			}
+			}*/
 			pObj->Set(info.rtSrc, info.rtDesk);
 			pObj->SetPosition(pos);
 			if (info.iObjType == 300)
@@ -265,7 +265,7 @@ bool	sScene::Load(const TCHAR* filename)
 				info.dwColor);
 		}
 
-		pObj->m_StateBitmap.resize(4);
+		/*pObj->m_StateBitmap.resize(4);
 		pObj->m_StateBitmap[DEFAULT] = pObj->m_pColorBmp;
 
 		if (!info.pushbitmap.empty());
@@ -279,7 +279,7 @@ bool	sScene::Load(const TCHAR* filename)
 		if (!info.disbitmap.empty());
 		{
 			pObj->m_StateBitmap[DISABLE] = (g_BitMapMar.Load(info.disbitmap.c_str()));
-		}
+		}*/
 
 		pObj->SetPosition(info.pos);
 		pObj->Set(info.rtSrc, info.rtDesk);

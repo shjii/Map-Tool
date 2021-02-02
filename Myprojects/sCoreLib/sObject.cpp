@@ -3,8 +3,8 @@
 bool	sObject::Init()
 {
 	
-	m_pMaskBmp = nullptr;
-	m_pColorBmp = nullptr;
+	/*m_pMaskBmp = nullptr;
+	m_pColorBmp = nullptr;*/
 	return true;
 }
 bool	sObject::Frame()
@@ -13,31 +13,28 @@ bool	sObject::Frame()
 }
 bool	sObject::Render()
 {
-	
-
-
-	if (m_pColorBmp && m_pColorBmp->m_BitmapInfo.bmBitsPixel == 32)
-	{
-		m_pColorBmp->DrawAlphaBlend(m_rtDesk, m_rtSrc);
-		//m_pColorBmp->DrawAlphaBlend(m_ptPos, m_rtSrc);
-		return true;
-	}
-	if (m_bColorKey == true)
-	{
-		DrawColorKey();
-		return true;
-	}
-	if (m_pMaskBmp != nullptr)
-	{
-		m_pMaskBmp->Draw(m_rtDesk, m_rtSrc, SRCAND, 1);
-		m_pColorBmp->Draw(m_rtDesk, m_rtSrc, SRCINVERT, 1);
-		m_pMaskBmp->Draw(m_rtDesk, m_rtSrc, SRCINVERT, 1);
-	}
-	else
-	{
-		m_pColorBmp->BackGroundDrow(m_ptPos);
-		//m_pColorBmp->Render();
-	}
+	//if (m_pColorBmp && m_pColorBmp->m_BitmapInfo.bmBitsPixel == 32)
+	//{
+	//	m_pColorBmp->DrawAlphaBlend(m_rtDesk, m_rtSrc);
+	//	//m_pColorBmp->DrawAlphaBlend(m_ptPos, m_rtSrc);
+	//	return true;
+	//}
+	//if (m_bColorKey == true)
+	//{
+	//	DrawColorKey();
+	//	return true;
+	//}
+	//if (m_pMaskBmp != nullptr)
+	//{
+	//	m_pMaskBmp->Draw(m_rtDesk, m_rtSrc, SRCAND, 1);
+	//	m_pColorBmp->Draw(m_rtDesk, m_rtSrc, SRCINVERT, 1);
+	//	m_pMaskBmp->Draw(m_rtDesk, m_rtSrc, SRCINVERT, 1);
+	//}
+	//else
+	//{
+	//	m_pColorBmp->BackGroundDrow(m_ptPos);
+	//	//m_pColorBmp->Render();
+	//}
 	return true;
 }
 bool	sObject::Release()
@@ -96,7 +93,7 @@ void	sObject::Set(sPoint p, RECT rtSrc, float fSpeed)
 }
 bool	sObject::Load(const TCHAR* color, const TCHAR* mask, DWORD dwColor)
 {
-	if (color != nullptr)
+	/*if (color != nullptr)
 	{
 		m_pColorBmp = g_BitMapMar.Load(color);
 		if (m_pColorBmp != nullptr)
@@ -108,7 +105,7 @@ bool	sObject::Load(const TCHAR* color, const TCHAR* mask, DWORD dwColor)
 	if (mask != nullptr)
 	{
 		m_pMaskBmp = g_BitMapMar.Load(mask);
-	}
+	}*/
 
 	if (mask == nullptr)
 	{
@@ -120,9 +117,9 @@ bool	sObject::Load(const TCHAR* color, const TCHAR* mask, DWORD dwColor)
 
 void	sObject::DrawColorKey()
 {
-	m_pColorBmp->DrawColorKey(
-		m_rtDesk, m_rtSrc, m_dwColorKey
-	);
+	//m_pColorBmp->DrawColorKey(
+	m_rtDesk, m_rtSrc, m_dwColorKey;
+	
 }
 
 bool sObject::GravitationalAction()

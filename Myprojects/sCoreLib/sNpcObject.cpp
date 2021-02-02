@@ -52,7 +52,7 @@ bool sNpcObject::Frame()
 		}
 	}
 
-	m_NPCAnimation->SetOwner(this);
+	//m_NPCAnimation->SetOwner(this);
 	if (m_bDead == true) return true;
 	if (!jump && !surface)
 	{
@@ -60,7 +60,7 @@ bool sNpcObject::Frame()
 		GravitationalAction();
 	}
 	SetPos(m_ptPos);
-	m_pAction->Process(sScene::m_pGamePlayer, *m_NPCAnimation);
+	//m_pAction->Process(sScene::m_pGamePlayer, *m_NPCAnimation);
 	for (std::vector<sProjectileInfo>::iterator iter = m_ProjectileList.begin();
 		iter != m_ProjectileList.end();
 		)
@@ -137,25 +137,25 @@ bool sNpcObject::Frame()
 	{
 		m_direction.x = -1;
 	}
-	m_NPCAnimation->SetP(m_direction);
-	m_NPCAnimation->Frame();
+//	m_NPCAnimation->SetP(m_direction);
+//	m_NPCAnimation->Frame();
 	return true;
 }
 void sNpcObject::FSM()
 {
-	m_pActionList.push_back(new sStandState(this));
-	m_pActionList.push_back(new sMoveState(this));
-	m_pActionList.push_back(new sAttackState(this));
-	m_pActionList.push_back(new sDeadState(this));
-	m_NPCAnimation = new sAnimation;
-	m_pAction = m_pActionList[0];
+	//m_pActionList.push_back(new sStandState(this));
+	//m_pActionList.push_back(new sMoveState(this));
+	//m_pActionList.push_back(new sAttackState(this));
+	//m_pActionList.push_back(new sDeadState(this));
+	//m_NPCAnimation = new sAnimation;
+	//m_pAction = m_pActionList[0];
 	HP = 1;
 	m_pProjectile = (sEffect*)g_objectMgr.GetPtr(L"rtProjectile");
 }
 void sNpcObject::SetTransition(DWORD dwEevnt)
 {
-	DWORD dwOutput = g_Fsm.GetTransition(m_pAction->m_dwState, dwEevnt);
-	m_pAction = m_pActionList[dwOutput];
+	/*DWORD dwOutput = g_Fsm.GetTransition(m_pAction->m_dwState, dwEevnt);
+	m_pAction = m_pActionList[dwOutput];*/
 }
 
 void sNpcObject::Attack(sObject* pPlayer)
@@ -234,7 +234,7 @@ bool sNpcObject::Render()
 		pEffect->Set(pInfo.p, pEffect->m_rtList[pInfo.m_iRectIndex]);
 		pEffect->Render();
 	}
-	m_NPCAnimation->Render();
+	//m_NPCAnimation->Render();
 	return true;
 }
 

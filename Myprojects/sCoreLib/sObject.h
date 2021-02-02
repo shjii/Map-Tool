@@ -44,9 +44,9 @@ public:
 	int			m_iObjectType;
 	wstring		m_szName;
 public:
-	sBitmap*	m_pMaskBmp;
-	sBitmap*	m_pColorBmp;
-	std::vector<sBitmap*> m_StateBitmap;
+	//sBitmap*	m_pMaskBmp;
+	//sBitmap*	m_pColorBmp;
+	//std::vector<sBitmap*> m_StateBitmap;
 	RECT		m_rtSrc;
 	RECT		m_rtDesk;
 	bool		m_bColorKey;
