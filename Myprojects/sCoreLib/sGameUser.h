@@ -14,7 +14,7 @@ public:
 	bool m_EventNPC;
 	sPoint EventNPCP;
 	float AttackTime;
-	sAnimation* m_Animation;
+	/*sAnimation* m_Animation;*/
 	sEffect* m_pProjectile;
 	sEffect* m_psbomb;
 	vector<sProjectileInfo> m_ProjectileList;

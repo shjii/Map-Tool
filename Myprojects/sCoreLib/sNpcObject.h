@@ -11,11 +11,11 @@ class sNpcObject :
 public:
 	bool HPC;
 	vector<sbombInfo> m_sbombInfoList;
-	sAnimation* m_NPCAnimation;
+	/*sAnimation* m_NPCAnimation;*/
 	sEffect*			m_pProjectile;
 	vector<sProjectileInfo>	m_ProjectileList;
-	sEnemyState* m_pAction;
-	vector<sEnemyState*> m_pActionList;
+	//sEnemyState* m_pAction;
+	//vector<sEnemyState*> m_pActionList;
 	vector<sEffectInfo> m_EffectList;
 public:
 	bool Init();

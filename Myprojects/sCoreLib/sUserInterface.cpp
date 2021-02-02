@@ -16,7 +16,7 @@ bool sButton::Frame()
 
 bool sButton::Render()
 {
-	if (m_bColorKey == true)
+	/*if (m_bColorKey == true)
 	{
 		sBitmap* pCurrent = m_pColorBmp;
 		(m_StateBitmap[m_iState] != nullptr) ?
@@ -58,6 +58,6 @@ bool sButton::Render()
 		case 2: {m_StateBitmap[2]->Render(); }break;
 		case 3: {m_StateBitmap[3]->Render(); }break;
 		}
-	}
+	}*/
 	return true;
 }

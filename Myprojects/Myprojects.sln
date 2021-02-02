@@ -147,6 +147,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DX", "DX", "{EFB6B619-974B-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice", "CreateDevice\CreateDevice.vcxproj", "{3F644965-D781-4F1E-8DB7-BECAD3053DD0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2DLibCore", "2DLibCore\2DLibCore.vcxproj", "{D7389CA1-269A-47E2-A5E1-D5516F2377C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -747,6 +749,16 @@ Global
 		{3F644965-D781-4F1E-8DB7-BECAD3053DD0}.Release|x64.Build.0 = Release|x64
 		{3F644965-D781-4F1E-8DB7-BECAD3053DD0}.Release|x86.ActiveCfg = Release|Win32
 		{3F644965-D781-4F1E-8DB7-BECAD3053DD0}.Release|x86.Build.0 = Release|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Debug|x64.ActiveCfg = Debug|x64
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Debug|x64.Build.0 = Debug|x64
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Debug|x86.ActiveCfg = Debug|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Debug|x86.Build.0 = Debug|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Release|x64.ActiveCfg = Release|x64
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Release|x64.Build.0 = Release|x64
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Release|x86.ActiveCfg = Release|Win32
+		{D7389CA1-269A-47E2-A5E1-D5516F2377C5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

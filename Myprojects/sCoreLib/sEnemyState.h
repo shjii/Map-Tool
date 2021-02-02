@@ -9,7 +9,7 @@ public:
 	DWORD m_dwState;
 	float Delay;
 public:
-	virtual void Process(sObject* pPlayer, sAnimation& animat) = 0;
+	/*virtual void Process(sObject* pPlayer, sAnimation& animat) = 0;*/
 	sEnemyState(sObject* owner);
 };
 

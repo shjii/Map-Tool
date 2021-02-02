@@ -5,16 +5,16 @@
 bool SItem::Init()
 {
 	sObject::Init();
-	m_sAnimation = new sAnimation;
-	m_sAnimation->SetOwner(this);
-	if (m_szName == L"GUN")
-	{
-		m_sAnimation->SetAnimation(L"Gun");
-	}
-	else
-	{
-		m_sAnimation->SetAnimation(L"Bomb");
-	}
+	//m_sAnimation = new sAnimation;
+	//m_sAnimation->SetOwner(this);
+	//if (m_szName == L"GUN")
+	//{
+	//	m_sAnimation->SetAnimation(L"Gun");
+	//}
+	//else
+	//{
+	//	m_sAnimation->SetAnimation(L"Bomb");
+	//}
 	return true;
 }
 
@@ -27,7 +27,7 @@ bool SItem::Frame()
 	{
 		GravitationalAction();
 	}
-	m_sAnimation->Frame();
+	/*m_sAnimation->Frame();*/
 	SetPos(m_ptPos);
 
 	
@@ -42,6 +42,6 @@ bool SItem::Frame()
 bool  SItem::Render()
 {
 	sObject::Render();
-	m_sAnimation->Render();
+	/*m_sAnimation->Render();*/
 	return true;
 }

@@ -7,10 +7,10 @@ bool sGameUser::Init()
 	sObject::Init();
 	m_pProjectile = (sEffect*)g_objectMgr.GetPtr(L"rtProjectile");
 	m_psbomb = (sEffect*)g_objectMgr.GetPtr(L"rtBomb");
-	m_Animation = new sAnimation;
-	m_Animation->SetOwner(this);
-	m_Animation->SetAnimationUP(L"UPWaiting");
-	m_Animation->SetAnimationLO(L"LOWaiting");
+	/*m_Animation = new sAnimation;*/
+	//m_Animation->SetOwner(this);
+	//m_Animation->SetAnimationUP(L"UPWaiting");
+	//m_Animation->SetAnimationLO(L"LOWaiting");
 	m_EventScens = false;
 	Gun = 0;
 	
@@ -32,7 +32,7 @@ bool sGameUser::death()
 		{
 			life--;
 			InvincibleTime = 2.0f;
-			m_Animation->SetAnimation(L"BodyDeath");
+			//m_Animation->SetAnimation(L"BodyDeath");
 			return true;
 		}
 	}
@@ -46,7 +46,7 @@ bool sGameUser::Frame()
 	InvincibleTime -= g_fSecondPerFrame;
 	if (InvincibleTime <= 0.5f)
 	{
-		m_Animation->SetAnimation(L"nullptr");
+//		m_Animation->SetAnimation(L"nullptr");
 		if (AttackTime <= 0)
 		{
 			if (g_KeyMap.bAKey == 0 && g_KeyMap.bDKey == 0 && g_KeyMap.bWKey == 0 && g_KeyMap.bSKey == 0 && g_KeyMap.bSpace == 0
@@ -54,12 +54,12 @@ bool sGameUser::Frame()
 			{
 				if (Gun >= 1)
 				{
-					m_Animation->SetAnimationUP(L"UPHeavyMachineGun");
+			//		m_Animation->SetAnimationUP(L"UPHeavyMachineGun");
 
 				}
 				else
 				{
-					m_Animation->SetAnimationUP(L"UPWaiting");
+			//		m_Animation->SetAnimationUP(L"UPWaiting");
 				}
 
 			}
@@ -72,7 +72,7 @@ bool sGameUser::Frame()
 		if (g_KeyMap.bAKey == 0 && g_KeyMap.bDKey == 0 && g_KeyMap.bWKey == 0 && g_KeyMap.bSKey == 0 && g_KeyMap.bSpace == 0
 			&& surface && g_KeyMap.bLeftClick == 0)
 		{
-			m_Animation->SetAnimationLO(L"LOWaiting");
+		//	m_Animation->SetAnimationLO(L"LOWaiting");
 		}
 
 		m_direction.y = 0;
@@ -95,7 +95,7 @@ bool sGameUser::Frame()
 			{
 				if (g_KeyMap.bSKey > 0 && g_KeyMap.bSKey != 3)
 				{
-					m_Animation->SetAnimation(L"DoDo");
+				//	m_Animation->SetAnimation(L"DoDo");
 					m_fSpeed = 100.0f;
 				}
 			}
@@ -104,8 +104,8 @@ bool sGameUser::Frame()
 			{
 				jump = true;
 				surface = false;
-				m_Animation->SetAnimationUP(L"UPJump");
-				m_Animation->SetAnimationLO(L"LOJump");
+				//m_Animation->SetAnimationUP(L"UPJump");
+				//m_Animation->SetAnimationLO(L"LOJump");
 			}
 		}
 
@@ -121,7 +121,7 @@ bool sGameUser::Frame()
 			m_direction.y = -1;
 			if (AttackTime <= 0)
 			{
-				m_Animation->SetAnimationUP(L"UPUP");
+			//	m_Animation->SetAnimationUP(L"UPUP");
 			}
 		}
 		if (g_KeyMap.bDKey > 0)
@@ -142,9 +142,9 @@ bool sGameUser::Frame()
 			SetPos(m_ptPos);
 			if (AttackTime <= 0 && m_direction.y != -1)
 			{
-				m_Animation->SetAnimationUP(L"UPRightMove");
+			//	m_Animation->SetAnimationUP(L"UPRightMove");
 			}
-			m_Animation->SetAnimationLO(L"RightMove");
+			//m_Animation->SetAnimationLO(L"RightMove");
 		}
 		if (g_KeyMap.bAKey > 0)
 		{
@@ -184,21 +184,21 @@ bool sGameUser::Frame()
 			m_ProjectileList.push_back(info);
 			if (Gun > 0 && m_direction.y == 0)
 			{
-				m_Animation->SetAnimationUP(L"PistolAttack");
+				//m_Animation->SetAnimationUP(L"PistolAttack");
 				Gun -= 1;
 			}
 			else if (Gun <= 0 && m_direction.y == 0)
 			{
-				m_Animation->SetAnimationUP(L"PistolAttack");
+				//m_Animation->SetAnimationUP(L"PistolAttack");
 			}
 			else if (Gun <= 0 && m_direction.y != 0) // À§·Î
 			{
-				m_Animation->SetAnimationUP(L"UpA");
+			//	m_Animation->SetAnimationUP(L"UpA");
 			}
 
 			if (m_fSpeed == 100.0f)
 			{
-				m_Animation->SetAnimation(L"DoA");
+			//	m_Animation->SetAnimation(L"DoA");
 			}
 
 			g_SoundMar.play("Gun.mp3");
@@ -206,7 +206,7 @@ bool sGameUser::Frame()
 		}
 		else if (m_psbomb && g_KeyMap.bXKey == 3)
 		{
-			m_Animation->SetAnimationUP(L"UPBombAttack");
+		//	m_Animation->SetAnimationUP(L"UPBombAttack");
 			if (Bomb > 0)
 			{
 				Bomb--;
@@ -269,8 +269,8 @@ bool sGameUser::Frame()
 			}
 		}
 	}
-	m_Animation->SetP(m_direction);
-	m_Animation->Frame();
+	//m_Animation->SetP(m_direction);
+	//m_Animation->Frame();
 	return false;
 }
 
@@ -289,6 +289,6 @@ bool sGameUser::Render()
 		pInfo.m_rtCollide = m_psbomb->m_rtCollide;
 		m_psbomb->Render();
 	}
-	m_Animation->Render();
+	//m_Animation->Render();
 	return true;
 }
