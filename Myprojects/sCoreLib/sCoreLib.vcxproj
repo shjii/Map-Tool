@@ -18,6 +18,68 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="doc.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TAttackState.cpp" />
+    <ClCompile Include="TBitmap.cpp" />
+    <ClCompile Include="TBitmapManager.cpp" />
+    <ClCompile Include="TCollision.cpp" />
+    <ClCompile Include="TCore.cpp" />
+    <ClCompile Include="TDevice.cpp" />
+    <ClCompile Include="TEffect.cpp" />
+    <ClCompile Include="TEnemyState.cpp" />
+    <ClCompile Include="TFiniteState.cpp" />
+    <ClCompile Include="TFiniteStateMachine.cpp" />
+    <ClCompile Include="TGameUser.cpp" />
+    <ClCompile Include="TInput.cpp" />
+    <ClCompile Include="TMath.cpp" />
+    <ClCompile Include="TMoveState.cpp" />
+    <ClCompile Include="TNpcObject.cpp" />
+    <ClCompile Include="TObject.cpp" />
+    <ClCompile Include="TObjectMgr.cpp" />
+    <ClCompile Include="TProjectile.cpp" />
+    <ClCompile Include="TScene.cpp" />
+    <ClCompile Include="TSound.cpp" />
+    <ClCompile Include="TSoundManager.cpp" />
+    <ClCompile Include="TStandState.cpp" />
+    <ClCompile Include="TTimer.cpp" />
+    <ClCompile Include="TUserInterface.cpp" />
+    <ClCompile Include="TWindow.cpp" />
+    <ClCompile Include="TWrite.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TAttackState.h" />
+    <ClInclude Include="TBasisStd.h" />
+    <ClInclude Include="TBitmap.h" />
+    <ClInclude Include="TBitmapManager.h" />
+    <ClInclude Include="TCollision.h" />
+    <ClInclude Include="TCore.h" />
+    <ClInclude Include="TCoreStd.h" />
+    <ClInclude Include="TDevice.h" />
+    <ClInclude Include="TEffect.h" />
+    <ClInclude Include="TEnemyState.h" />
+    <ClInclude Include="TFiniteState.h" />
+    <ClInclude Include="TFiniteStateMachine.h" />
+    <ClInclude Include="TGameUser.h" />
+    <ClInclude Include="TInput.h" />
+    <ClInclude Include="TMath.h" />
+    <ClInclude Include="TMoveState.h" />
+    <ClInclude Include="TNpcObject.h" />
+    <ClInclude Include="TObject.h" />
+    <ClInclude Include="TObjectMgr.h" />
+    <ClInclude Include="TProjectile.h" />
+    <ClInclude Include="TScene.h" />
+    <ClInclude Include="TSound.h" />
+    <ClInclude Include="TSoundManager.h" />
+    <ClInclude Include="TStandState.h" />
+    <ClInclude Include="TStd.h" />
+    <ClInclude Include="TTimer.h" />
+    <ClInclude Include="TUserInterface.h" />
+    <ClInclude Include="TWindow.h" />
+    <ClInclude Include="TWrite.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DAF8F1CB-6EC7-4D29-83D8-1841CC2CB8AB}</ProjectGuid>
@@ -72,8 +134,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output</OutDir>
-    <IntDir>../../output/sCoreLib</IntDir>
+    <OutDir>../../output/Deubug/</OutDir>
+    <IntDir>../../output/Deubug/sCoreLib</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -104,7 +166,7 @@
 copy "*.h" "..\\..\\include"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\"</Command>
+      <Command>copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\Debug"</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>../../fmod/lib/x64;</AdditionalLibraryDirectories>
@@ -168,74 +230,6 @@ copy "*.h" "..\\..\\include"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Floor.cpp" />
-    <ClCompile Include="sAnimation.cpp" />
-    <ClCompile Include="sAttackState.cpp" />
-    <ClCompile Include="sBitmap.cpp" />
-    <ClCompile Include="sBitmapManager.cpp" />
-    <ClCompile Include="sCollision.cpp" />
-    <ClCompile Include="sCore.cpp" />
-    <ClCompile Include="sDeadState.cpp" />
-    <ClCompile Include="sEcentScene.cpp" />
-    <ClCompile Include="sEffect.cpp" />
-    <ClCompile Include="sEnemyState.cpp" />
-    <ClCompile Include="sFiniteState.cpp" />
-    <ClCompile Include="sFiniteStateMachine.cpp" />
-    <ClCompile Include="sGameUser.cpp" />
-    <ClCompile Include="sGraphicAPI.cpp" />
-    <ClCompile Include="sInPut.cpp" />
-    <ClCompile Include="SItem.cpp" />
-    <ClCompile Include="sMoveState.cpp" />
-    <ClCompile Include="sNpcObject.cpp" />
-    <ClCompile Include="sObject.cpp" />
-    <ClCompile Include="sObjectManager.cpp" />
-    <ClCompile Include="sProjectile.cpp" />
-    <ClCompile Include="sScene.cpp" />
-    <ClCompile Include="sSceneInGame.cpp" />
-    <ClCompile Include="sSound.cpp" />
-    <ClCompile Include="sSoundManager.cpp" />
-    <ClCompile Include="sStandState.cpp" />
-    <ClCompile Include="sTime.cpp" />
-    <ClCompile Include="sUserInterface.cpp" />
-    <ClCompile Include="sWindow.cpp" />
-    <ClCompile Include="sWrite.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Floor.h" />
-    <ClInclude Include="sAnimation.h" />
-    <ClInclude Include="sAttackState.h" />
-    <ClInclude Include="sBitmap.h" />
-    <ClInclude Include="sBitmapManager.h" />
-    <ClInclude Include="sCollision.h" />
-    <ClInclude Include="sCore.h" />
-    <ClInclude Include="sCorestd.h" />
-    <ClInclude Include="sDeadState.h" />
-    <ClInclude Include="sEcentScene.h" />
-    <ClInclude Include="sEffect.h" />
-    <ClInclude Include="sEnemyState.h" />
-    <ClInclude Include="sFiniteState.h" />
-    <ClInclude Include="sFiniteStateMachine.h" />
-    <ClInclude Include="sGameUser.h" />
-    <ClInclude Include="sGraphicAPI.h" />
-    <ClInclude Include="sInPut.h" />
-    <ClInclude Include="SItem.h" />
-    <ClInclude Include="sMoveState.h" />
-    <ClInclude Include="sNpcObject.h" />
-    <ClInclude Include="sObject.h" />
-    <ClInclude Include="sObjectManager.h" />
-    <ClInclude Include="sProjectile.h" />
-    <ClInclude Include="sScene.h" />
-    <ClInclude Include="sSceneInGame.h" />
-    <ClInclude Include="sSound.h" />
-    <ClInclude Include="sSoundManager.h" />
-    <ClInclude Include="sStandState.h" />
-    <ClInclude Include="sStd.h" />
-    <ClInclude Include="sTime.h" />
-    <ClInclude Include="sUserInterface.h" />
-    <ClInclude Include="sWindow.h" />
-    <ClInclude Include="sWrite.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

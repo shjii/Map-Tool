@@ -24,198 +24,174 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sCore.cpp">
+    <Text Include="doc.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TAttackState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sInPut.cpp">
+    <ClCompile Include="TBitmap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sTime.cpp">
+    <ClCompile Include="TBitmapManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sWindow.cpp">
+    <ClCompile Include="TCollision.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sGraphicAPI.cpp">
+    <ClCompile Include="TCore.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sWrite.cpp">
+    <ClCompile Include="TDevice.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sSound.cpp">
+    <ClCompile Include="TEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sSoundManager.cpp">
+    <ClCompile Include="TEnemyState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sCollision.cpp">
+    <ClCompile Include="TFiniteState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sEffect.cpp">
+    <ClCompile Include="TFiniteStateMachine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sProjectile.cpp">
+    <ClCompile Include="TGameUser.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sUserInterface.cpp">
+    <ClCompile Include="TInput.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sAttackState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sEnemyState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sFiniteState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sFiniteStateMachine.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sMoveState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sStandState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sBitmap.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sBitmapManager.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sObject.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sObjectManager.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="sNpcObject.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Floor.cpp">
+    <ClCompile Include="TMath.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sAnimation.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sGameUser.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="sEcentScene.cpp">
+    <ClCompile Include="TMoveState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sDeadState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="sSceneInGame.cpp">
+    <ClCompile Include="TNpcObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SItem.cpp">
+    <ClCompile Include="TObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TObjectMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TProjectile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TSound.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TSoundManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TStandState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TTimer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TUserInterface.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TWindow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TWrite.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sCore.h">
+    <ClInclude Include="TAttackState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sCorestd.h">
+    <ClInclude Include="TBasisStd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sInPut.h">
+    <ClInclude Include="TBitmap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sStd.h">
+    <ClInclude Include="TBitmapManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sTime.h">
+    <ClInclude Include="TCollision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sWindow.h">
+    <ClInclude Include="TCore.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sGraphicAPI.h">
+    <ClInclude Include="TCoreStd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sWrite.h">
+    <ClInclude Include="TDevice.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sSound.h">
+    <ClInclude Include="TEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sSoundManager.h">
+    <ClInclude Include="TEnemyState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sCollision.h">
+    <ClInclude Include="TFiniteState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sEffect.h">
+    <ClInclude Include="TFiniteStateMachine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sProjectile.h">
+    <ClInclude Include="TGameUser.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sUserInterface.h">
+    <ClInclude Include="TInput.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sAttackState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sEnemyState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sFiniteState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sFiniteStateMachine.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sMoveState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sStandState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sBitmap.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sBitmapManager.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sObject.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sObjectManager.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="sNpcObject.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Floor.h">
+    <ClInclude Include="TMath.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sAnimation.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sGameUser.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="sEcentScene.h">
+    <ClInclude Include="TMoveState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sDeadState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="sSceneInGame.h">
+    <ClInclude Include="TNpcObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SItem.h">
+    <ClInclude Include="TObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TObjectMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TProjectile.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TSound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TSoundManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TStandState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TStd.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TTimer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TUserInterface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TWindow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TWrite.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
