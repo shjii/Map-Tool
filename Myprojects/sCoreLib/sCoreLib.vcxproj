@@ -22,6 +22,8 @@
     <Text Include="doc.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dxtk\DDSTextureLoader.cpp" />
+    <ClCompile Include="dxtk\WICTextureLoader.cpp" />
     <ClCompile Include="TAttackState.cpp" />
     <ClCompile Include="TBitmap.cpp" />
     <ClCompile Include="TBitmapManager.cpp" />
@@ -50,6 +52,13 @@
     <ClCompile Include="TWrite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dxtk\DDS.h" />
+    <ClInclude Include="dxtk\DDSTextureLoader.h" />
+    <ClInclude Include="dxtk\DirectXHelpers.h" />
+    <ClInclude Include="dxtk\LoaderHelpers.h" />
+    <ClInclude Include="dxtk\pch.h" />
+    <ClInclude Include="dxtk\PlatformHelpers.h" />
+    <ClInclude Include="dxtk\WICTextureLoader.h" />
     <ClInclude Include="TAttackState.h" />
     <ClInclude Include="TBasisStd.h" />
     <ClInclude Include="TBitmap.h" />
@@ -163,10 +172,12 @@
     </Link>
     <PostBuildEvent>
       <Command>copy "..\\..\\output\\sCoreLib.lib" "..\\..\\lib"
-copy "*.h" "..\\..\\include"</Command>
+copy "*.h" "..\\..\\include"
+copy "dxtk\\*h" "..\\..\\include\\dxtk"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\Debug"</Command>
+      <Command>md "..\\..\\include\\dxtk"
+copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\Debug"</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>../../fmod/lib/x64;</AdditionalLibraryDirectories>
