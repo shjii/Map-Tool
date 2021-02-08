@@ -66,6 +66,7 @@ namespace TBASIS_VECTOR {
 		Vector4();
 		Vector4(const Vector4& v0);
 		Vector4(float fX, float fY, float fZ, float fW);
+		bool	operator == (Vector4 const &v0);
 	};
 
 	class Vector2 : public float2
@@ -74,6 +75,7 @@ namespace TBASIS_VECTOR {
 		Vector2();
 		Vector2(const Vector2& v0);
 		Vector2(float fX, float fY);
+		bool	operator == (Vector2 const &v0);
 	};
 }
 using namespace TBASIS_VECTOR;

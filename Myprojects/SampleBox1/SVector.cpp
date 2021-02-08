@@ -118,7 +118,23 @@ Vector4::Vector4(float fX, float fY, float fZ, float fW)
 	z = fZ;
 	w = fW;
 }
-
+bool	Vector4::operator == (Vector4 const &v0)
+{
+	if (fabs(x - v0.x) < TBASIS_EPSILON)
+	{
+		if (fabs(y - v0.y) < TBASIS_EPSILON)
+		{
+			if (fabs(z - v0.z) < TBASIS_EPSILON)
+			{
+				if (fabs(w - v0.w) < TBASIS_EPSILON)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
 
 Vector2::Vector2()
 {
@@ -135,4 +151,15 @@ Vector2::Vector2(float fX, float fY)
 {
 	x = fX;
 	y = fY;
+}
+bool	Vector2::operator == (Vector2 const &v0)
+{
+	if (fabs(x - v0.x) < TBASIS_EPSILON)
+	{
+		if (fabs(y - v0.y) < TBASIS_EPSILON)
+		{
+			return true;
+		}
+	}
+	return false;
 }

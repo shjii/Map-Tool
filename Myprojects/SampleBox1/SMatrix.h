@@ -1,5 +1,4 @@
 #pragma once
-
 #include "SVector.h"
 
 struct float4x4
