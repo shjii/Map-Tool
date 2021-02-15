@@ -5,12 +5,11 @@
 #pragma comment(lib, "dxgi.lib")
 
 
-//#if NDEBUG
-//#pragma comment (lib, "TCoreLib_R.lib")
-//#else
-//#pragma comment (lib, "TCoreLib_D.lib")
-#pragma comment(lib, "sCoreLib.lib")
-//#endif
+#if NDEBUG
+#pragma comment (lib, "sCoreLib_R.lib")
+#else
+#pragma comment (lib, "sCoreLib_D.lib")
+#endif
 
 using namespace std;
 

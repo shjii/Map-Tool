@@ -24,6 +24,10 @@
   <ItemGroup>
     <ClCompile Include="dxtk\DDSTextureLoader.cpp" />
     <ClCompile Include="dxtk\WICTextureLoader.cpp" />
+    <ClCompile Include="SDxState.cpp" />
+    <ClCompile Include="SMatrix.cpp" />
+    <ClCompile Include="SShape.cpp" />
+    <ClCompile Include="SVector.cpp" />
     <ClCompile Include="TAttackState.cpp" />
     <ClCompile Include="TBitmap.cpp" />
     <ClCompile Include="TBitmapManager.cpp" />
@@ -59,6 +63,11 @@
     <ClInclude Include="dxtk\pch.h" />
     <ClInclude Include="dxtk\PlatformHelpers.h" />
     <ClInclude Include="dxtk\WICTextureLoader.h" />
+    <ClInclude Include="SDxState.h" />
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SMatrix.h" />
+    <ClInclude Include="SShape.h" />
+    <ClInclude Include="SVector.h" />
     <ClInclude Include="TAttackState.h" />
     <ClInclude Include="TBasisStd.h" />
     <ClInclude Include="TBitmap.h" />
@@ -88,6 +97,9 @@
     <ClInclude Include="TUserInterface.h" />
     <ClInclude Include="TWindow.h" />
     <ClInclude Include="TWrite.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -171,9 +183,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "..\\..\\output\\sCoreLib.lib" "..\\..\\lib"
+      <Command>copy  "..\\..\\output\\Debug\\sCoreLib.lib" "..\\..\\lib\\sCoreLib_D.lib"
 copy "*.h" "..\\..\\include"
-copy "dxtk\\*h" "..\\..\\include\\dxtk"</Command>
+copy "dxtk\\*.h" "..\\..\\include\\dxtk"
+copy "*.inl" "..\\..\\include"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>md "..\\..\\include\\dxtk"

@@ -16,6 +16,8 @@ void TDevice::ResizeDevice(UINT w, UINT h)
 
 	m_pd3dContext->OMSetRenderTargets(0, NULL, NULL);
 	if (m_pRednerTargetView) m_pRednerTargetView->Release();
+	if (m_pDSV) m_pDSV->Release();
+
 	DXGI_SWAP_CHAIN_DESC pSwapChainDesc;
 	m_pSwapChain->GetDesc(&pSwapChainDesc);
 	m_pSwapChain->ResizeBuffers(
@@ -26,6 +28,7 @@ void TDevice::ResizeDevice(UINT w, UINT h)
 		pSwapChainDesc.Flags);
 
 	SetRenderTargetView();
+	SetDepthStencilView();
 	SetViewport();
 
 	CreateDXResource(w,h);
@@ -137,6 +140,45 @@ HRESULT		TDevice::SetRenderTargetView()
 	if (pBackBuffer) pBackBuffer->Release();
 	return hr;
 }
+HRESULT TDevice::SetDepthStencilView()
+{
+	// create depth texture
+	ID3D11Texture2D* pTexture = nullptr;
+	D3D11_TEXTURE2D_DESC texDesc;
+	ZeroMemory(&texDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	texDesc.Width = g_rtClient.right;
+	texDesc.Height = g_rtClient.bottom;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	HRESULT hr = m_pd3dDevice->CreateTexture2D(&texDesc, NULL, &pTexture);
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Texture2D.MipSlice = 0;
+	hr = m_pd3dDevice->CreateDepthStencilView(
+		pTexture,
+		&dsvDesc,
+		&m_pDSV);
+
+	if (pTexture)pTexture->Release();
+	if (FAILED(hr))
+	{
+		return false;
+	}
+	return true;
+}
 bool TDevice::SetViewport()
 {
 	m_ViewPort.TopLeftX = 0;
@@ -165,10 +207,15 @@ bool TDevice::Init()
 	{
 		return false;
 	}	
+	if (FAILED(SetDepthStencilView()))
+	{
+		return false;
+	}
 	if (SetViewport()==false)
 	{
 		return false;
 	}
+	SDxState::Set(m_pd3dDevice);
 	if (FAILED(m_pGIFactory->MakeWindowAssociation(m_hWnd,
 		DXGI_MWA_NO_WINDOW_CHANGES |
 		DXGI_MWA_NO_ALT_ENTER)))
@@ -185,13 +232,14 @@ bool TDevice::PreRender()
 {
 	if (m_pd3dContext)
 	{
-		m_pd3dContext->OMSetRenderTargets(1, &m_pRednerTargetView, NULL);
+		m_pd3dContext->RSSetViewports(1, &m_ViewPort);
+		m_pd3dContext->OMSetRenderTargets(1, &m_pRednerTargetView, m_pDSV);
 		/*float clearColor[] = { cosf(g_fGameTimer)*0.5f + 0.5f,
 								-cosf(g_fGameTimer)*0.5f + 0.5f,
 								sinf(g_fGameTimer)*0.5f + 0.5f,1 };*/
 		float clearColor[] = { 0,0,0,1 };
 		m_pd3dContext->ClearRenderTargetView(m_pRednerTargetView, clearColor);
-		m_pd3dContext->RSSetViewports(1, &m_ViewPort);
+		m_pd3dContext->ClearDepthStencilView(m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 	}return true;
 }
 bool TDevice::Render()
@@ -208,6 +256,8 @@ bool TDevice::PostRender()
 }
 bool TDevice::Release()
 {
+	SDxState::Release();
+	m_pDSV->Release();
 	m_pRednerTargetView->Release();
 	m_pSwapChain->Release();
 	m_pd3dContext->Release();	

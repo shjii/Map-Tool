@@ -148,15 +148,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SMatrix.cpp" />
-    <ClCompile Include="SShape.cpp" />
-    <ClCompile Include="SVector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
-    <ClInclude Include="SMatrix.h" />
-    <ClInclude Include="SShape.h" />
-    <ClInclude Include="SVector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="PS.txt" />
