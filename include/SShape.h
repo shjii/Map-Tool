@@ -42,15 +42,12 @@ struct PNCT_VERTEX
 	}
 
 	PNCT_VERTEX() {}
-	PNCT_VERTEX(Vector3 p,
-		Vector3 n,
-		Vector4 c,
-		Vector2 t)
+	PNCT_VERTEX(Vector3		vp,
+		Vector3		vn,
+		Vector4		vc,
+		Vector2     vt)
 	{
-		this->p = p;
-		this->n = n;
-		this->c = c;
-		this->t = t;
+		p = vp, n = vn, c = vc, t = vt;
 	}
 };
 
@@ -67,7 +64,7 @@ class SShape
 {
 public:
 	ID3D11Device*	m_pd3dDevice;
-	ID3DBlob*		m_pVSobj;
+	ID3DBlob*		m_pVSObj;
 	UINT			m_iTopology;
 	C_STR			m_szVertexShader;
 	C_STR			m_szPixelShader;

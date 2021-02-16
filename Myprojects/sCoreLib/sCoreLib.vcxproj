@@ -24,6 +24,8 @@
   <ItemGroup>
     <ClCompile Include="dxtk\DDSTextureLoader.cpp" />
     <ClCompile Include="dxtk\WICTextureLoader.cpp" />
+    <ClCompile Include="SCamera.cpp" />
+    <ClCompile Include="SDebugCamera.cpp" />
     <ClCompile Include="SDxState.cpp" />
     <ClCompile Include="SMatrix.cpp" />
     <ClCompile Include="SShape.cpp" />
@@ -63,6 +65,8 @@
     <ClInclude Include="dxtk\pch.h" />
     <ClInclude Include="dxtk\PlatformHelpers.h" />
     <ClInclude Include="dxtk\WICTextureLoader.h" />
+    <ClInclude Include="SCamera.h" />
+    <ClInclude Include="SDebugCamera.h" />
     <ClInclude Include="SDxState.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SMatrix.h" />
@@ -155,8 +159,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Deubug/</OutDir>
-    <IntDir>../../output/Deubug/sCoreLib</IntDir>
+    <OutDir>../../output/Debug/</OutDir>
+    <IntDir>../../output/Debug/sCoreLib</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

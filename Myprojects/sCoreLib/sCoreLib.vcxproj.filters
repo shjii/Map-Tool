@@ -31,6 +31,9 @@
     <Filter Include="dx">
       <UniqueIdentifier>{59520b53-a48a-4933-a531-e176542a49b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{60318a76-3881-488b-8d38-1490bd5b1c62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc.txt" />
@@ -131,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="SDxState.cpp">
       <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="SCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SDebugCamera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="SCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SDebugCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

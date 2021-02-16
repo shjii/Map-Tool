@@ -4,11 +4,13 @@
 #include "TInput.h"
 #include "TWrite.h"
 #include "TSoundManager.h"
-
+#include "SDebugCamera.h"
 class TCore : public TDevice
 {
 public:
 	bool		m_bGameRun;
+	SDebugCamera	m_Camera;
+	SCamera*		m_pMainCamera;
 public:
 	virtual bool	PreInit();
 	virtual bool	Init();
@@ -17,6 +19,7 @@ public:
 	virtual bool	PreFrame() {
 		return true;
 	};
+	virtual void	CameraFrame();
 	virtual bool	Frame() {
 		return true;
 	};
@@ -42,5 +45,8 @@ private:
 	bool	GameRun();
 public:
 	bool	Run();
+public:
+	TCore();
+	virtual ~TCore();
 };
 

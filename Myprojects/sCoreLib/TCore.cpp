@@ -11,52 +11,57 @@ HRESULT TCore::CreateDXResource(UINT w, UINT h)
 	IDXGISurface1* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface),
 		(LPVOID*)&pBackBuffer);
-		g_dxWrite.ResizeDevice(w,h, pBackBuffer);
+	g_dxWrite.ResizeDevice(w, h, pBackBuffer);
 	if (pBackBuffer) pBackBuffer->Release();
 	return S_OK;
 }
-bool	TCore::PreInit() 
+bool	TCore::PreInit()
 {
 	return true;
 };
-bool	TCore::Init() 
+bool	TCore::Init()
 {
 	return true;
 };
-bool	TCore::PostInit() 
+bool	TCore::PostInit()
 {
-	
+
 	return true;
 };
-bool TCore::GameInit() 
+bool TCore::GameInit()
 {
 	PreInit();
-		m_bGameRun = true;
-		if (TDevice::Init()==false)
-		{
-			return false;
-		}
-		SetMode(m_bFullScreen);
+	m_bGameRun = true;
+	if (TDevice::Init() == false)
+	{
+		return false;
+	}
+	SetMode(m_bFullScreen);
 
-		g_Timer.Init();
-		g_Input.Init();
-		g_SoundMgr.Init();
+	g_Timer.Init();
+	g_Input.Init();
+	g_SoundMgr.Init();
 
-		IDXGISurface1* pBackBuffer = nullptr;
-		m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface),
-			(LPVOID*)&pBackBuffer);
-			g_dxWrite.Set(m_hWnd, 
-				g_rtClient.right,
-				g_rtClient.bottom, pBackBuffer);
-		if (pBackBuffer) pBackBuffer->Release();
+	IDXGISurface1* pBackBuffer = nullptr;
+	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface),
+		(LPVOID*)&pBackBuffer);
+	g_dxWrite.Set(m_hWnd,
+		g_rtClient.right,
+		g_rtClient.bottom, pBackBuffer);
+	if (pBackBuffer) pBackBuffer->Release();
 
-		Init();
+	m_Camera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
+	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
+	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
+	m_Camera.Init();
+	m_pMainCamera = &m_Camera;
+	Init();
 	PostInit();
 	ShowWindow(m_hWnd, SW_SHOWNORMAL);
 	return true;
 }
 bool TCore::GameRelease()
-{	
+{
 	Release();
 	g_Timer.Release();
 	g_Input.Release();
@@ -69,13 +74,42 @@ bool TCore::GameRelease()
 bool	TCore::GameFrame()
 {
 	PreFrame();
-	g_Timer.Frame();	
+	g_Timer.Frame();
 	g_Input.Frame();
 	g_SoundMgr.Frame();
-		Frame();
+	Frame();
 	g_ObjectMgr.Frame();
+	CameraFrame();
 	PostFrame();
 	return true;
+}
+void    TCore::CameraFrame()
+{
+	if (g_Input.GetKey('W') == KEY_HOLD)
+	{
+		m_pMainCamera->FrontMovement(1.0f);
+	}
+	if (g_Input.GetKey('S') == KEY_HOLD)
+	{
+		m_pMainCamera->FrontMovement(-1.0f);
+	}
+	if (g_Input.GetKey('A') == KEY_HOLD)
+	{
+		m_pMainCamera->RightMovement(1.0f);
+	}
+	if (g_Input.GetKey('D') == KEY_HOLD)
+	{
+		m_pMainCamera->RightMovement(-1.0f);
+	}
+	if (g_Input.GetKey('Q') == KEY_HOLD)
+	{
+		m_pMainCamera->UpMovement(1.0f);
+	}
+	if (g_Input.GetKey('E') == KEY_HOLD)
+	{
+		m_pMainCamera->UpMovement(-1.0f);
+	}
+	m_pMainCamera->Frame();
 }
 bool	TCore::PreRender()
 {
@@ -102,7 +136,7 @@ bool	TCore::GameRender()
 }
 bool	TCore::GameRun()
 {
-	if (GameFrame()==false) return false;
+	if (GameFrame() == false) return false;
 	if (GameRender() == false) return false;
 	return true;
 }
@@ -123,7 +157,7 @@ bool TCore::Run()
 		}
 		else
 		{
-			if (GameRun()==false)
+			if (GameRun() == false)
 			{
 				break;
 			}
@@ -132,4 +166,12 @@ bool TCore::Run()
 	GameRelease();
 	CoUninitialize();
 	return true;
+}
+TCore::TCore()
+{
+	m_pMainCamera = nullptr;
+}
+TCore::~TCore()
+{
+
 }

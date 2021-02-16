@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/Debug/</OutDir>
-    <IntDir>../../output/Debug/SampleBox</IntDir>
+    <IntDir>../../output/Debug/SampleStencilBuffer</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -148,11 +148,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SCamera.cpp" />
+    <ClCompile Include="SModelViewCamera.cpp" />
+    <ClCompile Include="STexture.cpp" />
+    <ClCompile Include="STextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
-    <ClInclude Include="SCamera.h" />
+    <ClInclude Include="SModelViewCamera.h" />
+    <ClInclude Include="STexture.h" />
+    <ClInclude Include="STextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="PS.txt" />

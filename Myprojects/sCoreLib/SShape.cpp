@@ -1,13 +1,23 @@
 #include "SShape.h"
-
-
 void SShape::CompilerCheck(ID3DBlob* pErrorMsgs)
 {
 	C_STR szMsg = (char*)pErrorMsgs->GetBufferPointer();
 	T_STR szError = to_mw(szMsg);
 	MessageBox(NULL, szError.c_str(), L"ERROR", MB_OK);
 }
-bool SShape::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
+bool	SShape::Init()
+{
+	/*m_matWorld = Matrix::Identity;
+	m_matView = Matrix::Identity;
+	m_matProj = Matrix::Identity;*/
+	return true;
+}
+bool	SShape::Frame() {
+	return true;
+}
+bool	SShape::SetMatrix(Matrix* pWorld,
+	Matrix* pView,
+	Matrix* pProj)
 {
 	if (pWorld != nullptr)
 	{
@@ -20,34 +30,10 @@ bool SShape::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
 	if (pProj != nullptr)
 	{
 		m_matProj = *pProj;
-	}
+	} 
 	return true;
 }
-bool SShape::Create(ID3D11Device* pDvice, T_STR szVS, T_STR szPS, T_STR szTex)
-{
-	m_pd3dDevice = pDvice;
-	CreateVertexData();
-	CreateConstantBuffer();
-	CreateVertexBuffer();
-	CreateIndexData();
-	CreateIndexBuffer();
-	LoadShader(szVS, szPS);
-	CreateInputLayout();
-	LoadTexture(szTex);
-	return true;
-}
-bool SShape::Init()
-{
-	m_matWorld = Matrix::Identity;
-	m_matView = Matrix::Identity;
-	m_matProj = Matrix::Identity;
-	return true;
-}
-bool SShape::Frame()
-{
-	return true;
-}
-bool SShape::Update(ID3D11DeviceContext* pd3dContext)
+bool    SShape::Update(ID3D11DeviceContext*	pd3dContext)
 {
 	D3D11_MAPPED_SUBRESOURCE mr;
 	HRESULT hr = pd3dContext->Map(m_pConstantBuffer, 0,
@@ -66,20 +52,11 @@ bool SShape::Update(ID3D11DeviceContext* pd3dContext)
 		pData->vTime[0] = cosf(g_fGameTimer)*0.5f + 0.5f;
 		pData->vTime[1] = g_fGameTimer;
 		pd3dContext->Unmap(m_pConstantBuffer, 0);
+		return true;
 	}
-	return true;
+	return false;
 }
-SShape::SShape()
-{
-	m_szVertexShader = "VS";
-	m_szPixelShader = "PS";
-	m_iTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-}
-SShape::~SShape()
-{
-
-}
-bool SShape::Render(ID3D11DeviceContext* pd3dContext)
+bool	SShape::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	Update(pd3dContext);
 	UINT iStride = sizeof(PNCT_VERTEX);
@@ -93,12 +70,11 @@ bool SShape::Render(ID3D11DeviceContext* pd3dContext)
 	pd3dContext->PSSetShader(m_pPixelShader, NULL, 0);
 	pd3dContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iTopology);
 	pd3dContext->PSSetShaderResources(0, 1, &m_pTextureSRV);
-	//m_pd3dContext->Draw(m_VertexList.size(), 0);
+	//pd3dContext->Draw(m_VertexList.size(), 0);
 	pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
 	return true;
-	return true;
 }
-bool SShape::Release()
+bool	SShape::Release()
 {
 	m_pTextureSRV->Release();
 	m_pConstantBuffer->Release();
@@ -109,12 +85,27 @@ bool SShape::Release()
 	m_pPixelShader->Release();
 	return true;
 }
-bool SShape::CreateVertexData()
+
+SShape::SShape()
 {
-	return true;
+	m_szVertexShader = "VS";
+	m_szPixelShader = "PS";
+	m_iTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
-bool SShape::CreateConstantBuffer()
+SShape::~SShape()
 {
+
+}
+bool    SShape::CreateVertexData() {
+	return true;
+};
+
+bool    SShape::CreateIndexData() {
+	return true;
+};
+bool    SShape::CreateConstantBuffer()
+{
+	// constant buffer
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(SDataCB);
@@ -130,14 +121,16 @@ bool SShape::CreateConstantBuffer()
 	{
 		return false;
 	}
+	return true;
 }
-bool SShape::CreateVertexBuffer()
+bool	SShape::CreateVertexBuffer()
 {
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(PNCT_VERTEX) * m_VertexList.size();
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
 	sd.pSysMem = &m_VertexList.at(0);
@@ -148,17 +141,14 @@ bool SShape::CreateVertexBuffer()
 	}
 	return true;
 }
-bool SShape::CreateIndexData()
-{
-	return true;
-}
-bool SShape::CreateIndexBuffer()
+bool	SShape::CreateIndexBuffer()
 {
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(DWORD) * m_IndexList.size();
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
 	sd.pSysMem = &m_IndexList.at(0);
@@ -167,29 +157,47 @@ bool SShape::CreateIndexBuffer()
 	{
 		return false;
 	}
+	return true;
 }
 bool SShape::LoadShader(T_STR szVS, T_STR szPS)
 {
-	//shader
 	ID3DBlob* pPSObj;
 	ID3DBlob* pErrorMsgs;
-	HRESULT hr = D3DCompileFromFile(szVS.c_str(), NULL, NULL, m_szVertexShader.c_str(), "vs_5_0", 0, 0, &m_pVSobj, &pErrorMsgs);
+	HRESULT hr = D3DCompileFromFile(szVS.c_str(), NULL, NULL,
+		m_szVertexShader.c_str(), "vs_5_0", 0, 0, &m_pVSObj, &pErrorMsgs);
 	if (FAILED(hr))
 	{
 		CompilerCheck(pErrorMsgs);
 		return false;
 	}
-	hr = m_pd3dDevice->CreateVertexShader(m_pVSobj->GetBufferPointer(), m_pVSobj->GetBufferSize(), NULL, &m_pVertexShader);
-	hr = D3DCompileFromFile(szPS.c_str(), NULL, NULL, m_szPixelShader.c_str(), "ps_5_0", 0, 0, &pPSObj, &pErrorMsgs);
+	hr = m_pd3dDevice->CreateVertexShader(m_pVSObj->GetBufferPointer(), m_pVSObj->GetBufferSize(), NULL, &m_pVertexShader);
+	if (FAILED(hr)) return false;
+
+	hr = D3DCompileFromFile(szPS.c_str(), NULL, NULL,
+		m_szPixelShader.c_str(), "ps_5_0", 0, 0, &pPSObj, &pErrorMsgs);
 	if (FAILED(hr))
 	{
 		CompilerCheck(pErrorMsgs);
 		return false;
 	}
 	hr = m_pd3dDevice->CreatePixelShader(pPSObj->GetBufferPointer(), pPSObj->GetBufferSize(), NULL, &m_pPixelShader);
+	if (FAILED(hr)) return false;
 
+	if (pPSObj)	pPSObj->Release();
+	return true;
 }
-bool SShape::CreateInputLayout()
+bool	SShape::LoadTexture(T_STR szTex)
+{
+	// load texture
+	ID3D11Resource* texture;
+	HRESULT hr = DirectX::CreateWICTextureFromFile(
+		m_pd3dDevice, szTex.c_str(),
+		NULL,
+		&m_pTextureSRV);
+	if (FAILED(hr)) return false;
+	return true;
+}
+bool	SShape::CreateInputLayout()
 {
 	const D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -202,27 +210,32 @@ bool SShape::CreateInputLayout()
 	HRESULT hr = m_pd3dDevice->CreateInputLayout(
 		layout,
 		iNumElement,
-		m_pVSobj->GetBufferPointer(),
-		m_pVSobj->GetBufferSize(),
+		m_pVSObj->GetBufferPointer(),
+		m_pVSObj->GetBufferSize(),
 		&m_pInputLayout
 	);
+	if (FAILED(hr)) return false;
 	return true;
 }
-bool SShape::LoadTexture(T_STR szTex)
+bool	SShape::Create(ID3D11Device* pDevice,
+	T_STR szVS, T_STR szPS,
+	T_STR	szTex)
 {
-	ID3D11Resource* texture;
-	HRESULT hr = DirectX::CreateWICTextureFromFile(
-		m_pd3dDevice, szTex.c_str(),
-		NULL,
-		&m_pTextureSRV);
+	m_pd3dDevice = pDevice;
+
+	CreateVertexData();
+	CreateConstantBuffer();
+	CreateVertexBuffer();
+	CreateIndexData();
+	CreateIndexBuffer();
+	LoadShader(szVS, szPS);
+	CreateInputLayout();
+	LoadTexture(szTex);
 	return true;
 }
-
-
-///////////BOX///////////////
-
-bool SShapeBox::CreateVertexData()
+bool	SShapeBox::CreateVertexData()
 {
+	// Vertex Data
 	m_VertexList.resize(24);
 	m_VertexList[0] = PNCT_VERTEX(Vector3(-1.0f, 1.0f, -1.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector2(0.0f, 0.0f));
 	m_VertexList[1] = PNCT_VERTEX(Vector3(1.0f, 1.0f, -1.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector2(1.0f, 0.0f));
@@ -259,7 +272,7 @@ bool SShapeBox::CreateVertexData()
 	m_VertexList[23] = PNCT_VERTEX(Vector3(-1.0f, -1.0f, 1.0f), Vector3(0.0f, -1.0f, 0.0f), Vector4(0.0f, 1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f));
 	return true;
 }
-bool SShapeBox::CreateIndexData()
+bool    SShapeBox::CreateIndexData()
 {
 	m_IndexList.resize(36);
 	int iIndex = 0;
@@ -280,92 +293,71 @@ SShapeBox::~SShapeBox()
 
 }
 
-//////////Plane/////////////
-
 bool SShapePlane::CreateVertexData()
 {
+	// Vertex Data
 	m_VertexList.resize(4);
-	m_VertexList[0] = {
-		Vector3(-1.0f, 1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(1,0,0,1),
-		Vector2(0,0) };
-	m_VertexList[1] = {
-		Vector3(1.0f, 1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(0,1,0,1),
-		Vector2(1,0) };
-	m_VertexList[2] = {
-		Vector3(-1.0f, -1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(0,0,1,1),
-		Vector2(0,1) };
-	m_VertexList[3] = {
-		Vector3(1.0f, -1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(1,1,1,1),
-		Vector2(1,1) };
+	m_VertexList[0] = PNCT_VERTEX(Vector3(-1.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f));
+	m_VertexList[1] = PNCT_VERTEX(Vector3(1.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f));
+	m_VertexList[2] = PNCT_VERTEX(Vector3(1.0f, -1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.0f, 1.0f));
+	m_VertexList[3] = PNCT_VERTEX(Vector3(-1.0f, -1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f));
 	return true;
 }
+
 bool SShapePlane::CreateIndexData()
 {
-
 	m_IndexList.resize(6);
-	m_IndexList[0] = 0;
-	m_IndexList[1] = 1;
-	m_IndexList[2] = 2;
-	m_IndexList[3] = 2;
-	m_IndexList[4] = 1;
-	m_IndexList[5] = 3;
+	int iIndex = 0;
+	m_IndexList[iIndex++] = 0;
+	m_IndexList[iIndex++] = 1;
+	m_IndexList[iIndex++] = 2;
+	m_IndexList[iIndex++] = 0;
+	m_IndexList[iIndex++] = 2;
+	m_IndexList[iIndex++] = 3;
 	return true;
 }
+
 SShapePlane::SShapePlane()
 {
-
 }
+
 SShapePlane::~SShapePlane()
 {
-
 }
 
-///////////Line/////////////
-
-bool SShapeLine::Draw(ID3D11DeviceContext* pd3dContext, Vector3 p, Vector3 e, Vector4 c )
+bool SShapeLine::Draw(ID3D11DeviceContext* pd3dContext,
+	Vector3 p, Vector3 e, Vector4 c)
 {
 	m_VertexList[0] = PNCT_VERTEX(p, Vector3(0.0f, 0.0f, -1.0f), c, Vector2(0.0f, 0.0f));
 	m_VertexList[1] = PNCT_VERTEX(e, Vector3(0.0f, 0.0f, -1.0f), c, Vector2(1.0f, 0.0f));
-	pd3dContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+	pd3dContext->UpdateSubresource(
+		m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
 	return SShape::Render(pd3dContext);
 }
 bool SShapeLine::CreateVertexData()
 {
+	// Vertex Data
 	m_VertexList.resize(2);
-	m_VertexList[0] = {
-		Vector3(-1.0f, 1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(1,0,0,1),
-		Vector2(0,0) };
-	m_VertexList[1] = {
-		Vector3(1.0f, 1.0f, -1.0f),
-		Vector3(0,0,0),
-		Vector4(0,1,0,1),
-		Vector2(1,0) };
+	m_VertexList[0] = PNCT_VERTEX(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector2(0.0f, 0.0f));
+	m_VertexList[1] = PNCT_VERTEX(Vector3(100.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector2(1.0f, 0.0f));
 	return true;
 }
+
 bool SShapeLine::CreateIndexData()
 {
-
 	m_IndexList.resize(2);
-	m_IndexList[0] = 0;
-	m_IndexList[1] = 1;
+	int iIndex = 0;
+	m_IndexList[iIndex++] = 0;
+	m_IndexList[iIndex++] = 1;
 	return true;
 }
+
 SShapeLine::SShapeLine()
 {
 	m_szPixelShader = "PSLine";
 	m_iTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 }
+
 SShapeLine::~SShapeLine()
 {
-
 }
