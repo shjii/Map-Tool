@@ -25,6 +25,12 @@
     <Filter Include="dxtk">
       <UniqueIdentifier>{80897363-575e-4d99-b1bb-28565d6913d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{67254a54-3af9-4d24-ac7e-77683ccbb3a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dx">
+      <UniqueIdentifier>{59520b53-a48a-4933-a531-e176542a49b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc.txt" />
@@ -113,6 +119,18 @@
     </ClCompile>
     <ClCompile Include="dxtk\WICTextureLoader.cpp">
       <Filter>dxtk</Filter>
+    </ClCompile>
+    <ClCompile Include="SMatrix.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="SShape.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="SVector.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="SDxState.cpp">
+      <Filter>dx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,5 +242,25 @@
     <ClInclude Include="dxtk\WICTextureLoader.h">
       <Filter>dxtk</Filter>
     </ClInclude>
+    <ClInclude Include="SMatrix.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="SShape.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="SVector.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="SDxState.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl">
+      <Filter>math</Filter>
+    </None>
   </ItemGroup>
 </Project>
