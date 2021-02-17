@@ -259,7 +259,7 @@ void  TDialogBox::Set(TPoint p, RECT rtSrc)
 		0.2f, 0.2f,		// 원본 좌우 소스 스케일  00, 02
 		0.33f, 0.33f);  // 원본 상하 소스 스케일  00, 20
 }
-bool  TDialogBox::Render()
+bool  TDialogBox::Render(ID3D11DeviceContext* pd3dContext)
 {
 	//for (int iRect = 0; iRect < 9; iRect++)
 	//{
@@ -295,7 +295,7 @@ bool  TDialogBox::Render()
 	//		Rectangle(g_hOffScreenDC,rtDesk.left, rtDesk.top, rtDesk.left + rtDesk.right, rtDesk.top + rtDesk.bottom);
 	//	}
 	//}
-	PostRender();
+	PostRender(pd3dContext);
 	return true;
 }
 TObject* TButton::Clone()
@@ -306,7 +306,7 @@ bool   TButton::Frame()
 {
 	return true;
 }
-bool   TButton::Render()
+bool   TButton::Render(ID3D11DeviceContext* pd3dContext)
 {
 	/*RECT rtDraw = m_rtDesk;
 	if (m_pParentObject != nullptr)
@@ -371,7 +371,7 @@ bool   TButton::Render()
 		}
 
 	}*/
-	return PostRender();
+	return PostRender(pd3dContext);
 }
 LRESULT	 TEdit::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -460,7 +460,7 @@ bool   TEdit::Frame()
 	return true;
 }
 
-bool   TEdit::Render()
+bool   TEdit::Render(ID3D11DeviceContext* pd3dContext)
 {
 	RECT rtDraw = m_rtDesk;
 	if (m_pParentObject != nullptr)
@@ -526,5 +526,5 @@ bool   TEdit::Render()
 
 	g_Write.Draw({ m_rtWndCtrl.left, m_rtWndCtrl.top }, m_szEdit);
 	*/
-	return PostRender();
+	return PostRender(pd3dContext);
 }

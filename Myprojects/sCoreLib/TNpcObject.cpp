@@ -29,9 +29,9 @@ bool TNpcObject::Frame()
 	m_pAction->Process(TScene::m_pGamePlayer);	
 	return true;
 }
-bool TNpcObject::Render()
+bool TNpcObject::Render(ID3D11DeviceContext* pd3dContext)
 {
-	TObject::Render();	
+	TObject::Render(pd3dContext);
 	return true;
 }
 

@@ -148,24 +148,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SFrustum.cpp" />
     <ClCompile Include="SModelViewCamera.cpp" />
-    <ClCompile Include="STexture.cpp" />
-    <ClCompile Include="STextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
+    <ClInclude Include="SFrustum.h" />
     <ClInclude Include="SModelViewCamera.h" />
-    <ClInclude Include="STexture.h" />
-    <ClInclude Include="STextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="PS.txt" />
     <Text Include="VS.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\sCoreLib\sCoreLib.vcxproj">
-      <Project>{daf8f1cb-6ec7-4d29-83d8-1841cc2cb8ab}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

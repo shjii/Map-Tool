@@ -335,24 +335,24 @@ bool  TScene::Release()
 	m_EffectList.clear();
 	return true;
 }
-bool  TScene::PreRender()
+bool  TScene::PreRender(ID3D11DeviceContext* pd3dContext)
 {
 	return true;
 }
-bool  TScene::Render()
+bool  TScene::Render(ID3D11DeviceContext* pd3dContext)
 {	
-	PreRender();
+	PreRender(pd3dContext);
 	{
-		RenderMap();
-		RenderObject();
-		RenderCharacter();
-		RenderEffect();
-		RenderUI();
+		RenderMap(pd3dContext);
+		RenderObject(pd3dContext);
+		RenderCharacter(pd3dContext);
+		RenderEffect(pd3dContext);
+		RenderUI(pd3dContext);
 	}
-	PostRender();
+	PostRender(pd3dContext);
 	return true;
 }
-bool  TScene::PostRender()
+bool  TScene::PostRender(ID3D11DeviceContext* pd3dContext)
 {
 	if (TScene::m_pCurrentScene->m_bGameFinish)
 	{
@@ -361,61 +361,61 @@ bool  TScene::PostRender()
 	}
 	return true;
 }
-bool  TScene::RenderMap()
+bool  TScene::RenderMap(ID3D11DeviceContext* pd3dContext)
 {
 	for (auto iter : m_MapList)
 	{
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_Attribute.iVisible >= 1)
 		{
-			pObj->Render();
+			pObj->Render(pd3dContext);
 		}
 	}
 	return true;
 }
-bool  TScene::RenderUI()
+bool  TScene::RenderUI(ID3D11DeviceContext* pd3dContext)
 {
 	for (auto iter : m_UIDrawObjList)
 	{
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_Attribute.iVisible >= 1)
 		{
-			pObj->Render();
+			pObj->Render(pd3dContext);
 		}
 	}
 	return true;
 }
-bool  TScene::RenderEffect()
+bool  TScene::RenderEffect(ID3D11DeviceContext* pd3dContext)
 {
 	for (auto& pInfo : m_EffectList)
 	{
 		TEffect* pEffect = (TEffect*)g_ObjectMgr.GetPtr(pInfo.m_csName);
 		pEffect->Set(pInfo.p,
 			pEffect->m_rtList[pInfo.m_iRectIndex]);
-		pEffect->Render();
+		pEffect->Render(pd3dContext);
 	}
 	return true;
 }
-bool  TScene::RenderObject()
+bool  TScene::RenderObject(ID3D11DeviceContext* pd3dContext)
 {
 	for (auto iter : m_ObjList)
 	{
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_bDead == false)
 		{
-			pObj->Render();
+			pObj->Render( pd3dContext);
 		}
 	}
 	return true;
 }
-bool  TScene::RenderCharacter()
+bool  TScene::RenderCharacter(ID3D11DeviceContext* pd3dContext)
 {
 	for (auto iter : m_NpcList)
 	{
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_Attribute.iVisible >= 1)
 		{
-			pObj->Render();
+			pObj->Render(pd3dContext);
 		}
 	}
 	for (auto iter : m_UserList)
@@ -423,7 +423,7 @@ bool  TScene::RenderCharacter()
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_Attribute.iVisible >= 1)
 		{
-			pObj->Render();
+			pObj->Render(pd3dContext);
 		}
 	}
 	return true;

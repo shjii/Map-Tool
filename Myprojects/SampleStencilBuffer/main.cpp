@@ -148,7 +148,7 @@ bool main::Render()
 	m_pd3dContext->RSSetState(SDxState::m_pRS);
 	m_pd3dContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	m_pd3dContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
-	m_BoxShape.SetMatrix(&m_matBoxWorld,
+	m_BoxShape.SetMatrix(&m_pMainCamera->m_matWorld,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_BoxShape.Render(m_pd3dContext);

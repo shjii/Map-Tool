@@ -3,20 +3,12 @@
 #include "SShape.h"
 #include "TObject.h"
 #include "SModelViewCamera.h"
-class SGameObject : public TObject
-{
-public:
-	SShape* m_pShape;
-public:
-	SGameObject() {};
-	virtual ~SGameObject() {};
-};
 
 class main : public TCore
 {
 public:
 	Vector4			m_vDirValue;
-	SGameObject     m_BoxObj;
+	vector<TObject*>     m_ObjList;
 	SShapeBox		m_BoxShape;
 	SShapePlane		m_PlaneShape;
 	SShapeLine		m_LineShape;

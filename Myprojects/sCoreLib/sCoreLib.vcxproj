@@ -26,9 +26,12 @@
     <ClCompile Include="dxtk\WICTextureLoader.cpp" />
     <ClCompile Include="SCamera.cpp" />
     <ClCompile Include="SDebugCamera.cpp" />
+    <ClCompile Include="SDxObject.cpp" />
     <ClCompile Include="SDxState.cpp" />
     <ClCompile Include="SMatrix.cpp" />
     <ClCompile Include="SShape.cpp" />
+    <ClCompile Include="STexture.cpp" />
+    <ClCompile Include="STextureManager.cpp" />
     <ClCompile Include="SVector.cpp" />
     <ClCompile Include="TAttackState.cpp" />
     <ClCompile Include="TBitmap.cpp" />
@@ -67,10 +70,13 @@
     <ClInclude Include="dxtk\WICTextureLoader.h" />
     <ClInclude Include="SCamera.h" />
     <ClInclude Include="SDebugCamera.h" />
+    <ClInclude Include="SDxObject.h" />
     <ClInclude Include="SDxState.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SMatrix.h" />
     <ClInclude Include="SShape.h" />
+    <ClInclude Include="STexture.h" />
+    <ClInclude Include="STextureManager.h" />
     <ClInclude Include="SVector.h" />
     <ClInclude Include="TAttackState.h" />
     <ClInclude Include="TBasisStd.h" />

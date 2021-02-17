@@ -21,10 +21,7 @@
     <ClCompile Include="SModelViewCamera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="STexture.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="STextureManager.cpp">
+    <ClCompile Include="SFrustum.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +32,7 @@
     <ClInclude Include="SModelViewCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="STexture.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="STextureManager.h">
+    <ClInclude Include="SFrustum.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

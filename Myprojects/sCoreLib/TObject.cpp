@@ -238,11 +238,11 @@ bool  TObject::Release()
 	m_pChildObjects.clear();
 	return true;
 }
-bool TObject::PreRender()
+bool TObject::PreRender(ID3D11DeviceContext* pd3dContext)
 {
 	return true;
 }
-bool  TObject::Render()
+bool  TObject::Render(ID3D11DeviceContext* pd3dContext)
 {	
 	// 부모의 위치에서 상대적으로 위치하게 된다. 
 	//m_rtDraw = m_rtDesk;
@@ -278,13 +278,13 @@ bool  TObject::Render()
 	//		}
 	//	}
 	//}
-	return PostRender();	
+	return PostRender(pd3dContext);
 }
-bool TObject::PostRender()
+bool TObject::PostRender(ID3D11DeviceContext* pd3dContext)
 {
 	for (int iChild = 0; iChild < m_pChildObjects.size(); iChild++)
 	{
-		m_pChildObjects[iChild]->Render();
+		m_pChildObjects[iChild]->Render(pd3dContext);
 	}
 	return true;
 }

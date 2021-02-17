@@ -42,12 +42,6 @@
     <ClCompile Include="TAttackState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TBitmap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TBitmapManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TCollision.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -69,9 +63,6 @@
     <ClCompile Include="TFiniteStateMachine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TGameUser.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TInput.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -81,19 +72,7 @@
     <ClCompile Include="TMoveState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TNpcObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TObjectMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TProjectile.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TSound.cpp">
@@ -126,9 +105,6 @@
     <ClCompile Include="SMatrix.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="SShape.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
     <ClCompile Include="SVector.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -141,18 +117,45 @@
     <ClCompile Include="SDebugCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="STexture.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="STextureManager.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="SDxObject.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="SShape.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TBitmap.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TBitmapManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TObjectMgr.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TNpcObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TGameUser.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TAttackState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TBasisStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TBitmap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TBitmapManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TCollision.h">
@@ -179,9 +182,6 @@
     <ClInclude Include="TFiniteStateMachine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TGameUser.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TInput.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -191,19 +191,7 @@
     <ClInclude Include="TMoveState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TNpcObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TObjectMgr.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TProjectile.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TSound.h">
@@ -254,9 +242,6 @@
     <ClInclude Include="SMatrix.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="SShape.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="SVector.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -271,6 +256,39 @@
     </ClInclude>
     <ClInclude Include="SDebugCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="STexture.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="STextureManager.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="SDxObject.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="SShape.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TBitmap.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TBitmapManager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TObjectMgr.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TNpcObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TGameUser.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

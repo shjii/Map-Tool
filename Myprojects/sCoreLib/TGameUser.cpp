@@ -104,14 +104,14 @@ bool TGameUser::Frame()
 	return true;
 }
 
-bool TGameUser::Render()
+bool TGameUser::Render(ID3D11DeviceContext* pd3dContext)
 {
-	TObject::Render();
+	TObject::Render(pd3dContext);
 	for (auto& pInfo : m_ProjectileList)
 	{
 		m_pProjectile->Set(pInfo.p,	m_pProjectile->m_rtList[pInfo.m_iRectIndex]);
 		pInfo.m_rtCollide = m_pProjectile->m_rtCollide;
-		m_pProjectile->Render();
+		m_pProjectile->Render(pd3dContext);
 	}
 	return true;
 }
