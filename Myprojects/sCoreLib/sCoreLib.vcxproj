@@ -28,6 +28,7 @@
     <ClCompile Include="SDebugCamera.cpp" />
     <ClCompile Include="SDxObject.cpp" />
     <ClCompile Include="SDxState.cpp" />
+    <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SMatrix.cpp" />
     <ClCompile Include="SShape.cpp" />
     <ClCompile Include="STexture.cpp" />

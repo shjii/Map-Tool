@@ -48,17 +48,17 @@ void SCamera::SetTarget(Vector3 p)
 
 void SCamera::Update(Vector4 data)
 {
-	Matrix matRotation;
-	matRotation = Matrix::CreateRotationY(data.y);
-	Vector3 vLocalUp = { 0,1,0 };
-	Vector3	vLocalLook = { 0,0,1 };
-	vLocalUp = Vector3::Transform(vLocalUp, matRotation);
-	vLocalLook = Vector3::Transform(vLocalLook, matRotation);
-	vLocalLook.Normalize();
-	vLocalUp.Normalize();
-	float fHeight = m_vCameraPos.y;
-	m_vCameraPos = m_vCameraTarget - vLocalLook * m_fDistance;
-	m_vCameraPos.y = fHeight;
+	//Matrix matRotation;
+	//matRotation = Matrix::CreateRotationY(data.y);
+	//Vector3 vLocalUp = { 0,1,0 };
+	//Vector3	vLocalLook = { 0,0,1 };
+	//vLocalUp = Vector3::Transform(vLocalUp, matRotation);
+	//vLocalLook = Vector3::Transform(vLocalLook, matRotation);
+	//vLocalLook.Normalize();
+	//vLocalUp.Normalize();
+	//float fHeight = m_vCameraPos.y;
+	//m_vCameraPos = m_vCameraTarget - vLocalLook * m_fDistance;
+	//m_vCameraPos.y = fHeight;
 }
 
 bool SCamera::CreateViewMatrix(Vector3 p, Vector3 t, Vector3 u)
@@ -67,6 +67,15 @@ bool SCamera::CreateViewMatrix(Vector3 p, Vector3 t, Vector3 u)
 	m_vCameraTarget = t;
 	m_fDistance = (m_vCameraPos - m_vCameraTarget).Length();
 	m_matView = Matrix::CreateLookAt(p,t,u);
+
+	Matrix mlnvView;
+	mlnvView = m_matView.Invert();
+	Vector3* pZBasis = (Vector3*)&mlnvView._31;
+
+	m_vDirValue.y = atan2f(pZBasis->x, pZBasis->z);
+	float fLen = sqrtf(pZBasis->z * pZBasis->z + pZBasis->x * pZBasis->x);
+	m_vDirValue.x = -atan2f(pZBasis->y, fLen);
+
 	UpdateVector();
 	return true;
 }
@@ -138,6 +147,7 @@ void SCamera::UpdateVector()
 
 bool SCamera::Init()
 {
+	PostInit();
 	return true;
 }
 

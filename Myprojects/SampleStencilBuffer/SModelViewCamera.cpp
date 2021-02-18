@@ -9,20 +9,17 @@ int SModelViewCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 	{
 	case WM_LBUTTONDOWN:
 	{
-		m_bDrag = true;
-		OnBegin(iMouseX, iMouseY);
+		m_WorldArcBall.OnBegin(iMouseX, iMouseY);
 	}break;
 	case WM_MOUSEMOVE:
 	{
-		if (m_bDrag)
-		{
-			OnMove(iMouseX, iMouseY);
-		}
-	}break;
+		m_WorldArcBall.OnMove(iMouseX, iMouseY);
+		m_ViewArcBall.OnMove(iMouseX, iMouseY);
+	}
+	break;
 	case WM_LBUTTONUP:
 	{
-		m_bDrag = false;
-		OnEnd();
+		m_WorldArcBall.OnEnd();
 	}break;
 	case WM_MOUSEWHEEL:
 	{
@@ -32,12 +29,12 @@ int SModelViewCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 	return -1;
 }
 
-Matrix SModelViewCamera::GetRotationMatrix()
+Matrix SArcBall::GetRotationMatrix()
 {
 	return Matrix::CreateFromQuaternion(m_qDown);
 }
 
-Quaternion SModelViewCamera::QuatFromPoints(Vector3 v0, Vector3 v1)
+Quaternion SArcBall::QuatFromPoints(Vector3 v0, Vector3 v1)
 {
 	Vector3 vCross;
 	float fDot = v0.Dot(v1);
@@ -45,7 +42,7 @@ Quaternion SModelViewCamera::QuatFromPoints(Vector3 v0, Vector3 v1)
 	return Quaternion(vCross.x, vCross.y, vCross.z, fDot);
 }
 
-Vector3 SModelViewCamera::ScreenToVector(float px, float py)
+Vector3 SArcBall::ScreenToVector(float px, float py)
 {
 	float x = -((px / (float) g_rtClient.right) * 2.0f -1.0f);
 	float y = ((py / (float) g_rtClient.bottom) * 2.0f - 1.0f);
@@ -64,43 +61,44 @@ Vector3 SModelViewCamera::ScreenToVector(float px, float py)
 	return Vector3(x,y,z);
 }
 
-void SModelViewCamera::OnBegin(int x, int y)
+void SArcBall::OnBegin(int x, int y)
 {
+	m_bDrag = true;
 	m_vDownPt = ScreenToVector(x,y);
 	m_qDown = m_qNow;
 }
 
-void SModelViewCamera::OnMove(int x, int y)
+void SArcBall::OnMove(int x, int y)
 {
-	m_vCurrentPt = ScreenToVector(x,y);
-	m_qDown = m_qNow * QuatFromPoints(m_vDownPt, m_vCurrentPt);
+	if (m_bDrag)
+	{
+		m_vCurrentPt = ScreenToVector(x, y);
+		m_qDown = m_qNow * QuatFromPoints(m_vDownPt, m_vCurrentPt);
+	}
 }
 
-void SModelViewCamera::OnEnd()
+void SArcBall::OnEnd()
 {
+	m_bDrag = false;
 }
 
 void SModelViewCamera::Update(Vector4 data)
 {
-	Matrix mInvView = m_matView.Invert();
-	mInvView._41 = mInvView._42 = mInvView._43 = 0.0f;
-
-	Matrix mModelRotInv = m_mModelLastRot.Invert();
-
-	Matrix mModlRot = GetRotationMatrix();
-	m_matWorld = m_matWorld * m_matView * mModelRotInv * mModlRot *mInvView;
-	m_mModelLastRot = mModlRot;
 
 }
 
 bool SModelViewCamera::Frame()
 {
+
+
+
+	//WORLD
 	Matrix mInvView = m_matView.Invert();
 	mInvView._41 = mInvView._42 = mInvView._43 = 0.0f;
 
 	Matrix mModelRotInv = m_mModelLastRot.Invert();
 
-	Matrix mModlRot = GetRotationMatrix();
+	Matrix mModlRot = m_WorldArcBall.GetRotationMatrix();
 	m_matWorld = m_matWorld * m_matView * mModelRotInv * mModlRot *mInvView;
 	m_matWorld._41 = m_matWorld._42 = m_matWorld._43 = 0.0f;
 	m_mModelLastRot = mModlRot;
@@ -111,8 +109,7 @@ bool SModelViewCamera::Frame()
 
 SModelViewCamera::SModelViewCamera()
 {
-	//m_qDown = Quaternion::Identity;
-	//m_qNow = Quaternion::Identity;
+
 }
 
 SModelViewCamera::~SModelViewCamera()

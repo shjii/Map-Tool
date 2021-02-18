@@ -149,11 +149,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SFrustum.cpp" />
+    <ClCompile Include="SMap.cpp" />
     <ClCompile Include="SModelViewCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
     <ClInclude Include="SFrustum.h" />
+    <ClInclude Include="SMap.h" />
     <ClInclude Include="SModelViewCamera.h" />
   </ItemGroup>
   <ItemGroup>

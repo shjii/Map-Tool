@@ -19,6 +19,8 @@ public:
 	RECT		m_rtOffset;
 	RECT		m_rtPreOffset;
 	int			m_fWheelDelta;
+	Vector4		m_vDirValue;
+	POINT		m_ptPrePosition;
 public:
 	virtual int		WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	virtual	void	SetPos(Vector3 p);
@@ -35,6 +37,10 @@ public:
 	virtual void	UpdateVector();
 	virtual bool	Init();
 	virtual bool	Frame();
+	virtual bool	PostInit()
+	{
+		return true;
+	}
 public:
 	SCamera();
 	virtual ~SCamera();

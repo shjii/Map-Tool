@@ -150,6 +150,9 @@
     <ClCompile Include="TScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TAttackState.h">

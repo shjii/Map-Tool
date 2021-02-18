@@ -1,8 +1,6 @@
 #pragma once
 #include "TObject.h"
 
-
-
 class SShape : public TObject
 {
 public:

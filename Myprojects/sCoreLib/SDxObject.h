@@ -82,7 +82,7 @@ public:
 	ID3D11InputLayout*		m_pInputLayout;
 	ID3D11VertexShader*		m_pVertexShader;
 	ID3D11PixelShader*		m_pPixelShader;
-	STexture* m_pTexture;
+	STexture*				m_pTexture;
 public:
 	void CompilerCheck(ID3DBlob* pErrorMsgs);
 	virtual bool SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);

@@ -7,9 +7,9 @@ void SDxObject::CompilerCheck(ID3DBlob* pErrorMsgs)
 }
 bool	SDxObject::Init()
 {
-	//m_matWorld = Matrix::Identity;
-	//m_matView = Matrix::Identity;
-	//m_matProj = Matrix::Identity;
+	m_matWorld = Matrix::Identity;
+	m_matView = Matrix::Identity;
+	m_matProj = Matrix::Identity;
 	return true;
 }
 bool	SDxObject::Frame() {

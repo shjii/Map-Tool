@@ -8,7 +8,7 @@ class main : public TCore
 {
 public:
 	Vector4			m_vDirValue;
-	vector<TObject*>     m_ObjList;
+	vector<TObject*>    m_ObjList;
 	SShapeBox		m_BoxShape;
 	SShapePlane		m_PlaneShape;
 	SShapeLine		m_LineShape;
