@@ -1,6 +1,10 @@
 #include "SCamera.h"
 #include "TInput.h"
-int SCamera::WndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam)
+int SCamera::WndProc(
+	HWND hWnd,
+	UINT message,
+	WPARAM wParam,
+	LPARAM lParam)
 {
 	HRESULT hittest;
 	switch (message)
@@ -36,41 +40,20 @@ int SCamera::WndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam)
 	}
 	return -1;
 }
-void SCamera::SetPos(Vector3 p)
-{
-	m_vCameraPos = p;
-}
 
-void SCamera::SetTarget(Vector3 p)
-{
-	m_vCameraTarget = p;
-}
-
-void SCamera::Update(Vector4 data)
-{
-	//Matrix matRotation;
-	//matRotation = Matrix::CreateRotationY(data.y);
-	//Vector3 vLocalUp = { 0,1,0 };
-	//Vector3	vLocalLook = { 0,0,1 };
-	//vLocalUp = Vector3::Transform(vLocalUp, matRotation);
-	//vLocalLook = Vector3::Transform(vLocalLook, matRotation);
-	//vLocalLook.Normalize();
-	//vLocalUp.Normalize();
-	//float fHeight = m_vCameraPos.y;
-	//m_vCameraPos = m_vCameraTarget - vLocalLook * m_fDistance;
-	//m_vCameraPos.y = fHeight;
-}
-
-bool SCamera::CreateViewMatrix(Vector3 p, Vector3 t, Vector3 u)
+bool		SCamera::CreateViewMatrix(
+	Vector3 p,
+	Vector3 t,
+	Vector3 u)
 {
 	m_vCameraPos = p;
 	m_vCameraTarget = t;
 	m_fDistance = (m_vCameraPos - m_vCameraTarget).Length();
-	m_matView = Matrix::CreateLookAt(p,t,u);
+	m_matView = Matrix::CreateLookAt(p, t, u);
 
-	Matrix mlnvView;
-	mlnvView = m_matView.Invert();
-	Vector3* pZBasis = (Vector3*)&mlnvView._31;
+	Matrix mInvView;
+	mInvView = m_matView.Invert();
+	Vector3* pZBasis = (Vector3*)&mInvView._31;
 
 	m_vDirValue.y = atan2f(pZBasis->x, pZBasis->z);
 	float fLen = sqrtf(pZBasis->z * pZBasis->z + pZBasis->x * pZBasis->x);
@@ -79,31 +62,52 @@ bool SCamera::CreateViewMatrix(Vector3 p, Vector3 t, Vector3 u)
 	UpdateVector();
 	return true;
 }
-
-bool SCamera::CreateProjMatrix(float fN, float fF, float fFov, float fAspect)
+bool		SCamera::CreateProjMatrix(
+	float fN,
+	float fF,
+	float fFov,
+	float fAspect)
 {
-	m_matProj = Matrix::CreatePerspectiveFieldOfView(fFov,fAspect,fN,fF);
+	m_matProj = Matrix::CreatePerspectiveFieldOfView(
+		fFov, fAspect, fN, fF);
+	return true;
+}
+bool		SCamera::CreateOrthographic(
+	float width, float height,
+	float zNearPlane, float zFarPlane)
+{
+	m_matProj = Matrix::CreateOrthographic(
+		width, height,
+		zNearPlane, zFarPlane);
 	return true;
 }
 
+void SCamera::SetPos(Vector3 p)
+{
+	m_vCameraPos = p;
+}
+void SCamera::SetTarget(Vector3 p)
+{
+	m_vCameraTarget = p;
+}
+void SCamera::Update(Vector4 data)
+{
+}
 void SCamera::FrontMovement(float fDir)
 {
 	Vector3 vOffset = m_vLook * g_fSecondPerFrame * m_pSpeed * fDir;
 	m_vCameraPos += vOffset;
 }
-
 void SCamera::RightMovement(float fDir)
 {
 	Vector3 vMove = m_vRight * g_fSecondPerFrame * m_pSpeed * fDir;
 	m_vCameraPos += vMove;
 }
-
 void SCamera::UpMovement(float fDir)
 {
 	Vector3 vMove = m_vUp * g_fSecondPerFrame * m_pSpeed * fDir;
 	m_vCameraPos += vMove;
 }
-
 void SCamera::FrontBase(float fDir)
 {
 	Vector3 vSide = { 0,0,1 };
@@ -111,7 +115,6 @@ void SCamera::FrontBase(float fDir)
 	m_vCameraPos += vMove;
 	m_vCameraTarget += m_vLook * m_pSpeed;
 }
-
 void SCamera::RightBase(float fDir)
 {
 	Vector3 vSide = { 1,0,0 };
@@ -119,15 +122,13 @@ void SCamera::RightBase(float fDir)
 	m_vCameraPos += vMove;
 	m_vCameraTarget += m_vLook * m_pSpeed;
 }
-
 void SCamera::UpBase(float fDir)
 {
-	Vector3 vSide = { 0,1,0 };
-	Vector3 vMove = vSide * g_fSecondPerFrame * m_pSpeed * fDir;
+	Vector3 vUp = { 0,1,0 };
+	Vector3 vMove = vUp * g_fSecondPerFrame * m_pSpeed * fDir;
 	m_vCameraPos += vMove;
 	m_vCameraTarget += m_vLook * m_pSpeed;
 }
-
 void SCamera::UpdateVector()
 {
 	m_vLook.x = m_matView._13;
@@ -144,28 +145,28 @@ void SCamera::UpdateVector()
 	m_vUp.Normalize();
 	m_vRight.Normalize();
 }
-
 bool SCamera::Init()
 {
 	PostInit();
 	return true;
 }
-
 bool SCamera::Frame()
 {
 	Vector3 vUp = { 0,1,0 };
-	m_matView = Matrix::CreateLookAt(m_vCameraPos, m_vCameraTarget, vUp);
+	m_matView = Matrix::CreateLookAt(
+		m_vCameraPos,
+		m_vCameraTarget,
+		vUp);
 	UpdateVector();
 	return true;
 }
-
 SCamera::SCamera()
 {
 	m_pSpeed = 30.0f;
 	m_bDrag = false;
 	m_fWheelDelta = 0;
 }
-
 SCamera::~SCamera()
 {
+
 }

@@ -1,21 +1,12 @@
 #include "SShape.h"
 SShape::SShape()
 {
-	m_szVertexShader = "VS";
-	m_szPixelShader = "PS";
-	m_iTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
 }
 SShape::~SShape()
 {
 
 }
-bool    SShape::CreateVertexData() {
-	return true;
-};
-
-bool    SShape::CreateIndexData() {
-	return true;
-};
 
 bool	SShapeBox::CreateVertexData()
 {

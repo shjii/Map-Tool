@@ -56,11 +56,11 @@ enum TCollisionType
 };
 enum TSelectState
 {
-	T_DEFAULT	= 0,  /// 마우스가 위에 없을 때( T_FOCUS상태에서 다른 곳이 T_ACTIVE 이후 상태가 되었을 때 전환된다.)
-	T_HOVER		= 1,	/// 마우스가 위에 있을 때	
-	T_FOCUS		= 2,	/// T_ACTIVE에서 마우스를 왼쪽 버튼을 다른 곳에서 놓았을 때( 또는 탭, 엔터키 적용 대상, 기타 경우)	
-	T_ACTIVE	= 4,	/// 마우스 좌측 버튼을 누르고 있을 때(키 상태의 KEY_HOLD와 같다)	
-	T_SELECTED	= 8, /// T_ACTIVE에서 마우스를 왼쪽 버튼을 위에서 놓았을 때( 이후에는 T_FOCUS가 된다.)
+	T_DEFAULT = 0,  /// 마우스가 위에 없을 때( T_FOCUS상태에서 다른 곳이 T_ACTIVE 이후 상태가 되었을 때 전환된다.)
+	T_HOVER = 1,	/// 마우스가 위에 있을 때	
+	T_FOCUS = 2,	/// T_ACTIVE에서 마우스를 왼쪽 버튼을 다른 곳에서 놓았을 때( 또는 탭, 엔터키 적용 대상, 기타 경우)	
+	T_ACTIVE = 4,	/// 마우스 좌측 버튼을 누르고 있을 때(키 상태의 KEY_HOLD와 같다)	
+	T_SELECTED = 8, /// T_ACTIVE에서 마우스를 왼쪽 버튼을 위에서 놓았을 때( 이후에는 T_FOCUS가 된다.)
 };
 class TObject : public SDxObject
 {
@@ -76,16 +76,13 @@ public:
 	DWORD		m_dwOverlapState;	 /// 오버랩 상태
 	DWORD		m_dwSelectState;	 /// 마우스 선택 상태
 	int			m_iImageState;
-public:	
+public:
 	wstring     m_szName;
 	wstring		m_szParentName;
 	TObject*	m_pParentObject;
 	TObjAttribute m_Attribute;
 	std::vector<TObject*>	m_pChildObjects;
 public:
-	//TBitmap*	m_pMaskBmp;
-	//TBitmap*	m_pColorBmp;
-	//std::vector<TBitmap*> m_StateBitmap;
 	RECT		m_rtSrc;		/// 원본 이미지 영역
 	RECT		m_rtDesk;		/// 초기 화면 드로우 영역
 	RECT		m_rtDraw;		/// 최종 드로우 영역
@@ -123,9 +120,9 @@ public:
 	virtual bool  PreFrame();
 	virtual bool  Frame();
 	virtual bool  PostFrame();
-	virtual bool  PreRender(ID3D11DeviceContext* pd3dContext);
-	virtual bool  Render(ID3D11DeviceContext* pd3dContext);
-	virtual bool  PostRender(ID3D11DeviceContext* pd3dContext);
+	virtual bool  PreRender(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  Render(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  PostRender(ID3D11DeviceContext*	pd3dContext);
 	virtual bool  Release();
 	virtual void  Update();
 	virtual void  SetDir(float* p);
@@ -137,9 +134,9 @@ public:
 	virtual void  SetPosTL(TPoint p);
 	virtual void  SetSpeed(float fSpeed);
 	virtual void  Set(RECT rtSrc, RECT rtDesk);
-	virtual bool  Load( const TCHAR* color,
-						const TCHAR* mask =nullptr,
-						DWORD dwColor= RGB(255,0,255));
+	virtual bool  Load(const TCHAR* color,
+		const TCHAR* mask = nullptr,
+		DWORD dwColor = RGB(255, 0, 255));
 	virtual void  DrawColorKey();
 public:
 	virtual bool Damage() { return false; };

@@ -1,7 +1,6 @@
 #pragma once
 #include "TWindow.h"
 #include "SDxState.h"
-
 class TDevice : public TWindow
 {
 public:
@@ -10,8 +9,8 @@ public:
 	ID3D11DeviceContext*	m_pd3dContext;
 	IDXGISwapChain*			m_pSwapChain;
 	ID3D11RenderTargetView* m_pRednerTargetView;
-	D3D11_VIEWPORT			m_ViewPort;
 	ID3D11DepthStencilView*  m_pDSV;
+	D3D11_VIEWPORT			m_ViewPort;
 public:
 	HRESULT		CreateGIFactory();
 	HRESULT		CreateDevice();

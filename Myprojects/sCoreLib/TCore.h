@@ -8,9 +8,9 @@
 class TCore : public TDevice
 {
 public:
-	bool		m_bGameRun;
-	SDebugCamera	m_Camera;
-	SCamera*		m_pMainCamera;
+	bool				m_bGameRun;
+	SDebugCamera	    m_Camera;
+	SCamera*		    m_pMainCamera;
 public:
 	virtual bool	PreInit();
 	virtual bool	Init();
@@ -19,7 +19,7 @@ public:
 	virtual bool	PreFrame() {
 		return true;
 	};
-	virtual void	CameraFrame();
+	virtual void    CameraFrame();
 	virtual bool	Frame() {
 		return true;
 	};

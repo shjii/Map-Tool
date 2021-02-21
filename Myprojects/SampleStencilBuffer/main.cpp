@@ -1,5 +1,4 @@
 #include "main.h"
-//#include "SDxState.h"
 Matrix* TD3DXMatrixShadow(Matrix *pout,
 	Vector4 *plight,
 	Vector4 *pplane)
@@ -62,27 +61,34 @@ bool main::Init()
 	matRotation = Matrix::CreateRotationX(TBASIS_PI*0.5f);
 	m_matPlaneWorld = matScale * matRotation;
 
-
 	if (!m_BoxShape.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/kgca08.bmp"))
+		L"../../data/bitmap/tileA.jpg"))
 	{
 		return false;
 	}
 	if (!m_PlaneShape.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/kgca08.bmp"))
+		L"../../data/bitmap/tileA.jpg"))
 	{
 		return false;
 	}
 	if (!m_LineShape.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/kgca08.bmp"))
+		L"../../data/bitmap/tileA.jpg"))
 	{
 		return false;
 	}
-	m_ModelCamera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
+	m_ModelCamera.CreateViewMatrix({ 0,10,-1 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_ModelCamera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_ModelCamera.Init();
-	m_pMainCamera = &m_ModelCamera;
+	//m_pMainCamera = &m_ModelCamera;
+	SMapDesc desc;
+	desc.iNumCols = 513;
+	desc.iNumRows = 513;
+	desc.fCellDistance = 1;
+	desc.szTexFile = L"../../data/bitmap/tileA.jpg";
+	desc.szVS = L"VS.txt";
+	desc.szPS = L"PS.txt";
+	m_Map.CreateMap(m_pd3dDevice, desc);
 	return true;
 }
 bool main::Frame()
@@ -164,10 +170,11 @@ bool main::Render()
 	m_BoxShape.SetMatrix(&matShadow, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_BoxShape.Render(m_pd3dContext);
 
-	m_PlaneShape.SetMatrix(&m_matPlaneWorld,
+	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
-	m_PlaneShape.Render(m_pd3dContext);
+	//m_PlaneShape.Render(m_pd3dContext);
+	m_Map.Render(m_pd3dContext);
 
 	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
@@ -181,6 +188,7 @@ bool main::Render()
 }
 bool main::Release()
 {
+	m_Map.Release();
 	m_BoxShape.Release();
 	m_PlaneShape.Release();
 	m_LineShape.Release();

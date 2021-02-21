@@ -56,9 +56,14 @@ bool    SDxObject::Update(ID3D11DeviceContext*	pd3dContext)
 	}
 	return false;
 }
+bool	SDxObject::PreRender(ID3D11DeviceContext*	pd3dContext)
+{
+	return true;
+}
 bool	SDxObject::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	Update(pd3dContext);
+	PreRender(pd3dContext);
 	UINT iStride = sizeof(PNCT_VERTEX);
 	UINT iOffset = 0;
 	pd3dContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &iStride, &iOffset);
@@ -69,14 +74,22 @@ bool	SDxObject::Render(ID3D11DeviceContext*	pd3dContext)
 	pd3dContext->VSSetShader(m_pVertexShader, NULL, 0);
 	pd3dContext->PSSetShader(m_pPixelShader, NULL, 0);
 	pd3dContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iTopology);
-	if(m_pTexture != nullptr) pd3dContext->PSSetShaderResources(0, 1, &m_pTexture->m_pTextureSRV);
+	if (m_pTexture != nullptr)
+	{
+		pd3dContext->PSSetShaderResources(0, 1,
+			&m_pTexture->m_pTextureSRV);
+	}
 	//pd3dContext->Draw(m_VertexList.size(), 0);
+	PostRender(pd3dContext);
+	return true;
+}
+bool	SDxObject::PostRender(ID3D11DeviceContext*	pd3dContext)
+{
 	pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
 	return true;
 }
 bool	SDxObject::Release()
 {
-	//m_pTextureSRV->Release();
 	m_pConstantBuffer->Release();
 	m_pVertexBuffer->Release();
 	m_pIndexBuffer->Release();
@@ -190,7 +203,6 @@ bool	SDxObject::LoadTexture(T_STR szTex)
 {
 	m_pTexture = g_TextMgr.Load(m_pd3dDevice, szTex.c_str());
 	if (m_pTexture == nullptr) return false;
-
 	return true;
 }
 bool	SDxObject::CreateInputLayout()
@@ -229,3 +241,4 @@ bool	SDxObject::Create(ID3D11Device* pDevice,
 	LoadTexture(szTex);
 	return true;
 }
+

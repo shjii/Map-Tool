@@ -17,6 +17,7 @@ public:
 	UINT		m_iNumCols;
 	UINT		m_iNumCellRows;
 	UINT		m_iNumCellCols;
+	UINT		m_iNumVertices;
 	UINT		m_iNumFaces;
 	float		m_fCellDistance;
 public:

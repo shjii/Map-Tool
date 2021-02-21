@@ -31,7 +31,7 @@ void TDevice::ResizeDevice(UINT w, UINT h)
 	SetDepthStencilView();
 	SetViewport();
 
-	CreateDXResource(w,h);
+	CreateDXResource(w, h);
 }
 HRESULT TDevice::DeleteDXResource()
 {
@@ -42,7 +42,7 @@ HRESULT TDevice::CreateDXResource(UINT w, UINT h)
 	return S_OK;
 }
 HRESULT TDevice::CreateGIFactory()
-{	
+{
 	if (m_pd3dDevice == NULL) return E_FAIL;
 	HRESULT hr;
 	IDXGIDevice * pDXGIDevice;
@@ -79,7 +79,7 @@ HRESULT		TDevice::CreateDevice()
 		D3D_DRIVER_TYPE_REFERENCE,
 	};
 	HMODULE				Software = NULL; // 외부모듈 사용유무
-	
+
 	//UINT				FeatureLevels = ARRAYSIZE(pFeatureLevels);
 	UINT				FeatureLevels = sizeof(pFeatureLevels) / sizeof(pFeatureLevels[0]);
 	UINT				SDKVersion = D3D11_SDK_VERSION;
@@ -95,7 +95,7 @@ HRESULT		TDevice::CreateDevice()
 			Flags,
 			pFeatureLevels,
 			FeatureLevels,
-			SDKVersion,			
+			SDKVersion,
 			&m_pd3dDevice,
 			&OutputFeatureLevel,
 			&m_pd3dContext);
@@ -125,9 +125,9 @@ HRESULT		TDevice::CreateSwapChain()
 	pSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hr = m_pGIFactory->CreateSwapChain(
-			m_pd3dDevice,
-			&pSwapChainDesc,
-			&m_pSwapChain);
+		m_pd3dDevice,
+		&pSwapChainDesc,
+		&m_pSwapChain);
 	return hr;
 }
 HRESULT		TDevice::SetRenderTargetView()
@@ -135,8 +135,8 @@ HRESULT		TDevice::SetRenderTargetView()
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		(LPVOID*)&pBackBuffer);
-		HRESULT hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL,
-			&m_pRednerTargetView);
+	HRESULT hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL,
+		&m_pRednerTargetView);
 	if (pBackBuffer) pBackBuffer->Release();
 	return hr;
 }
@@ -156,12 +156,10 @@ HRESULT TDevice::SetDepthStencilView()
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	HRESULT hr = m_pd3dDevice->CreateTexture2D(&texDesc, NULL, &pTexture);
-
 	if (FAILED(hr))
 	{
 		return false;
 	}
-
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
 	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -183,14 +181,14 @@ bool TDevice::SetViewport()
 {
 	m_ViewPort.TopLeftX = 0;
 	m_ViewPort.TopLeftY = 0;
-	m_ViewPort.Width  = g_rtClient.right;
+	m_ViewPort.Width = g_rtClient.right;
 	m_ViewPort.Height = g_rtClient.bottom;
 	m_ViewPort.MinDepth = 0.0f;
 	m_ViewPort.MaxDepth = 1.0f;
 	return true;
 }
 bool TDevice::Init()
-{	
+{
 	if (FAILED(CreateDevice()))
 	{
 		return false;
@@ -206,16 +204,18 @@ bool TDevice::Init()
 	if (FAILED(SetRenderTargetView()))
 	{
 		return false;
-	}	
+	}
 	if (FAILED(SetDepthStencilView()))
 	{
 		return false;
 	}
-	if (SetViewport()==false)
+	if (SetViewport() == false)
 	{
 		return false;
 	}
+
 	SDxState::Set(m_pd3dDevice);
+
 	if (FAILED(m_pGIFactory->MakeWindowAssociation(m_hWnd,
 		DXGI_MWA_NO_WINDOW_CHANGES |
 		DXGI_MWA_NO_ALT_ENTER)))
@@ -234,13 +234,11 @@ bool TDevice::PreRender()
 	{
 		m_pd3dContext->RSSetViewports(1, &m_ViewPort);
 		m_pd3dContext->OMSetRenderTargets(1, &m_pRednerTargetView, m_pDSV);
-		/*float clearColor[] = { cosf(g_fGameTimer)*0.5f + 0.5f,
-								-cosf(g_fGameTimer)*0.5f + 0.5f,
-								sinf(g_fGameTimer)*0.5f + 0.5f,1 };*/
 		float clearColor[] = { 0,0,0,1 };
 		m_pd3dContext->ClearRenderTargetView(m_pRednerTargetView, clearColor);
 		m_pd3dContext->ClearDepthStencilView(m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
-	}return true;
+	}
+	return true;
 }
 bool TDevice::Render()
 {
@@ -257,17 +255,18 @@ bool TDevice::PostRender()
 bool TDevice::Release()
 {
 	SDxState::Release();
+
 	m_pDSV->Release();
 	m_pRednerTargetView->Release();
 	m_pSwapChain->Release();
-	m_pd3dContext->Release();	
+	m_pd3dContext->Release();
 	m_pd3dDevice->Release();
 	m_pGIFactory->Release();
 	return true;
 }
 TDevice::TDevice()
 {
-	m_pGIFactory	= nullptr;
+	m_pGIFactory = nullptr;
 	m_pd3dDevice = nullptr;
 	m_pd3dContext = nullptr;
 	m_pSwapChain = nullptr;

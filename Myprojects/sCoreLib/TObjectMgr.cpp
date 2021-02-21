@@ -42,7 +42,7 @@ void TObjectManager::CreateEffect(std::vector<TSpriteInfo>&	list)
 		TEffect* pEffect = new TEffect;
 		pEffect->Init();
 		pEffect->m_szName = list[iEffect].szName;
-		pEffect->Load(list[iEffect].colorbitmap.c_str(),list[iEffect].maskbitmap.c_str());
+		pEffect->Load(list[iEffect].colorbitmap.c_str(), list[iEffect].maskbitmap.c_str());
 		TPoint p = { 0,0 };
 		pEffect->Set(p, list[iEffect].rtArray[0]);
 		pEffect->SetSprite(list[iEffect].rtArray);
@@ -105,10 +105,10 @@ bool TObjectManager::LoadEffectFile(T_STR szFileName, std::vector<TSpriteInfo>& 
 		int iMaxCount = 0;
 		_fgetts(szBuffer, _countof(szBuffer), fp);
 		_stscanf_s(szBuffer, _T("%s %s %d"), szTemp, (unsigned)_countof(szTemp), szTempParent, (unsigned)_countof(szTempParent), &iMaxCount);
-		objinfo.szName			= szTemp;
-		objinfo.szParentName	= szTempParent;
+		objinfo.szName = szTemp;
+		objinfo.szParentName = szTempParent;
 
-		while(1)
+		while (1)
 		{
 			TSpriteInfo tSprite;
 			int iNumFrame = 0;
@@ -136,13 +136,13 @@ bool TObjectManager::LoadEffectFile(T_STR szFileName, std::vector<TSpriteInfo>& 
 				_stscanf_s(szBuffer, _T("%s %d %d %d %d"), szTemp, (unsigned)_countof(szTemp),
 					&rt.left, &rt.top, &rt.right, &rt.bottom);
 				tSprite.rtArray.push_back(rt);
-			}			
+			}
 			list.push_back(tSprite);
 		}
 	}
 	fclose(fp);
 	return true;
-	
+
 }
 bool TObjectManager::LoadObjectFile(T_STR szFileName, std::vector<TObjAttribute>&	list)
 {
@@ -162,7 +162,7 @@ bool TObjectManager::LoadObjectFile(T_STR szFileName, std::vector<TObjAttribute>
 		objhead.szName = szTemp;
 		objhead.szParentName = szTempParent;
 
-		while(1)
+		while (1)
 		{
 			TObjAttribute objinfo;
 			_fgetts(szBuffer, _countof(szBuffer), fp);
@@ -197,7 +197,7 @@ bool TObjectManager::LoadObjectFile(T_STR szFileName, std::vector<TObjAttribute>
 			objinfo.szName = szTemp;
 			objinfo.szParentName = szTempParent;
 
-			
+
 			GetBitmapLoad(fp, objinfo.colorbitmap);
 			GetBitmapLoad(fp, objinfo.pushbitmap);
 			GetBitmapLoad(fp, objinfo.selectbitmap);
@@ -225,7 +225,7 @@ bool TObjectManager::LoadObjectFile(T_STR szFileName, std::vector<TObjAttribute>
 			int g = 0;
 			int b = 0;
 			_fgetts(szBuffer, sizeof(TCHAR) * 256, fp);
-			_stscanf_s(szBuffer, _T("%d%d%d%d"),&mask,&r, &g, &b);
+			_stscanf_s(szBuffer, _T("%d%d%d%d"), &mask, &r, &g, &b);
 			if (mask == 0)
 				objinfo.bColorKey = false;
 			else
@@ -242,7 +242,7 @@ void TObjectManager::AddCollisionExecute(TObject* ownder, CollisionFunction func
 {
 	ownder->m_iCollisionObjectID = m_iExecuteCollisionID++;
 	m_CollisionObjectList.insert(make_pair(ownder->m_iCollisionObjectID, ownder));
-	g_ObjectMgr.m_fnCollisionExecute.insert(make_pair(ownder->m_iCollisionObjectID,func));
+	g_ObjectMgr.m_fnCollisionExecute.insert(make_pair(ownder->m_iCollisionObjectID, func));
 }
 void TObjectManager::AddSelectExecute(TObject* ownder, SelectFunction func)
 {
@@ -287,7 +287,7 @@ bool TObjectManager::Load(const TCHAR* filename)
 		_stscanf_s(szBuffer, _T("%s %s %d"), szTemp, (unsigned)_countof(szTemp), szTempParent, (unsigned)_countof(szTempParent), &iMaxCount);
 		objinfo.szName = szTemp;
 		objinfo.szParentName = szTempParent;
-		szObjType = szTemp;		
+		szObjType = szTemp;
 	}
 	fclose(fp);
 
@@ -302,7 +302,7 @@ bool TObjectManager::Load(const TCHAR* filename)
 		LoadEffectFile(filename, m_rtSpriteList);
 		CreateEffect(m_rtSpriteList);
 		return true;
-	}	
+	}
 	return false;
 }
 
@@ -324,7 +324,7 @@ bool		TObjectManager::Frame()
 {
 	for (auto src : m_SelectObjectList)
 	{
-		TObject* pSrcObj = (TObject*)src.second;		
+		TObject* pSrcObj = (TObject*)src.second;
 		POINT ptMouse = g_Input.GetPos();
 		if (pSrcObj->m_Attribute.iEnable < 0) continue;
 		pSrcObj->m_bSelect = false;
@@ -344,12 +344,12 @@ bool		TObjectManager::Frame()
 			}
 			if (dwKeyState == KEY_HOLD)
 			{
-				pSrcObj->m_dwSelectState = TSelectState::T_FOCUS;				
+				pSrcObj->m_dwSelectState = TSelectState::T_FOCUS;
 				pSrcObj->m_iImageState = 2;
 			}
 			if (dwKeyState == KEY_UP)
 			{
-				pSrcObj->m_dwSelectState = TSelectState::T_SELECTED;	
+				pSrcObj->m_dwSelectState = TSelectState::T_SELECTED;
 				pSrcObj->m_bSelect = true;
 			}
 			SelectFuncIterator calliter = m_fnSelectExecute.find(pSrcObj->m_iCollisionObjectID);
@@ -357,14 +357,14 @@ bool		TObjectManager::Frame()
 			{
 				SelectFunction call = calliter->second;
 				call(ptMouse, pSrcObj->m_dwSelectState);
-			}		
+			}
 		}
 		/*else
 		{
 			pSrcObj->m_dwSelectState &= ~TSelectState::T_HOVER;
-			pSrcObj->m_dwSelectState &= ~TSelectState::T_ACTIVE;			
+			pSrcObj->m_dwSelectState &= ~TSelectState::T_ACTIVE;
 			pSrcObj->m_dwSelectState &= ~TSelectState::T_FOCUS;
-			pSrcObj->m_dwSelectState &= ~TSelectState::T_SELECTED;			
+			pSrcObj->m_dwSelectState &= ~TSelectState::T_SELECTED;
 		}*/
 	}
 	TOverlapState dwOverlap = TOverlapState::OVERLAP_NONE;
@@ -394,7 +394,7 @@ bool		TObjectManager::Frame()
 					dwOverlap = TOverlapState::OVERLAP_BEGIN;
 					pSrcObj->m_dwOverlapState = TOverlapState::OVERLAP_BEGIN;
 				}
-				
+
 				CollisionFuncIterator calliter = m_fnCollisionExecute.find(pSrcObj->m_iCollisionObjectID);
 				if (calliter != m_fnCollisionExecute.end())
 				{
@@ -410,7 +410,7 @@ bool		TObjectManager::Frame()
 			}
 			else
 			{
-				if (pSrcObj->m_dwOverlapState == TOverlapState::OVERLAP_BEGIN || 
+				if (pSrcObj->m_dwOverlapState == TOverlapState::OVERLAP_BEGIN ||
 					pSrcObj->m_dwOverlapState == TOverlapState::OVERLAP_STAY)
 				{
 					dwOverlap = TOverlapState::OVERLAP_END;

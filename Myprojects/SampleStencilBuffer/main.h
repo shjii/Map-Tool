@@ -3,10 +3,11 @@
 #include "SShape.h"
 #include "TObject.h"
 #include "SModelViewCamera.h"
-
+#include "SMap.h"
 class main : public TCore
 {
 public:
+	SMap			m_Map;
 	Vector4			m_vDirValue;
 	vector<TObject*>    m_ObjList;
 	SShapeBox		m_BoxShape;

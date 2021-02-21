@@ -4,9 +4,6 @@
 class SShape : public TObject
 {
 public:
-	virtual bool CreateVertexData();
-	virtual bool CreateIndexData();
-public:
 	SShape();
 	virtual ~SShape();
 };

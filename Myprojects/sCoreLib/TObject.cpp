@@ -87,15 +87,15 @@ void  TObject::SetSpeed(float fSpeed)
 {
 	m_fSpeed = fSpeed;
 }
-void  TObject::SetDir(float* p)
+void  TObject::SetDir(float* d)
 {
-	m_ptDirection.x = p[0];
-	m_ptDirection.y = p[1];
+	m_ptDirection.x = d[0];
+	m_ptDirection.y = d[1];
 }
-void  TObject::SetPos(float* d)
+void  TObject::SetPos(float* p)
 {
-	m_ptPos.x = d[0];
-	m_ptPos.y = d[1];
+	m_ptPos.x = p[0];
+	m_ptPos.y = p[1];
 }
 void  TObject::SetDir(TPoint p)
 {
@@ -104,13 +104,13 @@ void  TObject::SetDir(TPoint p)
 // 영역의 중앙이 원점이 되며 화면 밖을 벗어 나지 못하도록 한다.
 void  TObject::SetPos(TPoint p)
 {
-	if (p.x < g_rtClient.left+ (m_rtSrc.right / 2))
+	if (p.x < g_rtClient.left + (m_rtSrc.right / 2))
 	{
-		p.x = g_rtClient.left+ (m_rtSrc.right / 2);
+		p.x = g_rtClient.left + (m_rtSrc.right / 2);
 	}
-	if (p.y < g_rtClient.top+(m_rtSrc.bottom / 2))
+	if (p.y < g_rtClient.top + (m_rtSrc.bottom / 2))
 	{
-		p.y = g_rtClient.top+(m_rtSrc.bottom / 2);
+		p.y = g_rtClient.top + (m_rtSrc.bottom / 2);
 	}
 	if (p.x > g_rtClient.right - (m_rtSrc.right / 2))
 	{
@@ -132,7 +132,7 @@ void  TObject::SetPosTL(TPoint p)
 
 	m_rtDraw = m_rtDesk;
 	m_rtCollide = m_rtDesk;
-	m_rtCollide.right  += m_rtDesk.left;
+	m_rtCollide.right += m_rtDesk.left;
 	m_rtCollide.bottom += m_rtDesk.top;
 }
 bool  TObject::Init()
@@ -150,7 +150,7 @@ void  TObject::Update()
 // 상단-좌측 코너가 원점이 된다.
 void  TObject::Set(RECT rtSrc, RECT rtDesk)
 {
-	if( rtSrc.left >= 0) m_rtSrc.left = rtSrc.left;
+	if (rtSrc.left >= 0) m_rtSrc.left = rtSrc.left;
 	if (rtSrc.top >= 0) m_rtSrc.top = rtSrc.top;
 	if (rtSrc.right >= 0) m_rtSrc.right = rtSrc.right;
 	if (rtSrc.bottom >= 0) m_rtSrc.bottom = rtSrc.bottom;
@@ -184,7 +184,7 @@ void  TObject::Set(TPoint p, RECT rtSrc)
 	m_rtCollide.right += m_rtDesk.left;
 	m_rtCollide.bottom += m_rtDesk.top;
 }
-bool  TObject::Load(const TCHAR* color,	const TCHAR* mask,DWORD dwColor)
+bool  TObject::Load(const TCHAR* color, const TCHAR* mask, DWORD dwColor)
 {
 	//if (color != nullptr)
 	//{
@@ -218,7 +218,7 @@ bool  TObject::Frame()
 {
 	PreFrame();
 	for (int iChild = 0; iChild < m_pChildObjects.size(); iChild++)
-	{		
+	{
 		m_pChildObjects[iChild]->Frame();
 	}
 	PostFrame();
@@ -236,57 +236,23 @@ bool  TObject::Release()
 		delete m_pChildObjects[iChild];
 	}
 	m_pChildObjects.clear();
-	return true;
+	return SDxObject::Release();
 }
-bool TObject::PreRender(ID3D11DeviceContext* pd3dContext)
+bool TObject::PreRender(ID3D11DeviceContext*	pd3dContext)
 {
 	return true;
 }
-bool  TObject::Render(ID3D11DeviceContext* pd3dContext)
-{	
-	// 부모의 위치에서 상대적으로 위치하게 된다. 
-	//m_rtDraw = m_rtDesk;
-	//if (m_pParentObject != nullptr)
-	//{
-	//	m_rtDraw.left += m_pParentObject->m_rtDesk.left;
-	//	m_rtDraw.top += m_pParentObject->m_rtDesk.top;
-	//}
-	//if (m_pColorBmp)
-	//{
-	//	if (m_bColorKey == true)
-	//	{
-	//		DrawColorKey();
-	//	}
-	//	else
-	//	{
-	//		if (m_pColorBmp->m_BitmapInfo.bmBitsPixel == 32 && m_pMaskBmp == nullptr)
-	//		{
-	//			m_pColorBmp->DrawAlphaBlend(m_rtDraw, m_rtSrc);
-	//		}
-	//		else
-	//		{
-	//			if (m_pMaskBmp != nullptr)
-	//			{
-	//				m_pMaskBmp->Draw(m_rtDraw, m_rtSrc, SRCAND, 0);
-	//				m_pColorBmp->Draw(m_rtDraw, m_rtSrc, SRCINVERT, 0);
-	//				m_pMaskBmp->Draw(m_rtDraw, m_rtSrc, SRCINVERT, 0);
-	//			}
-	//			else
-	//			{
-	//				m_pColorBmp->Draw(m_rtDraw, m_rtSrc, SRCCOPY, 0);
-	//			}
-	//		}
-	//	}
-	//}
-	return PostRender(pd3dContext);
+bool  TObject::Render(ID3D11DeviceContext*	pd3dContext)
+{
+	return SDxObject::Render(pd3dContext);
 }
-bool TObject::PostRender(ID3D11DeviceContext* pd3dContext)
+bool TObject::PostRender(ID3D11DeviceContext*	pd3dContext)
 {
 	for (int iChild = 0; iChild < m_pChildObjects.size(); iChild++)
 	{
 		m_pChildObjects[iChild]->Render(pd3dContext);
 	}
-	return true;
+	return SDxObject::PostRender(pd3dContext);
 }
 void  TObject::DrawColorKey()
 {
@@ -309,12 +275,12 @@ TObject::TObject()
 	m_ptDirection.x = 0.0f;
 	m_ptDirection.y = 0.0f;
 	m_fSpeed = 50.0f;
-	m_bColorKey  = false;
+	m_bColorKey = false;
 	m_dwColorKey = RGB(255, 255, 255);
 	m_bSelect = false;
 	m_bDrawDebugRect = false;
 	m_iSortValue = 0;
 }
 TObject::~TObject()
-{	
+{
 }

@@ -1,24 +1,27 @@
 #include "SDebugCamera.h"
 #include "TInput.h"
+bool SDebugCamera::Init()
+{
+	SCamera::Init();
+	m_ptPrePosition = g_Input.GetPos();
+	return true;
+}
 void SDebugCamera::Update(Vector4 data)
 {
 	Matrix matRoation;
-	matRoation = Matrix::CreateFromYawPitchRoll(data.x, data.y, data.z);
+	matRoation = Matrix::CreateFromYawPitchRoll(
+		data.y, data.x, data.z);
+	//D3DXMatrixAffineTransformation
+	// matRotation = quaternion * pos * scale;
+	//m_vCameraPos += m_vLook * data.w;
 	m_vCameraPos += m_vLook * m_fWheelDelta;
-	//TBASIS_CORE_LIB::OutputDebug("%10.4f\n", m_fWheeIDelta);
+//	TBASIS_CORE_LIB::OutputDebug("%10.4f\n", m_fWheelDelta);
 	matRoation._41 = m_vCameraPos.x;
 	matRoation._42 = m_vCameraPos.y;
 	matRoation._43 = m_vCameraPos.z;
 
 	m_matView = matRoation.Invert();
 	m_fWheelDelta = 0;
-}
-
-bool SDebugCamera::Init()
-{
-	SCamera::Init();
-	m_ptPrePosition = g_Input.GetPos();
-	return true;
 }
 
 bool SDebugCamera::Frame()
@@ -50,8 +53,8 @@ SDebugCamera::SDebugCamera()
 	m_vDirValue.y = 0.0f;
 	m_vDirValue.z = 0.0f;
 	m_vDirValue.w = 0.0f;
-}
 
+}
 SDebugCamera::~SDebugCamera()
 {
 }

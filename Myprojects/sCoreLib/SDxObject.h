@@ -60,6 +60,7 @@ struct SDataCB
 	float vColor[4];
 	float vTime[4];
 };
+
 class SDxObject
 {
 public:
@@ -84,22 +85,24 @@ public:
 	ID3D11PixelShader*		m_pPixelShader;
 	STexture*				m_pTexture;
 public:
-	void CompilerCheck(ID3DBlob* pErrorMsgs);
-	virtual bool SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);
-	virtual bool Init();
-	virtual bool Frame();
-	virtual bool Render(ID3D11DeviceContext* pd3dContext);
-	virtual bool Release();
-	virtual bool CreateVertexData();
-	virtual bool CreateConstantBuffer();
-	virtual bool CreateVertexBuffer();
-	virtual bool CreateIndexData();
-	virtual bool CreateIndexBuffer();
-	virtual bool LoadShader(T_STR szVS, T_STR szPS);
-	virtual bool CreateInputLayout();
-	virtual bool Create(ID3D11Device* pDvice, T_STR szVS, T_STR szPS, T_STR szTex);
-	virtual bool LoadTexture(T_STR szTex);
-	virtual bool Update(ID3D11DeviceContext* pd3dContext);
+	virtual bool	Init();
+	virtual bool	Frame();
+	virtual bool	SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);
+	virtual bool    Update(ID3D11DeviceContext*	pd3dContext);
+	virtual bool	PreRender(ID3D11DeviceContext*	pd3dContext);
+	virtual bool	Render(ID3D11DeviceContext*	pd3dContext);
+	virtual bool	PostRender(ID3D11DeviceContext*	pd3dContext);
+	virtual bool	Release();
+	virtual bool    CreateVertexData();
+	virtual bool    CreateIndexData();
+	virtual bool    CreateVertexBuffer();
+	virtual bool    CreateIndexBuffer();
+	virtual bool    CreateConstantBuffer();
+	virtual bool	LoadShader(T_STR szVS, T_STR szPS);
+	virtual bool	CreateInputLayout();
+	virtual bool	LoadTexture(T_STR szTex);
+	virtual bool	Create(ID3D11Device* pDevice, T_STR szVS, T_STR szPS, T_STR	szTex);
+	void	CompilerCheck(ID3DBlob* pErrorMsgs);
 public:
 	SDxObject();
 	virtual ~SDxObject();

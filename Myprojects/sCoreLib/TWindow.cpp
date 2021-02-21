@@ -14,7 +14,7 @@ namespace TBASIS_CORE_LIB
 	TWindow*		g_pWindow;
 }
 
-static bool		m_bDrag =false;
+static bool		m_bDrag = false;
 static POINT	m_ptClick;
 
 LRESULT CALLBACK WndProc(
@@ -22,7 +22,7 @@ LRESULT CALLBACK WndProc(
 	UINT message,
 	WPARAM wParam,
 	LPARAM lParam)
-{	
+{
 	int iRet = g_pWindow->MsgProc(hWnd, message, wParam, lParam);
 	if (iRet > -1)
 	{
@@ -85,12 +85,12 @@ LRESULT CALLBACK WndProc(
 			g_bActive = true;
 			SetWindowText(g_hWnd, L"ACTIVE");
 		}
-		
+
 	}break;
 	case WM_DESTROY:
 		PostQuitMessage(0);// WM_QUIT
-		break;	
-	}	
+		break;
+	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 void TWindow::ResizeDevice(UINT w, UINT h)
@@ -113,13 +113,13 @@ bool TWindow::MsgProcess()
 		}
 		MsgEvent(m_msg);
 	}
-	
+
 	return true;
 }
 void TWindow::MsgEvent(MSG msg)
 {
 }
-bool	TWindow::SetWindow(HINSTANCE hInstance,const  TCHAR* pTitleName,int iWidth, int iHeight)
+bool	TWindow::SetWindow(HINSTANCE hInstance, const  TCHAR* pTitleName, int iWidth, int iHeight)
 {
 	g_hInstance = hInstance;
 	m_hInstance = hInstance;
@@ -144,8 +144,8 @@ bool	TWindow::SetWindow(HINSTANCE hInstance,const  TCHAR* pTitleName,int iWidth,
 		m_dwExStyle,
 		m_szClassName.c_str(), m_szWindowName.c_str(),
 		m_dwStyle,
-		0, 0, 
-		rt.right-rt.left, 
+		0, 0,
+		rt.right - rt.left,
 		rt.bottom - rt.top,
 		nullptr, nullptr,
 		m_hInstance, nullptr);
@@ -169,13 +169,13 @@ TWindow::TWindow()
 	m_bDrag = false;
 	m_szClassName = L"KGCAWINDOW";
 #if NDEBUG
-	m_dwExStyle		= WS_EX_TOPMOST;
-	m_szWindowName	= L"Sample Project(Release)";
-	m_dwStyle		= WS_POPUPWINDOW;// WS_OVERLAPPEDWINDOW,,;
+	m_dwExStyle = WS_EX_TOPMOST;
+	m_szWindowName = L"Sample Project(Release)";
+	m_dwStyle = WS_POPUPWINDOW;// WS_OVERLAPPEDWINDOW,,;
 #else
-	m_dwExStyle		= WS_EX_APPWINDOW;
-	m_szWindowName	= L"Sample Project(Debug)";
-	m_dwStyle		= WS_OVERLAPPEDWINDOW;
+	m_dwExStyle = WS_EX_APPWINDOW;
+	m_szWindowName = L"Sample Project(Debug)";
+	m_dwStyle = WS_OVERLAPPEDWINDOW;
 #endif
 }
 TWindow::~TWindow()
