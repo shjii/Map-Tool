@@ -1,9 +1,9 @@
 #include "TSound.h"
 #include "TWrite.h"
 
-bool  TSound::Load( System* pSystem, 
-					std::string szFileName,
-					bool bPaused)
+bool  TSound::Load(System* pSystem,
+	std::string szFileName,
+	bool bPaused)
 {
 	m_pSystem = pSystem;
 	FMOD_RESULT hr = pSystem->createSound(
@@ -16,7 +16,7 @@ bool  TSound::Load( System* pSystem,
 	return true;
 }
 bool  TSound::Init()
-{	
+{
 	return true;
 }
 void   TSound::Stop()
@@ -26,7 +26,7 @@ void   TSound::Stop()
 		m_pChannel->stop();
 	}
 }
-bool   TSound::Play( bool bPaused, bool bLoop)
+bool   TSound::Play(bool bPaused, bool bLoop)
 {
 	bool play = false;
 	if (m_pChannel != nullptr)
@@ -54,7 +54,7 @@ bool   TSound::Play( bool bPaused, bool bLoop)
 		{
 			SetMode(FMOD_LOOP_OFF);
 		}
-	}	
+	}
 	return true;
 }
 FMOD_RESULT TSound::SetMode(FMOD_MODE mode)
@@ -65,8 +65,8 @@ FMOD_RESULT TSound::SetMode(FMOD_MODE mode)
 bool   TSound::PlayEffect(bool bLoop)
 {
 	FMOD_RESULT hr = m_pSystem->playSound(m_pSound,
-			NULL, false,
-			&m_pChannel);
+		NULL, false,
+		&m_pChannel);
 	if (hr != FMOD_OK)
 	{
 		return false;
@@ -104,7 +104,7 @@ void  TSound::Volume(float fVolume)
 	m_pChannel->setVolume(fCurrentVolume);
 }
 bool  TSound::Frame()
-{	
+{
 	return true;
 }
 bool  TSound::Release()

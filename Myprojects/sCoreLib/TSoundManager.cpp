@@ -30,7 +30,7 @@ TSound*    TSoundManager::Load(const char* filename)
 
 
 	pData = new TSound;
-	pData->Init();	
+	pData->Init();
 	if (pData->Load(m_pSystem, loadfile))
 	{
 		m_List.insert(make_pair(key, pData));
@@ -75,16 +75,16 @@ bool		TSoundManager::Init()
 	}
 	return true;
 }
-bool		TSoundManager::Frame() 
+bool		TSoundManager::Frame()
 {
 	m_pSystem->update();
 	return true;
 }
-bool		TSoundManager::Render() 
+bool		TSoundManager::Render()
 {
 	return true;
 }
-bool		TSoundManager::Release() 
+bool		TSoundManager::Release()
 {
 	for (m_iter = m_List.begin();
 		m_iter != m_List.end();

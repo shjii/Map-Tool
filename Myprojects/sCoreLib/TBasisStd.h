@@ -29,7 +29,7 @@ namespace TBASIS_CORE_LIB
 	typedef std::basic_string<TCHAR>		T_STR;
 	typedef std::basic_string<CHAR>			C_STR;
 	typedef std::vector<T_STR>				T_STR_VECTOR;
-	
+
 	template<class T>
 	class TSingleton
 	{
@@ -115,7 +115,20 @@ namespace TBASIS_CORE_LIB
 			exit(1);
 		}
 	}
+	inline void OutputDebug(const char* format, ...)
+	{
+#ifdef _DEBUG
+		va_list args;
+		va_start(args, format);
 
+		char buff[1024] = {};
+		vsprintf_s(buff, format, args);
+		OutputDebugStringA(buff);
+		va_end(args);
+#else
+		UNREFERENCED_PARAMETER(format);
+#endif
+	}
 	template <typename T>
 	inline void SafeRelease(T *&p)
 	{

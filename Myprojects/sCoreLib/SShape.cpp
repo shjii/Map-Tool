@@ -7,7 +7,6 @@ SShape::~SShape()
 {
 
 }
-
 bool	SShapeBox::CreateVertexData()
 {
 	// Vertex Data
@@ -107,7 +106,7 @@ bool SShapeLine::Draw(ID3D11DeviceContext* pd3dContext,
 	m_VertexList[1] = PNCT_VERTEX(e, Vector3(0.0f, 0.0f, -1.0f), c, Vector2(1.0f, 0.0f));
 	pd3dContext->UpdateSubresource(
 		m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
-	return SShape::Render(pd3dContext);
+	return Render(pd3dContext);
 }
 bool SShapeLine::CreateVertexData()
 {

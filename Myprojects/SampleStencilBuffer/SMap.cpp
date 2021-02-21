@@ -1,24 +1,5 @@
 #include "SMap.h"
-
-bool SMap::CreateMap(ID3D11Device * pDevice, SMapDesc desc)
-{
-	m_MapDesc = desc;
-	m_iNumRows = desc.iNumRows;
-	m_iNumCols = desc.iNumCols;
-	m_iNumCellCols = m_iNumCols - 1;
-	m_iNumCellRows = m_iNumRows - 1;
-	m_iNumVertices = m_iNumCols * m_iNumRows;
-	m_iNumFaces = m_iNumCellCols * m_iNumCellRows * 2;
-	m_fCellDistance = desc.fCellDistance;
-
-	vector<float> m_fHeightList;
-	m_fHeightList.resize(m_iNumVertices);
-
-	Create(pDevice, desc.szVS, desc.szPS, desc.szTexFile);
-	return true;
-}
-
-bool SMap::CreateVertexData()
+bool    SMap::CreateVertexData()
 {
 	// 정점 가로 및 세수 = 2N승+1
 	m_VertexList.resize(m_iNumVertices);
@@ -43,8 +24,7 @@ bool SMap::CreateVertexData()
 	}
 	return true;
 }
-
-bool SMap::CreateIndexData()
+bool    SMap::CreateIndexData()
 {
 	m_IndexList.resize(m_iNumFaces * 3);
 	int iIndex = 0;
@@ -66,10 +46,31 @@ bool SMap::CreateIndexData()
 	return true;
 }
 
+bool SMap::CreateMap(ID3D11Device* pDevice, SMapDesc  desc)
+{
+	m_MapDesc = desc;
+	m_iNumRows = desc.iNumRows;
+	m_iNumCols = desc.iNumCols;
+	m_iNumCellCols = m_iNumCols - 1;
+	m_iNumCellRows = m_iNumRows - 1;
+	m_iNumVertices = m_iNumCols * m_iNumRows;
+	m_iNumFaces = m_iNumCellCols * m_iNumCellRows * 2;
+	m_fCellDistance = desc.fCellDistance;
+
+	std::vector<float> m_fHeightList;
+	m_fHeightList.resize(m_iNumVertices);
+
+	Create(pDevice,
+		desc.szVS,
+		desc.szPS,
+		desc.szTexFile);
+	return true;
+}
 SMap::SMap()
 {
-}
 
+}
 SMap::~SMap()
 {
+
 }

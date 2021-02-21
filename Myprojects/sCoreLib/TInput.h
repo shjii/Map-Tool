@@ -5,7 +5,7 @@ enum KeyState
 	KEY_FREE = 0,
 	KEY_UP,
 
-	KEY_PUSH,	
+	KEY_PUSH,
 	KEY_HOLD
 };
 class TInput : public TSingleton<TInput>
@@ -14,7 +14,7 @@ public:
 	friend  class TSingleton<TInput>;
 private:
 	DWORD	m_dwKeyState[256];
-	POINT   m_MousePos;	
+	POINT   m_MousePos;
 	bool	m_bEnable;
 public:
 	void	SetEnable(bool bEnable = true);

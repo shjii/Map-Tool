@@ -28,7 +28,7 @@ bool TEffect::Frame()
 		m_fTimer -= m_fStep;
 	}
 	Set(m_rtList[m_iRectIndex],
-		{   (LONG)m_ptPos.x,(LONG)m_ptPos.y,
+		{ (LONG)m_ptPos.x,(LONG)m_ptPos.y,
 			m_rtList[m_iRectIndex].right,
 			m_rtList[m_iRectIndex].bottom });
 	return false;
@@ -39,7 +39,7 @@ TEffect::TEffect() :m_iRectIndex(0.0f)
 	m_iObjectType = 1000;
 	m_fTimer = 0.0f;
 	m_fStep = 1.0f;
-	
+
 }
 TEffect::~TEffect()
 {}

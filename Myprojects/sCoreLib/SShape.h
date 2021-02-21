@@ -1,6 +1,5 @@
 #pragma once
 #include "TObject.h"
-
 class SShape : public TObject
 {
 public:
@@ -11,8 +10,8 @@ public:
 class SShapeBox : public SShape
 {
 public:
-	virtual bool CreateVertexData() override;
-	virtual bool CreateIndexData() override;
+	virtual bool    CreateVertexData()override;
+	virtual bool    CreateIndexData()override;
 public:
 	SShapeBox();
 	virtual ~SShapeBox();
@@ -21,8 +20,8 @@ public:
 class SShapePlane : public SShape
 {
 public:
-	virtual bool CreateVertexData() override;
-	virtual bool CreateIndexData() override;
+	virtual bool    CreateVertexData()override;
+	virtual bool    CreateIndexData()override;
 public:
 	SShapePlane();
 	virtual ~SShapePlane();
@@ -31,10 +30,11 @@ public:
 class SShapeLine : public SShape
 {
 public:
-	bool Draw(ID3D11DeviceContext* pd3dContext, Vector3 p, Vector3 e, Vector4 c = Vector4(1,0,0,1));
+	bool Draw(ID3D11DeviceContext* pd3dContext,
+		Vector3 p, Vector3 e, Vector4 c = Vector4(1, 0, 0, 1));
 public:
-	virtual bool CreateVertexData() override;
-	virtual bool CreateIndexData() override;
+	virtual bool    CreateVertexData()override;
+	virtual bool    CreateIndexData()override;
 public:
 	SShapeLine();
 	virtual ~SShapeLine();

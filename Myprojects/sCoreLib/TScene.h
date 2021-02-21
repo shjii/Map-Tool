@@ -6,7 +6,7 @@
 
 struct TEnum
 {
-	enum  TGameType 
+	enum  TGameType
 	{
 		T_MAP = 0,
 		T_USER = 100,
@@ -33,7 +33,7 @@ public:
 public:
 	static TScene*				m_pCurrentScene;
 	std::vector<TObjAttribute>  m_ObjAttribute;
-	static TGameUser*			m_pGamePlayer;	
+	static TGameUser*			m_pGamePlayer;
 	std::vector<TSpriteInfo>	m_rtSpriteList;
 
 	std::map<wstring, TObject*>				m_UIObjList;
@@ -69,8 +69,8 @@ public:
 	virtual void  AddEffect(wstring name, TPoint pos, TPoint dir);
 	virtual void  AddNpc(wstring name, TPoint pos, TPoint dir, int index);
 	virtual bool  Reset();
-	virtual void  SortZValue(	std::map<wstring, TObject*>& srcList, 
-								std::vector<std::pair<wstring, TObject*>>& destList);
+	virtual void  SortZValue(std::map<wstring, TObject*>& srcList,
+		std::vector<std::pair<wstring, TObject*>>& destList);
 public:
 	virtual LRESULT	 MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	virtual bool  Load(const TCHAR* filename);
@@ -78,14 +78,14 @@ public:
 	virtual bool  PreFrame();
 	virtual bool  Frame();
 	virtual bool  PostFrame();
-	virtual bool  PreRender(ID3D11DeviceContext* pd3dContext);
-	virtual bool  Render(ID3D11DeviceContext* pd3dContext);
-	virtual bool  PostRender(ID3D11DeviceContext* pd3dContext);
-	virtual bool  RenderMap(ID3D11DeviceContext* pd3dContext);
-	virtual bool  RenderObject(ID3D11DeviceContext* pd3dContext);
-	virtual bool  RenderCharacter(ID3D11DeviceContext* pd3dContext);
-	virtual bool  RenderEffect(ID3D11DeviceContext* pd3dContext);
-	virtual bool  RenderUI(ID3D11DeviceContext* pd3dContext);
+	virtual bool  PreRender(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  Render(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  PostRender(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  RenderMap(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  RenderObject(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  RenderCharacter(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  RenderEffect(ID3D11DeviceContext*	pd3dContext);
+	virtual bool  RenderUI(ID3D11DeviceContext*	pd3dContext);
 	virtual bool  Release();
 public:
 	virtual TObject*  NewObj(TObjAttribute& info);

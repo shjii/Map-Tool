@@ -9,14 +9,14 @@ class main : public TCore
 public:
 	SMap			m_Map;
 	Vector4			m_vDirValue;
-	vector<TObject*>    m_ObjList;
+	std::vector<TObject*> m_ObjList;
 	SShapeBox		m_BoxShape;
 	SShapePlane		m_PlaneShape;
 	SShapeLine		m_LineShape;
 	SModelViewCamera  m_ModelCamera;
 public:
-	Matrix    m_matBoxWorld;
-	Matrix    m_matPlaneWorld;
+	Matrix			m_matBoxWorld;
+	Matrix			m_matPlaneWorld;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -28,5 +28,4 @@ public:
 	LRESULT	 MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-GAME_RUN;
-
+TGAME_RUN;

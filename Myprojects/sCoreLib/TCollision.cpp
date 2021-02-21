@@ -1,10 +1,10 @@
 #include "TCollision.h"
 bool TCollision::RectInPt(RECT rt, POINT pt)
 {
-	return (pt.x >= rt.left && 
-			pt.x <= rt.right &&
-			pt.y >= rt.top && 
-			pt.y <= rt.bottom);
+	return (pt.x >= rt.left &&
+		pt.x <= rt.right &&
+		pt.y >= rt.top &&
+		pt.y <= rt.bottom);
 }
 bool TCollision::Rect2Rect(RECT rtDesk, RECT rtSrc)
 {

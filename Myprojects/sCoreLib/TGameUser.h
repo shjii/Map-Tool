@@ -4,7 +4,7 @@
 class TGameUser : public TObject
 {
 public:
-	bool		m_bAttack;	
+	bool		m_bAttack;
 	float		m_fKeyTimer;
 	TPoint		m_tTargetPos;
 	DWORD		m_dwMove;
@@ -15,7 +15,7 @@ public:
 	bool Reset() override;
 	bool Init() override;
 	bool Frame() override;
-	bool Render(ID3D11DeviceContext* pd3dContext) override;
+	bool Render(ID3D11DeviceContext*	pd3dContext) override;
 public:
 	virtual TObject* Clone() override;
 	virtual bool Damage();

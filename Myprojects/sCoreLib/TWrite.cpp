@@ -35,7 +35,7 @@ HRESULT TDxWrite::CreateIndependentResource()
 		return hr;
 	}
 
-	
+
 	return S_OK;
 }
 HRESULT TDxWrite::CreateDependentResource(
@@ -44,10 +44,10 @@ HRESULT TDxWrite::CreateDependentResource(
 {
 	if (m_pd2dFactory == nullptr) return S_OK;
 	D2D1_RENDER_TARGET_PROPERTIES Properties;
-	Properties.type= D2D1_RENDER_TARGET_TYPE_DEFAULT;
-	Properties.pixelFormat.format= DXGI_FORMAT_UNKNOWN;
-	Properties.pixelFormat.alphaMode = 
-			D2D1_ALPHA_MODE_PREMULTIPLIED;
+	Properties.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
+	Properties.pixelFormat.format = DXGI_FORMAT_UNKNOWN;
+	Properties.pixelFormat.alphaMode =
+		D2D1_ALPHA_MODE_PREMULTIPLIED;
 	Properties.dpiX = m_fdpiX;
 	Properties.dpiY = m_fdpiY;
 	Properties.usage = D2D1_RENDER_TARGET_USAGE_NONE;
@@ -68,7 +68,7 @@ HRESULT TDxWrite::CreateDependentResource(
 	color.a = 255.0f;
 
 	hr = m_pd2dRT->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Red), 
+		D2D1::ColorF(D2D1::ColorF::Red),
 		&m_pBrush);
 	if (FAILED(hr))
 	{
@@ -83,14 +83,14 @@ void TDxWrite::DeleteDependentResource()
 		m_pBrush->Release();
 	}
 	if (m_pd2dRT)
-	{		
+	{
 		m_pd2dRT->Release();
-	}	
+	}
 	m_pBrush = nullptr;
 	m_pd2dRT = nullptr;
 }
-bool TDxWrite::Set( HWND hWnd, int iWidth, int iHeight,
-					IDXGISurface1* pSurface)
+bool TDxWrite::Set(HWND hWnd, int iWidth, int iHeight,
+	IDXGISurface1* pSurface)
 {
 	// 디바이스 종속성, 디바이스 독립적
 	m_iWidth = iWidth;
@@ -149,12 +149,12 @@ bool TDxWrite::Render()
 
 bool TDxWrite::Release()
 {
-	if(m_pd2dFactory == nullptr) return true;
-	if(m_pBrush)m_pBrush->Release();
-	if(m_pd2dFactory)m_pd2dFactory->Release();
-	if(m_pd2dRT)m_pd2dRT->Release();
-	if(m_pd2dWrite)m_pd2dWrite->Release();
-	if(m_pTextFormat)m_pTextFormat->Release();
+	if (m_pd2dFactory == nullptr) return true;
+	if (m_pBrush)m_pBrush->Release();
+	if (m_pd2dFactory)m_pd2dFactory->Release();
+	if (m_pd2dRT)m_pd2dRT->Release();
+	if (m_pd2dWrite)m_pd2dWrite->Release();
+	if (m_pTextFormat)m_pTextFormat->Release();
 	return false;
 }
 void   TDxWrite::push(TMsg& msg)
@@ -164,7 +164,7 @@ void   TDxWrite::push(TMsg& msg)
 	{
 		m_TextList.pop_back();
 	}
-	m_TextList.insert(m_TextList.begin(),msg);
+	m_TextList.insert(m_TextList.begin(), msg);
 }
 void TDxWrite::Draw(int x, int y, wstring msg, DWORD color)
 {
@@ -179,7 +179,7 @@ void TDxWrite::Draw(POINT pos, wstring msg, DWORD color)
 	{
 		D2D1_RECT_F layoutRect =
 		{
-			pos.x,pos.y, g_rtClient.right, g_rtClient.bottom						
+			pos.x,pos.y, g_rtClient.right, g_rtClient.bottom
 		};
 		D2D1_MATRIX_3X2_F matWorld = D2D1::IdentityMatrix();
 		m_pd2dRT->SetTransform(matWorld);

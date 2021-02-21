@@ -16,7 +16,7 @@ public:
 	HRESULT		CreateDevice();
 	HRESULT		CreateSwapChain();
 	HRESULT		SetRenderTargetView();
-	HRESULT		SetDepthStencilView();
+	HRESULT SetDepthStencilView();
 	bool		SetViewport();
 public:
 	bool		Init();

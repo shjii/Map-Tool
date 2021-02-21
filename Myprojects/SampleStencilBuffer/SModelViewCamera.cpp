@@ -1,5 +1,4 @@
 #include "SModelViewCamera.h"
-
 Quaternion SArcBall::QuatFromPoints(Vector3 v0, Vector3 v1)
 {
 	Vector3 vCross;

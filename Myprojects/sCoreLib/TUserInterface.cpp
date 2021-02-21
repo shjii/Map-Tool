@@ -235,10 +235,10 @@ bool  TDialogBox::Init()
 	rtClient.right = g_rtClient.right - rtClient.left * 2;
 	rtClient.bottom = g_rtClient.bottom - rtClient.top * 2;
 
-	SetData(rtClient,	0.1f, 0.1f,     // 화면 좌우 스케일 00, 02
-						0.1f, 0.1f,		// 화면 상하 스케일 00, 20
-						0.2f, 0.2f,		// 원본 좌우 소스 스케일  00, 02
-						0.33f, 0.33f);  // 원본 상하 소스 스케일  00, 20
+	SetData(rtClient, 0.1f, 0.1f,     // 화면 좌우 스케일 00, 02
+		0.1f, 0.1f,		// 화면 상하 스케일 00, 20
+		0.2f, 0.2f,		// 원본 좌우 소스 스케일  00, 02
+		0.33f, 0.33f);  // 원본 상하 소스 스케일  00, 20
 	return true;
 }
 
@@ -259,7 +259,7 @@ void  TDialogBox::Set(TPoint p, RECT rtSrc)
 		0.2f, 0.2f,		// 원본 좌우 소스 스케일  00, 02
 		0.33f, 0.33f);  // 원본 상하 소스 스케일  00, 20
 }
-bool  TDialogBox::Render(ID3D11DeviceContext* pd3dContext)
+bool  TDialogBox::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	//for (int iRect = 0; iRect < 9; iRect++)
 	//{
@@ -306,7 +306,7 @@ bool   TButton::Frame()
 {
 	return true;
 }
-bool   TButton::Render(ID3D11DeviceContext* pd3dContext)
+bool   TButton::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	/*RECT rtDraw = m_rtDesk;
 	if (m_pParentObject != nullptr)
@@ -326,10 +326,10 @@ bool   TButton::Render(ID3D11DeviceContext* pd3dContext)
 	}
 	if (m_bColorKey == true)
 	{
-		TBitmap* pCurrent = m_pColorBmp;	
+		TBitmap* pCurrent = m_pColorBmp;
 		(m_StateBitmap[iCurrentState] != nullptr) ?
 			pCurrent = m_StateBitmap[iCurrentState] :
-			pCurrent = nullptr;	
+			pCurrent = nullptr;
 		if (pCurrent != nullptr)
 		{
 			pCurrent->DrawColorKey(
@@ -363,7 +363,7 @@ bool   TButton::Render(ID3D11DeviceContext* pd3dContext)
 	else
 	{
 		switch (iCurrentState)
-		{			
+		{
 		case 0: {m_pColorBmp->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
 		case 1: {m_StateBitmap[1]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
 		case 2: {m_StateBitmap[2]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
@@ -377,47 +377,47 @@ LRESULT	 TEdit::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-		case WM_LBUTTONDOWN:
+	case WM_LBUTTONDOWN:
+	{
+		int  iID = LOWORD(wParam);
+		if (TCollision::RectInPt(g_rtClient, g_Input.GetPos()))
 		{
-			int  iID = LOWORD(wParam);
-			if (TCollision::RectInPt(g_rtClient, g_Input.GetPos()))
+			if (!TCollision::RectInPt(m_rtWndCtrl, g_Input.GetPos()))
 			{
-				if (!TCollision::RectInPt(m_rtWndCtrl, g_Input.GetPos()))
-				{
-					::SetFocus(g_hWnd);
-					m_bEditFocus = false;
-					g_Input.SetEnable();
-				}
+				::SetFocus(g_hWnd);
+				m_bEditFocus = false;
+				g_Input.SetEnable();
 			}
-		}break;
-		case WM_COMMAND:
+		}
+	}break;
+	case WM_COMMAND:
+	{
+		HWND hWndCtrl = (HWND)lParam;
+		int  iID = LOWORD(wParam);
+		int  iNotify = HIWORD(wParam);
+		if (m_iWindowCtrl == iID)
 		{
-			HWND hWndCtrl = (HWND)lParam;
-			int  iID = LOWORD(wParam);
-			int  iNotify = HIWORD(wParam);
-			if(m_iWindowCtrl == iID)
+			switch (iNotify)
 			{
-				switch (iNotify)
-				{
-				case EN_CHANGE:
-				{
-					TCHAR szBuffer[256] = { 0, };
-					GetWindowText(m_hWndEdit, szBuffer, MAX_PATH);
-					m_szEdit = szBuffer;
-				}break;
-				case EN_SETFOCUS:
-				{
-					m_bEditFocus = true;
-					g_Input.SetEnable(false);
-				}break;
-				case EN_KILLFOCUS:
-				{
-					m_bEditFocus = false;
-					g_Input.SetEnable();
-				}break;
-				}
-			}		
-		}break;
+			case EN_CHANGE:
+			{
+				TCHAR szBuffer[256] = { 0, };
+				GetWindowText(m_hWndEdit, szBuffer, MAX_PATH);
+				m_szEdit = szBuffer;
+			}break;
+			case EN_SETFOCUS:
+			{
+				m_bEditFocus = true;
+				g_Input.SetEnable(false);
+			}break;
+			case EN_KILLFOCUS:
+			{
+				m_bEditFocus = false;
+				g_Input.SetEnable();
+			}break;
+			}
+		}
+	}break;
 	}
 	return -1;// m_Network.MsgProc(hWnd, msg, wParam, lParam);
 }
@@ -446,7 +446,7 @@ void   TEdit::CreateEdit()
 			SendMessage(m_hWndEdit, WM_SETTEXT, 0, (LPARAM)L"game");
 			m_szEdit = L"game";
 		}
-		
+
 	}*/
 }
 bool   TEdit::Init()
@@ -460,7 +460,7 @@ bool   TEdit::Frame()
 	return true;
 }
 
-bool   TEdit::Render(ID3D11DeviceContext* pd3dContext)
+bool   TEdit::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	RECT rtDraw = m_rtDesk;
 	if (m_pParentObject != nullptr)
@@ -471,60 +471,60 @@ bool   TEdit::Render(ID3D11DeviceContext* pd3dContext)
 		m_rtCollide.right += m_rtCollide.left;
 		m_rtCollide.bottom += m_rtCollide.top;
 	}
-/*	int iCurrentState = m_iImageState;
-	if (m_StateBitmap[iCurrentState] == nullptr )
-	{
-		iCurrentState = 0;
-	}
-	if (m_bColorKey == true)
-	{
-		TBitmap* pCurrent = m_pColorBmp;
-		
-		(m_StateBitmap[iCurrentState] != nullptr) ?
-			pCurrent = m_StateBitmap[iCurrentState] :
-			pCurrent = nullptr;
-		if (pCurrent != nullptr)
+	/*	int iCurrentState = m_iImageState;
+		if (m_StateBitmap[iCurrentState] == nullptr )
 		{
-			pCurrent->DrawColorKey(rtDraw,m_rtSrc,m_dwColorKey);
+			iCurrentState = 0;
 		}
-		
-		return PostRender();
-	}
-	if (m_pColorBmp &&
-		m_pColorBmp->m_BitmapInfo.bmBitsPixel == 32)
-	{
-		switch (iCurrentState)
+		if (m_bColorKey == true)
 		{
-		case 0: {m_pColorBmp->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
-		case 1: {
-			m_StateBitmap[1]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
-		case 2: {
-			m_StateBitmap[2]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
-		case 3: {
-			m_StateBitmap[3]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
-		}		
-	}
-	else
-	{
-		if (m_pMaskBmp != nullptr)
-		{
-			m_pMaskBmp->Draw(rtDraw, m_rtSrc, SRCAND, 0);
-			m_pColorBmp->Draw(rtDraw, m_rtSrc, SRCINVERT, 0);
-			m_pMaskBmp->Draw(rtDraw, m_rtSrc, SRCINVERT, 0);
+			TBitmap* pCurrent = m_pColorBmp;
+
+			(m_StateBitmap[iCurrentState] != nullptr) ?
+				pCurrent = m_StateBitmap[iCurrentState] :
+				pCurrent = nullptr;
+			if (pCurrent != nullptr)
+			{
+				pCurrent->DrawColorKey(rtDraw,m_rtSrc,m_dwColorKey);
+			}
+
+			return PostRender();
 		}
-		else
+		if (m_pColorBmp &&
+			m_pColorBmp->m_BitmapInfo.bmBitsPixel == 32)
 		{
 			switch (iCurrentState)
 			{
-			case 0: {m_pColorBmp->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
-			case 1: {m_StateBitmap[1]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
-			case 2: {m_StateBitmap[2]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
-			case 3: {m_StateBitmap[3]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
+			case 0: {m_pColorBmp->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
+			case 1: {
+				m_StateBitmap[1]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
+			case 2: {
+				m_StateBitmap[2]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
+			case 3: {
+				m_StateBitmap[3]->DrawAlphaBlend(rtDraw, m_rtSrc); }break;
 			}
 		}
-	}
+		else
+		{
+			if (m_pMaskBmp != nullptr)
+			{
+				m_pMaskBmp->Draw(rtDraw, m_rtSrc, SRCAND, 0);
+				m_pColorBmp->Draw(rtDraw, m_rtSrc, SRCINVERT, 0);
+				m_pMaskBmp->Draw(rtDraw, m_rtSrc, SRCINVERT, 0);
+			}
+			else
+			{
+				switch (iCurrentState)
+				{
+				case 0: {m_pColorBmp->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
+				case 1: {m_StateBitmap[1]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
+				case 2: {m_StateBitmap[2]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
+				case 3: {m_StateBitmap[3]->Draw(rtDraw, m_rtSrc, SRCCOPY, 0); }break;
+				}
+			}
+		}
 
-	g_Write.Draw({ m_rtWndCtrl.left, m_rtWndCtrl.top }, m_szEdit);
-	*/
+		g_Write.Draw({ m_rtWndCtrl.left, m_rtWndCtrl.top }, m_szEdit);
+		*/
 	return PostRender(pd3dContext);
 }

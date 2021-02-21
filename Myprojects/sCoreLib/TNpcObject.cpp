@@ -12,24 +12,24 @@ void TNpcObject::FSM()
 	m_pActionList.push_back(new TMoveState(this));
 	m_pActionList.push_back(new TAttackState(this));
 	m_pAction = m_pActionList[0];
-	
+
 	m_fAttackTimer = 1.0f;
 	m_pProjectile = (TEffect*)g_ObjectMgr.GetPtr(L"rtProjectile");
 
 }
 void TNpcObject::SetTransition(DWORD dwEvent)
 {
-	DWORD dwOutput = g_Fsm.GetTransition(m_pAction->m_dwState, 
-									dwEvent);
+	DWORD dwOutput = g_Fsm.GetTransition(m_pAction->m_dwState,
+		dwEvent);
 	m_pAction = m_pActionList[dwOutput];
 }
 bool TNpcObject::Frame()
 {
 	if (m_bDead == true) return true;
-	m_pAction->Process(TScene::m_pGamePlayer);	
+	m_pAction->Process(TScene::m_pGamePlayer);
 	return true;
 }
-bool TNpcObject::Render(ID3D11DeviceContext* pd3dContext)
+bool TNpcObject::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	TObject::Render(pd3dContext);
 	return true;

@@ -5,7 +5,7 @@
 #include "fmod_errors.h"
 using namespace FMOD;
 
-class TSound 
+class TSound
 {
 public:
 	FMOD::System*			m_pSystem;
@@ -17,14 +17,14 @@ public:
 	bool  Frame();
 	bool  Render();
 	bool  Release();
-	bool  Load(	System* pSystem, 
-				std::string szFileName,
-				bool bPaused= true);
+	bool  Load(System* pSystem,
+		std::string szFileName,
+		bool bPaused = true);
 	void  Stop();
-	FMOD_RESULT SetMode(FMOD_MODE mode= FMOD_LOOP_OFF);
+	FMOD_RESULT SetMode(FMOD_MODE mode = FMOD_LOOP_OFF);
 	bool  Play(bool bPaused = false, bool bLoop = true);
 	bool  PlayEffect(bool bLoop = false);
-	
+
 	void  Paused();
 	void  Volume(float fVolume);
 };

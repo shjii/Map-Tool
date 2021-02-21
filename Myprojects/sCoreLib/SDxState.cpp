@@ -1,14 +1,14 @@
 #include "SDxState.h"
+ID3D11RasterizerState*		SDxState::m_pRSSolidBack = nullptr;
+ID3D11RasterizerState*		SDxState::m_pRSWireBack = nullptr;
+ID3D11RasterizerState*		SDxState::m_pRS = nullptr;
+ID3D11SamplerState*			SDxState::m_pWrapLinear = nullptr;
+ID3D11DepthStencilState*	SDxState::m_pDSS = nullptr;
 
-ID3D11RasterizerState*	SDxState::m_pRSSolidBack = nullptr;
-ID3D11RasterizerState*	SDxState::m_pRSWireBack = nullptr;
-ID3D11RasterizerState*	SDxState::m_pRS = nullptr;
-ID3D11SamplerState*		SDxState::m_pWrapLinear = nullptr;
-ID3D11DepthStencilState* SDxState::m_pDSS = nullptr;
 D3D11_FILL_MODE			SDxState::m_FillMode = D3D11_FILL_SOLID;
 D3D11_CULL_MODE			SDxState::m_CullMode = D3D11_CULL_NONE;
 
-bool SDxState::Set(ID3D11Device * pd3dDevice)
+bool SDxState::Set(ID3D11Device* pd3dDevice)
 {
 	// DS STATE
 	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc;
@@ -23,7 +23,6 @@ bool SDxState::Set(ID3D11Device * pd3dDevice)
 	{
 		return false;
 	}
-
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -41,9 +40,6 @@ bool SDxState::Set(ID3D11Device * pd3dDevice)
 	{
 		return false;
 	}
-	m_FillMode = D3D11_FILL_SOLID;
-	m_CullMode = D3D11_CULL_NONE;
-	SetRasterizerState(pd3dDevice);
 
 	D3D11_RASTERIZER_DESC rdesc;
 	ZeroMemory(&rdesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -63,13 +59,16 @@ bool SDxState::Set(ID3D11Device * pd3dDevice)
 	{
 		return false;
 	}
+
+	// update
+	m_FillMode = D3D11_FILL_SOLID;
+	m_CullMode = D3D11_CULL_NONE;
+	SetRasterizerState(pd3dDevice);
 	return true;
 }
-
-bool SDxState::SetRasterizerState(ID3D11Device * pd3dDevice)
+bool SDxState::SetRasterizerState(ID3D11Device* pd3dDevice)
 {
 	HRESULT hr;
-	// Rasterizer State
 	if (m_pRS != nullptr) m_pRS->Release();
 	D3D11_RASTERIZER_DESC rdesc;
 	ZeroMemory(&rdesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -83,7 +82,6 @@ bool SDxState::SetRasterizerState(ID3D11Device * pd3dDevice)
 	}
 	return true;
 }
-
 bool SDxState::Release()
 {
 	m_pDSS->Release();
@@ -91,5 +89,5 @@ bool SDxState::Release()
 	m_pRS->Release();
 	m_pRSSolidBack->Release();
 	m_pRSWireBack->Release();
-	return false;
+	return true;
 }

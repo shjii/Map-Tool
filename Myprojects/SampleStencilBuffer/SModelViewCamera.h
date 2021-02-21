@@ -4,40 +4,43 @@
 class SArcBall
 {
 public:
-	Vector3		m_vDownPt;
-	Vector3		m_vCurrentPt;
-	Quaternion	m_qDown;
-	Quaternion	m_qNow;
+	Vector3   m_vDownPt;
+	Vector3   m_vCurrentPt;
+	Quaternion  m_qDown;
+	Quaternion  m_qNow;
 	bool		m_bDrag;
 public:
 	Matrix		GetRotationMatrix();
-	Quaternion	QuatFromPoints(Vector3 v0, Vector3 v1);
+	Quaternion  QuatFromPoints(Vector3   v0, Vector3   v1);
 	Vector3		ScreenToVector(float x, float y);
 	void		OnBegin(int x, int y);
 	void		OnMove(int x, int y);
 	void		OnEnd();
 public:
-	SArcBall()
-	{
-		m_qDown = Quaternion::Identity;
+	SArcBall() {
 		m_qNow = Quaternion::Identity;
+		m_qDown = Quaternion::Identity;
 		m_bDrag = false;
 	}
 };
-
 class SModelViewCamera : public SCamera
 {
 public:
-	SFrustum	m_Frustum;
+	//Matrix    m_matWorld;
+	SFrustum  m_Frustum;
 public:
 	SArcBall	m_WorldArcBall;
 	SArcBall	m_ViewArcBall;
 	Matrix		m_mModelLastRot;
 public:
-	virtual int		WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	virtual  int WndProc(
+		HWND hWnd,
+		UINT message,
+		WPARAM wParam,
+		LPARAM lParam);
 public:
-	virtual void	Update(Vector4 data) override;
-	virtual bool	Frame() override;
+	virtual void Update(Vector4 data) override;
+	virtual bool Frame() override;
 public:
 	SModelViewCamera();
 	virtual ~SModelViewCamera();

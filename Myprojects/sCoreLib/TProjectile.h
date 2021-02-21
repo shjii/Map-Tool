@@ -95,6 +95,6 @@ struct TProjectileInfo
 };
 class TProjectile : public TEffect
 {
-	public:
+public:
 };
 

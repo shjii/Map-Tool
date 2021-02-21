@@ -25,23 +25,20 @@ struct P_VERTEX
 		this->t = t;
 	}
 };
-
 struct PNCT_VERTEX
 {
-	Vector3 p;
-	Vector3 n;
-	Vector4 c;
-	Vector2 t;
-
-	bool operator == (const PNCT_VERTEX& Vertex)
+	Vector3		p;
+	Vector3		n;
+	Vector4		c;
+	Vector2     t;
+	bool operator == (const PNCT_VERTEX & Vertex)
 	{
-		if (p == Vertex.p && n == Vertex.n && c == Vertex.c && t == Vertex.t)
+		if (p == Vertex.p  && n == Vertex.n && 	c == Vertex.c  &&	t == Vertex.t)
 		{
 			return true;
 		}
-		return false;
+		return  false;
 	}
-
 	PNCT_VERTEX() {}
 	PNCT_VERTEX(Vector3		vp,
 		Vector3		vn,
@@ -51,6 +48,7 @@ struct PNCT_VERTEX
 		p = vp, n = vn, c = vc, t = vt;
 	}
 };
+
 
 struct SDataCB
 {
@@ -64,11 +62,11 @@ struct SDataCB
 class SDxObject
 {
 public:
-	ID3D11Device*	m_pd3dDevice;
-	ID3DBlob*		m_pVSObj;
-	UINT			m_iTopology;
-	C_STR			m_szVertexShader;
-	C_STR			m_szPixelShader;
+	ID3D11Device* m_pd3dDevice;
+	ID3DBlob*	  m_pVSObj;
+	UINT		  m_iTopology;
+	C_STR		  m_szVertexShader;
+	C_STR		  m_szPixelShader;
 public:
 	Matrix    m_matWorld;
 	Matrix    m_matView;

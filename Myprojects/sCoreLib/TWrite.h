@@ -19,7 +19,7 @@ struct TMsg
 		this->dwColor = dwColor;
 	}
 };
-class TDxWrite :  public TSingleton<TDxWrite>
+class TDxWrite : public TSingleton<TDxWrite>
 {
 public:
 	ID2D1Factory*		m_pd2dFactory;
@@ -33,15 +33,15 @@ public:
 	float				m_fdpiY;
 	std::vector<TMsg>   m_TextList;
 public:
-	virtual bool Init() ;
+	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render();
 	virtual bool Release();
-	virtual bool Set(HWND hWnd, 
+	virtual bool Set(HWND hWnd,
 		int iWidth, int iHeight,
 		IDXGISurface1* pSurface);
-	void ResizeDevice(   int iWidth, int iHeight,
-						 IDXGISurface1* pSurface);
+	void ResizeDevice(int iWidth, int iHeight,
+		IDXGISurface1* pSurface);
 	HRESULT CreateIndependentResource();
 	HRESULT CreateDependentResource(int iWidth, int iHeight,
 		IDXGISurface1* pSurface);

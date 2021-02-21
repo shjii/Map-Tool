@@ -3,12 +3,10 @@
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
-
-
 #if NDEBUG
-#pragma comment (lib, "sCoreLib_R.lib")
+#pragma comment (lib, "SCoreLib_R.lib")
 #else
-#pragma comment (lib, "sCoreLib_D.lib")
+#pragma comment (lib, "SCoreLib_D.lib")
 #endif
 
 using namespace std;
@@ -27,14 +25,14 @@ namespace TBASIS_CORE_LIB
 		bool   m_bCapsLock;
 		bool   m_bNumLock;
 	};
-	
+
 	extern TKeyMap  g_KeyMap;
 	extern float	g_fGameTimer;
 	extern float    g_fSecondPerFrame;
 	extern HWND     g_hWnd;
 	extern HINSTANCE     g_hInstance;
 	extern RECT		g_rtClient;
-	extern bool		g_bActive;	
+	extern bool		g_bActive;
 }
 
 using namespace TBASIS_CORE_LIB;

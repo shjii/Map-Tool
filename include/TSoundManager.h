@@ -11,10 +11,10 @@ private:
 	std::string				m_szDefaultPath;
 public:
 	TSound*		Load(const char* filename);
-	bool		PlayEffect(	const char* filename, 
-							bool bLoop = false);
+	bool		PlayEffect(const char* filename,
+		bool bLoop = false);
 	TSound*		GetPtr(string filename);
-	
+
 	bool		Init();
 	bool		Frame();
 	bool		Render();

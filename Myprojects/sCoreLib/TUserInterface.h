@@ -78,7 +78,7 @@ public:
 	virtual LRESULT	 MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	virtual TObject* Clone() override;
 	virtual bool	PostFrame() override;
-	TUserInterface() 
+	TUserInterface()
 	{
 		m_iObjectType = 300;
 	}
@@ -114,7 +114,7 @@ public:
 		float fOffsetV0, float fOffsetV1);
 public:
 	virtual bool	Init() override;
-	virtual bool	Render(ID3D11DeviceContext* pd3dContext) override;
+	virtual bool	Render(ID3D11DeviceContext*	pd3dContext) override;
 	virtual void  Set(RECT rtSrc, RECT rtDesk) override;
 	virtual void  Set(TPoint p, RECT rtDesk) override;
 public:
@@ -127,7 +127,7 @@ public:
 
 public:
 	bool   Frame();
-	bool   Render(ID3D11DeviceContext* pd3dContext);
+	bool   Render(ID3D11DeviceContext*	pd3dContext);
 	virtual TObject* Clone() override;
 public:
 	TButton()
@@ -150,7 +150,7 @@ public:
 	virtual TObject* Clone() override;
 	bool	Init() override;
 	bool	Frame()override;
-	bool	Render(ID3D11DeviceContext* pd3dContext)override;
+	bool	Render(ID3D11DeviceContext*	pd3dContext)override;
 	LRESULT	 MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:
 	TEdit()

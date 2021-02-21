@@ -9,7 +9,7 @@ bool TGameUser::Damage()
 {
 	return true;
 }
-bool TGameUser::Dead() 
+bool TGameUser::Dead()
 {
 	return true;
 }
@@ -20,7 +20,7 @@ bool TGameUser::Hit(TPoint p, int iIndex)
 
 bool  TGameUser::Reset()
 {
-	m_ProjectileList.clear();	
+	m_ProjectileList.clear();
 	return true;
 }
 bool TGameUser::Init()
@@ -49,7 +49,7 @@ bool TGameUser::ProjectileTick()
 
 	/// TODO : OtherUser projectle frame
 	for (std::vector<TProjectileInfo>::iterator iter = m_ProjectileList.begin();
-		iter != m_ProjectileList.end();	)
+		iter != m_ProjectileList.end(); )
 	{
 		iter->Frame();
 		if (iter->m_bDead == true)
@@ -65,7 +65,7 @@ bool TGameUser::ProjectileTick()
 	return true;
 }
 bool TGameUser::Frame()
-{		
+{
 	m_dwMove = 0;
 	TPoint dir(0, 0);
 	if (g_bActive)
@@ -104,12 +104,12 @@ bool TGameUser::Frame()
 	return true;
 }
 
-bool TGameUser::Render(ID3D11DeviceContext* pd3dContext)
+bool TGameUser::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	TObject::Render(pd3dContext);
 	for (auto& pInfo : m_ProjectileList)
 	{
-		m_pProjectile->Set(pInfo.p,	m_pProjectile->m_rtList[pInfo.m_iRectIndex]);
+		m_pProjectile->Set(pInfo.p, m_pProjectile->m_rtList[pInfo.m_iRectIndex]);
 		pInfo.m_rtCollide = m_pProjectile->m_rtCollide;
 		m_pProjectile->Render(pd3dContext);
 	}

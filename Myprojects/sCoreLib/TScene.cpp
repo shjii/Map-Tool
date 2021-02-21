@@ -4,7 +4,7 @@ int	TScene::m_iStageCounter = 1;
 TScene*	TScene::m_pCurrentScene = nullptr;
 
 TGameUser*	TScene::m_pGamePlayer = nullptr;
-LRESULT	 TScene::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
+LRESULT	 TScene::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	for (auto iter : m_UIObjList)
 	{
@@ -19,30 +19,30 @@ TObject*  TScene::NewObj(TObjAttribute& info)
 	TObject* pObject = nullptr;
 	switch (info.iObjType)
 	{
-		case TEnum::T_MAP: 
+	case TEnum::T_MAP:
+	{
+		pObject = new TObject;
+	}break;
+	case TEnum::T_USER:
+	{
+		pObject = new TGameUser;
+	}break;
+	case TEnum::T_NPC:
+	{
+		pObject = new TNpcObject;
+		TNpcObject* pNpc = dynamic_cast<TNpcObject*>(pObject);
+		if (pNpc != nullptr)
 		{
-			pObject = new TObject; 
-		}break;
-		case TEnum::T_USER:
-		{
-			pObject = new TGameUser; 
-		}break;
-		case TEnum::T_NPC: 
-		{
-			pObject = new TNpcObject; 
-			TNpcObject* pNpc = dynamic_cast<TNpcObject*>(pObject);
-			if (pNpc != nullptr)
-			{
-				pNpc->FSM();
-			}
-		} break;
-		case TEnum::T_INTERFACE: {pObject = new TUserInterface; } break;
-		case TEnum::T_DIALOGBOX: 
-		{
-			pObject = new TDialogBox; 
-		} break;
-		case TEnum::T_BUTTON: {pObject = new TButton; } break;
-		case TEnum::T_EDIT: {pObject = new TEdit; } break;
+			pNpc->FSM();
+		}
+	} break;
+	case TEnum::T_INTERFACE: {pObject = new TUserInterface; } break;
+	case TEnum::T_DIALOGBOX:
+	{
+		pObject = new TDialogBox;
+	} break;
+	case TEnum::T_BUTTON: {pObject = new TButton; } break;
+	case TEnum::T_EDIT: {pObject = new TEdit; } break;
 	}
 
 	return pObject;
@@ -59,15 +59,15 @@ bool  TScene::CreateScene()
 		pObj->m_Attribute = info;
 		pObj->m_szName = info.szName;
 		pObj->m_szParentName = info.szParentName;
-		pObj->Init();				
-		
+		pObj->Init();
+
 		if (info.bColorKey == false)
 		{
-			pObj->Load(info.colorbitmap.c_str(),info.maskbitmap.c_str());
+			pObj->Load(info.colorbitmap.c_str(), info.maskbitmap.c_str());
 		}
 		else
 		{
-			pObj->Load(info.colorbitmap.c_str(),nullptr,info.dwColor);
+			pObj->Load(info.colorbitmap.c_str(), nullptr, info.dwColor);
 		}
 		//// state
 		//pObj->m_StateBitmap.resize(4);
@@ -84,8 +84,8 @@ bool  TScene::CreateScene()
 		//{
 		//	pObj->m_StateBitmap[DISABLE] =	g_BitmapMgr.Load(info.disbitmap.c_str());
 		//}
-		
-		SetObject(info, pObj);	
+
+		SetObject(info, pObj);
 		if (info.iObjType == TEnum::T_DIALOGBOX)
 		{
 			pObj->m_iSortValue += 100;
@@ -191,7 +191,7 @@ bool  TScene::SetObject(TObjAttribute& info, TObject* pObj)
 }
 bool  TScene::Load(const TCHAR* filename)
 {
-	Init();	
+	Init();
 	if (!g_ObjectMgr.LoadObjectFile(filename, m_ObjAttribute))
 	{
 		return false;
@@ -225,7 +225,7 @@ bool  TScene::Frame()
 		{
 			pObj->Frame();
 		}
-	}	
+	}
 	for (auto iter : m_ObjList)
 	{
 		TObject* pObj = (TObject*)iter.second;
@@ -335,12 +335,12 @@ bool  TScene::Release()
 	m_EffectList.clear();
 	return true;
 }
-bool  TScene::PreRender(ID3D11DeviceContext* pd3dContext)
+bool  TScene::PreRender(ID3D11DeviceContext*	pd3dContext)
 {
 	return true;
 }
-bool  TScene::Render(ID3D11DeviceContext* pd3dContext)
-{	
+bool  TScene::Render(ID3D11DeviceContext*	pd3dContext)
+{
 	PreRender(pd3dContext);
 	{
 		RenderMap(pd3dContext);
@@ -352,7 +352,7 @@ bool  TScene::Render(ID3D11DeviceContext* pd3dContext)
 	PostRender(pd3dContext);
 	return true;
 }
-bool  TScene::PostRender(ID3D11DeviceContext* pd3dContext)
+bool  TScene::PostRender(ID3D11DeviceContext*	pd3dContext)
 {
 	if (TScene::m_pCurrentScene->m_bGameFinish)
 	{
@@ -361,7 +361,7 @@ bool  TScene::PostRender(ID3D11DeviceContext* pd3dContext)
 	}
 	return true;
 }
-bool  TScene::RenderMap(ID3D11DeviceContext* pd3dContext)
+bool  TScene::RenderMap(ID3D11DeviceContext*	pd3dContext)
 {
 	for (auto iter : m_MapList)
 	{
@@ -373,7 +373,7 @@ bool  TScene::RenderMap(ID3D11DeviceContext* pd3dContext)
 	}
 	return true;
 }
-bool  TScene::RenderUI(ID3D11DeviceContext* pd3dContext)
+bool  TScene::RenderUI(ID3D11DeviceContext*	pd3dContext)
 {
 	for (auto iter : m_UIDrawObjList)
 	{
@@ -385,7 +385,7 @@ bool  TScene::RenderUI(ID3D11DeviceContext* pd3dContext)
 	}
 	return true;
 }
-bool  TScene::RenderEffect(ID3D11DeviceContext* pd3dContext)
+bool  TScene::RenderEffect(ID3D11DeviceContext*	pd3dContext)
 {
 	for (auto& pInfo : m_EffectList)
 	{
@@ -396,19 +396,19 @@ bool  TScene::RenderEffect(ID3D11DeviceContext* pd3dContext)
 	}
 	return true;
 }
-bool  TScene::RenderObject(ID3D11DeviceContext* pd3dContext)
+bool  TScene::RenderObject(ID3D11DeviceContext*	pd3dContext)
 {
 	for (auto iter : m_ObjList)
 	{
 		TObject* pObj = (TObject*)iter.second;
 		if (pObj->m_bDead == false)
 		{
-			pObj->Render( pd3dContext);
+			pObj->Render(pd3dContext);
 		}
 	}
 	return true;
 }
-bool  TScene::RenderCharacter(ID3D11DeviceContext* pd3dContext)
+bool  TScene::RenderCharacter(ID3D11DeviceContext*	pd3dContext)
 {
 	for (auto iter : m_NpcList)
 	{
@@ -466,7 +466,7 @@ bool  TScene::Reset()
 		pObj->Release();
 		delete pObj;
 	}
-	
+
 	m_UIObjList.clear();
 	m_ItemObjList.clear();
 	m_ObjList.clear();
@@ -553,7 +553,7 @@ bool	TScene::DelNpc(int iIndex)
 	{
 		g_ObjectMgr.DeleteExecute(iter->second);
 		delete iter->second;
-		m_NpcList.erase(iter);		
+		m_NpcList.erase(iter);
 		return true;
 	}
 	return false;
@@ -561,10 +561,10 @@ bool	TScene::DelNpc(int iIndex)
 TScene::TScene()
 {
 	m_iStageCounter = 0;
-	m_iSceneID		= 0;
-	m_bSceneChange	= false;
-	m_iNextScene	= TSCENE_LOADING;
-	m_iNpcCounter	= 0;
+	m_iSceneID = 0;
+	m_bSceneChange = false;
+	m_iNextScene = TSCENE_LOADING;
+	m_iNpcCounter = 0;
 }
 TScene::~TScene()
 {

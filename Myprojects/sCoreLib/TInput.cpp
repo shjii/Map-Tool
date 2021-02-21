@@ -6,7 +6,7 @@ namespace TBASIS_CORE_LIB
 
 TInput::TInput()
 {
-	
+
 }
 TInput::~TInput()
 {
@@ -23,18 +23,18 @@ bool	TInput::Reset()
 	ZeroMemory(&g_KeyMap, sizeof(TKeyMap));
 	return true;
 }
-void	TInput::SetEnable(bool bEnable) 
-{ 
-	m_bEnable = bEnable; 
+void	TInput::SetEnable(bool bEnable)
+{
+	m_bEnable = bEnable;
 	if (m_bEnable == false)
 	{
 		ZeroMemory(&m_dwKeyState, sizeof(DWORD) * 256);
 		ZeroMemory(&g_KeyMap, sizeof(TKeyMap));
 	}
 }
-bool	TInput::GetEnable() 
+bool	TInput::GetEnable()
 {
-	return m_bEnable; 
+	return m_bEnable;
 }
 bool TInput::Init()
 {
@@ -43,10 +43,12 @@ bool TInput::Init()
 	return true;
 }
 // 엔진에서 프레임 단위 1번만 호출한다.
-bool TInput::Frame() 
+bool TInput::Frame()
 {
 	GetCursorPos(&m_MousePos); // 화면좌표계
+	HWND hWnd = WindowFromPoint(m_MousePos);
 	ScreenToClient(g_hWnd, &m_MousePos);
+	if (hWnd != g_hWnd) return true;
 
 	if (m_bEnable == false) return true;
 
@@ -70,7 +72,7 @@ bool TInput::Frame()
 		}
 		else
 		{
-			if (m_dwKeyState[iKey] == KEY_PUSH||
+			if (m_dwKeyState[iKey] == KEY_PUSH ||
 				m_dwKeyState[iKey] == KEY_HOLD)
 			{
 				m_dwKeyState[iKey] = KEY_UP;
@@ -90,27 +92,27 @@ bool TInput::Frame()
 	g_KeyMap.m_bAttack = false;
 	if (m_dwKeyState[VK_UP] > KEY_UP || m_dwKeyState['W'] > KEY_UP)
 	{
-		g_KeyMap.m_bFront = true; 
+		g_KeyMap.m_bFront = true;
 	}
 	if (m_dwKeyState[VK_LEFT] > KEY_UP || m_dwKeyState['A'] > KEY_UP)
 	{
-		g_KeyMap.m_bLeft = true; 
+		g_KeyMap.m_bLeft = true;
 	}
 	if (m_dwKeyState[VK_RIGHT] > KEY_UP || m_dwKeyState['D'] > KEY_UP)
 	{
-		g_KeyMap.m_bRight = true; 
+		g_KeyMap.m_bRight = true;
 	}
 	if (m_dwKeyState[VK_DOWN] > KEY_UP || m_dwKeyState['S'] > KEY_UP)
 	{
-		g_KeyMap.m_bBack = true; 
+		g_KeyMap.m_bBack = true;
 	}
 	if (m_dwKeyState[VK_RETURN] > KEY_UP || m_dwKeyState[VK_MBUTTON] > KEY_UP)
 	{
-		g_KeyMap.m_bAttack = true; 
+		g_KeyMap.m_bAttack = true;
 	}
 	if (m_dwKeyState[VK_SPACE] > KEY_UP || m_dwKeyState[VK_RBUTTON] > KEY_UP)
 	{
-		g_KeyMap.m_bJump = true; 
+		g_KeyMap.m_bJump = true;
 	}
 
 	SHORT sKey = GetKeyState(VK_NUMLOCK);
@@ -133,7 +135,7 @@ bool TInput::Frame()
 	}
 	return true;
 }
-bool TInput::Release() 
+bool TInput::Release()
 {
 	return true;
 }

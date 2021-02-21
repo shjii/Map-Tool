@@ -5,14 +5,14 @@
 #include <time.h>
 
 
-	#define TBASIS_EPSILON		((float)  0.001f)
-	#define TBASIS_PI			((float)  3.141592654f)
-	#define DegreeToRadian( degree ) ((degree) * (TBASIS_PI / 180.0f))
-	#define RadianToDegree( radian ) ((radian) * (180.0f / TBASIS_PI))
-	#define randf(x) (x*rand()/(float)RAND_MAX)
-	#define randf2(x,off) (off+x*rand()/(float)RAND_MAX)
-	#define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
-	#define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
+#define TBASIS_EPSILON		((float)  0.001f)
+#define TBASIS_PI			((float)  3.141592654f)
+#define DegreeToRadian( degree ) ((degree) * (TBASIS_PI / 180.0f))
+#define RadianToDegree( radian ) ((radian) * (180.0f / TBASIS_PI))
+#define randf(x) (x*rand()/(float)RAND_MAX)
+#define randf2(x,off) (off+x*rand()/(float)RAND_MAX)
+#define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
+#define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
 
 namespace TBASIS_CORE_LIB
 {
@@ -77,7 +77,7 @@ namespace TBASIS_CORE_LIB
 			ret.x = x * fValue;
 			ret.y = y * fValue;
 			return ret;
-		}		
+		}
 		TPoint operator + (TPoint p)
 		{
 			TPoint ret;
@@ -155,7 +155,7 @@ namespace TBASIS_CORE_LIB
 			//float fAngle = vDir.Angle(vLook);
 
 			// 시계 반대방향으로 움직이면 각도를 뺀다.
-			TPoint vA, vB, vC;			
+			TPoint vA, vB, vC;
 			vA.x = vLook.x;	vA.y = vLook.y;
 			vB.x = vDir.x;	vB.y = vDir.y;
 			vC = (vA ^ vB).Normalize();
@@ -167,7 +167,7 @@ namespace TBASIS_CORE_LIB
 			return true;
 		}
 	};
-	
+
 }
 namespace T_CORE = TBASIS_CORE_LIB; // 별칭 사용
 using namespace T_CORE;
