@@ -25,6 +25,7 @@ public:
 	virtual bool    CreateVertexData() override;
 	virtual bool    CreateIndexData()override;
 	virtual bool	Frame() override;
+	virtual bool	Postrender(ID3D11DeviceContext* pd3dContext);
 public:
 	SMap();
 	virtual ~SMap();

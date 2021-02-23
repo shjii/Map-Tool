@@ -46,6 +46,10 @@ public:
 	virtual bool PostInit() {
 		return true;
 	};
+	virtual bool FrameFrustum(ID3D11DeviceContext* pd3dContext)
+	{
+		return true;
+	}
 	virtual bool Frame();
 public:
 	SCamera();

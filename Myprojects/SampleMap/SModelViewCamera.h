@@ -41,7 +41,11 @@ public:
 public:
 	virtual bool PostInit() override;
 	virtual void Update(Vector4 data) override;
+	virtual void UpdateVector() override;
 	virtual bool Frame() override;
+	virtual bool FrameFrustum(ID3D11DeviceContext* pd3dContext);
+	virtual bool CrateFrustum(ID3D11Device* pd3dDevice, ID3D11DeviceContext* d3dContext);
+	virtual bool DrawFrustum(ID3D11DeviceContext* pd3dContext, Matrix* pmatView, Matrix* pmatProj);
 public:
 	SModelViewCamera();
 	virtual ~SModelViewCamera();

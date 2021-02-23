@@ -97,6 +97,10 @@ void SModelViewCamera::Update(Vector4 data)
 {
 
 }
+void SModelViewCamera::UpdateVector()
+{
+	SCamera::UpdateVector();
+}
 bool SModelViewCamera::Frame()
 {
 	//VIEW
@@ -135,11 +139,35 @@ bool SModelViewCamera::Frame()
 	m_fWheelDelta = 0;
 	return true;
 }
+bool SModelViewCamera::FrameFrustum(ID3D11DeviceContext * pd3dContext)
+{
+	Matrix matInViewProj = m_matView * m_matProj;
+	matInViewProj = matInViewProj.Invert();
+	for (int iVertex = 0; iVertex < 24; iVertex++)
+	{
+		Vector3& v = m_Frustum.m_VertexList[iVertex].p;
+		m_Frustum.m_FrustumObj.m_VertexList[iVertex].p = Vector3::Transform(v, matInViewProj);
+	}
+	pd3dContext->UpdateSubresource(m_Frustum.m_FrustumObj.m_pVertexBuffer, 0 ,NULL, &m_Frustum.m_FrustumObj.m_VertexList.at(0), 0 ,0);
+	m_Frustum.Frame();
+	return true;
+}
+bool SModelViewCamera::CrateFrustum(ID3D11Device * pd3dDevice, ID3D11DeviceContext * d3dContext)
+{
+	m_Frustum.Create(pd3dDevice);
+	return true;
+}
+bool SModelViewCamera::DrawFrustum(ID3D11DeviceContext * pd3dContext, Matrix * pmatView, Matrix * pmatProj)
+{
+	m_Frustum.m_FrustumObj.SetMatrix(NULL, pmatView, pmatProj);
+	m_Frustum.m_FrustumObj.Render(pd3dContext);
+	return true;
+}
 SModelViewCamera::SModelViewCamera()
 {
 
 }
 SModelViewCamera::~SModelViewCamera()
 {
-
+	m_Frustum.m_FrustumObj.Release();
 }

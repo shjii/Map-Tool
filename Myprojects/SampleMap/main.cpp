@@ -81,21 +81,22 @@ bool main::Init()
 		return false;
 	}
 
-	m_ModelCamera.CreateViewMatrix({ 0,10,-1 }, { 0,0,0 });
+	m_ModelCamera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_ModelCamera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_ModelCamera.Init();
+	m_ModelCamera.CrateFrustum(m_pd3dDevice, m_pd3dContext);
 	m_pMainCamera = &m_ModelCamera;
 
 	m_TopCamera.CreateViewMatrix({ 0,30,-0.1f }, { 0,0,0 });
 	fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_TopCamera.CreateOrthographic(
-		500, 500, 1.0f, 1000);
+		8, 8, 1.0f, 1000);
 	m_TopCamera.Init();
 
 	SMapDesc desc;
-	desc.iNumCols = 513;
-	desc.iNumRows = 513;
+	desc.iNumCols = 9;
+	desc.iNumRows = 9;
 	desc.fCellDistance = 1;
 	desc.szTexFile = L"../../data/tileA.jpg";
 	desc.szVS = L"VS.txt";
@@ -152,6 +153,8 @@ bool main::Frame()
 	}
 	m_BoxShape.Frame();
 	m_pMainCamera->m_vCameraTarget = m_BoxShape.m_vPos;
+
+	m_pMainCamera->FrameFrustum(m_pd3dContext);
 	return true;
 }
 bool main::Render()
@@ -161,29 +164,86 @@ bool main::Render()
 	m_pd3dContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	m_pd3dContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
+	// CULLING
+	vector<DWORD> vislbeIB;
+	for (int iFace = 0; iFace < m_Map.m_IndexList.size() / 3; iFace++)
+	{
+		int a = m_Map.m_IndexList[iFace * 3 + 0];
+		int b = m_Map.m_IndexList[iFace * 3 + 1];
+		int c = m_Map.m_IndexList[iFace * 3 + 2];
+		Vector3 v[3];
+		v[0] = m_Map.m_VertexList[a].p;
+		v[1] = m_Map.m_VertexList[b].p;
+		v[2] = m_Map.m_VertexList[c].p;
+		SModelViewCamera* pCamera = (SModelViewCamera*)m_pMainCamera;
+		for (int iV = 0; iV < 3; iV++)
+		{
+			BOOL bVisiable = pCamera->m_Frustum.ClassifyPoint(v[iV]);
+			if (bVisiable)
+			{
+				vislbeIB.push_back(a);
+				vislbeIB.push_back(b);
+				vislbeIB.push_back(c);
+				break;
+			}
+		}
+	}
+	if (vislbeIB.size() != 0)
+	{
+		m_Map.m_iNumFaces = vislbeIB.size() / 3;
+		m_pd3dContext->UpdateSubresource(m_Map.m_pIndexBuffer, 0 ,NULL, &vislbeIB.at(0), 0,0);
+	}
+	else
+	{
+		m_Map.m_iNumFaces = 0;
+	}
+
 	if (m_MinMap.Begin(m_pd3dContext))
 	{
 		m_Map.SetMatrix(NULL,
 			&m_TopCamera.m_matView,
 			&m_TopCamera.m_matProj);
 		m_Map.Render(m_pd3dContext);
-		m_BoxShape.SetMatrix(NULL,
+
+
+		Matrix matWorld;
+		matWorld._41 = m_TopCamera.m_vCameraPos.x;
+		matWorld._42 = m_TopCamera.m_vCameraPos.y;
+		matWorld._43 = m_TopCamera.m_vCameraPos.z;
+
+
+
+		m_BoxShape.SetMatrix(&m_BoxShape.m_matWorld,
 			&m_TopCamera.m_matView,
 			&m_TopCamera.m_matProj);
 		m_BoxShape.Render(m_pd3dContext);
+		
 		m_MinMap.End(m_pd3dContext);
+
+				// ¹Ì´Ï¸Ê Á¤Áß¾Ó ¹èÄ¡
+		//Vector3 vPos = m_BoxShape.m_vPos- m_BoxShape.m_vLook;
+		//vPos.y = 30.0f;
+		//m_TopCamera.CreateViewMatrix(
+		//	vPos,
+		//	m_BoxShape.m_vPos);
+
+		/*m_pMainCamera->DrawFrustum(m_pd3dContext,
+			&m_TopCamera.m_matView,
+			&m_TopCamera.m_matProj);*/
+
 	}
 
 
-	m_BoxShape.SetMatrix(NULL,
-		&m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
-	m_BoxShape.Render(m_pd3dContext);
 
 	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_Map.Render(m_pd3dContext);
+
+	m_BoxShape.SetMatrix(&m_BoxShape.m_matWorld,
+		&m_pMainCamera->m_matView,
+		&m_pMainCamera->m_matProj);
+	m_BoxShape.Render(m_pd3dContext);
 
 	m_MinMap.SetMatrix(NULL,
 		NULL, //&m_pMainCamera->m_matView,

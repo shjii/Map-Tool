@@ -15,8 +15,8 @@ bool    SMap::CreateVertexData()
 			m_VertexList[iIndex].p.x = (iCol - fHalfCols)*m_fCellDistance;
 			m_VertexList[iIndex].p.y = 0.0f;
 			m_VertexList[iIndex].p.z = (iRow - fHalfRows)*m_fCellDistance*-1.f;
-			m_VertexList[iIndex].t.x = iCol * fOffsetU * 100;
-			m_VertexList[iIndex].t.y = iRow * fOffsetV * 100;
+			m_VertexList[iIndex].t.x = iCol * fOffsetU * 1;
+			m_VertexList[iIndex].t.y = iRow * fOffsetV * 1;
 
 			m_VertexList[iIndex].n = { 0,1,0 };
 			m_VertexList[iIndex].c = { 1,1,1,1 };
@@ -43,10 +43,16 @@ bool    SMap::CreateIndexData()
 			iIndex += 6;
 		}
 	}
+	m_iNumFaces = m_IndexList.size() / 3;
 	return true;
 }
 bool	SMap::Frame()
 {
+	return true;
+}
+bool SMap::Postrender(ID3D11DeviceContext * pd3dContext)
+{
+	pd3dContext->DrawIndexed(m_iNumFaces * 3, 0, 0);
 	return true;
 }
 bool SMap::CreateMap(ID3D11Device* pDevice, SMapDesc  desc)

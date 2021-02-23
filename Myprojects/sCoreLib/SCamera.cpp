@@ -156,6 +156,10 @@ bool SCamera::Frame()
 	UpdateVector();
 	return true;
 }
+bool SCamera::DrawFrustum(ID3D11DeviceContext * pd3dContext, Matrix * pmatView, Matrix * pmatProj)
+{
+	return false;
+}
 SCamera::SCamera()
 {
 	m_pSpeed = 30.0f;
