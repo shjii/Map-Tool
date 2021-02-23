@@ -80,7 +80,8 @@ bool main::Init()
 	{
 		return false;
 	}
-	m_ModelCamera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
+
+	m_ModelCamera.CreateViewMatrix({ 0,10,-1 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_ModelCamera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_ModelCamera.Init();
