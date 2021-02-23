@@ -41,16 +41,12 @@ int SCamera::WndProc(
 	return -1;
 }
 
-bool		SCamera::CreateViewMatrix(
-	Vector3 p,
-	Vector3 t,
-	Vector3 u)
+bool		SCamera::CreateViewMatrix(Vector3 p,Vector3 t,Vector3 u)
 {
 	m_vCameraPos = p;
 	m_vCameraTarget = t;
 	m_fDistance = (m_vCameraPos - m_vCameraTarget).Length();
 	m_matView = Matrix::CreateLookAt(p, t, u);
-
 	Matrix mInvView;
 	mInvView = m_matView.Invert();
 	Vector3* pZBasis = (Vector3*)&mInvView._31;

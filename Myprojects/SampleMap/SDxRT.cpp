@@ -104,7 +104,7 @@ void SDxRT::ClearShaderResources(ID3D11DeviceContext*  pImmediateContext)
 bool SDxRT::Begin(ID3D11DeviceContext*	pd3dContext)
 {
 	UINT  iNumView = 1;
-	pd3dContext->RSGetViewports(&iNumView, &vpSave);
+ 	pd3dContext->RSGetViewports(&iNumView, &vpSave);
 	pd3dContext->OMGetRenderTargets(1, &pSaveRTV, &pSaveDSV);
 
 	ID3D11RenderTargetView* pNull = NULL;
