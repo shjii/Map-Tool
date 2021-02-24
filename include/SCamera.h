@@ -51,6 +51,8 @@ public:
 		return true;
 	}
 	virtual bool Frame();
+	virtual bool DrawFrustum(ID3D11DeviceContext*	pd3dContext,
+		Matrix* pmatView, Matrix* pmatProj);
 public:
 	SCamera();
 	virtual ~SCamera();

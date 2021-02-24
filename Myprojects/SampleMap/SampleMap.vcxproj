@@ -148,19 +148,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SDxRT.cpp" />
-    <ClCompile Include="SFrustum.cpp" />
-    <ClCompile Include="SMap.cpp" />
-    <ClCompile Include="SMiniMap.cpp" />
-    <ClCompile Include="SModelViewCamera.cpp" />
+    <ClCompile Include="SHeightMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
-    <ClInclude Include="SDxRT.h" />
-    <ClInclude Include="SFrustum.h" />
-    <ClInclude Include="SMap.h" />
-    <ClInclude Include="SMiniMap.h" />
-    <ClInclude Include="SModelViewCamera.h" />
+    <ClInclude Include="SHeightMap.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="PS.txt" />

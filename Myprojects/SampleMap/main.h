@@ -3,7 +3,7 @@
 #include "SShape.h"
 #include "TObject.h"
 #include "SModelViewCamera.h"
-#include "SMap.h"
+#include "SHeightMap.h"
 #include "SMiniMap.h"
 class SBoxUser : public SShapeBox
 {
@@ -73,7 +73,7 @@ class main : public TCore
 {
 public:
 	SMiniMap		m_MinMap;
-	SMap			m_Map;
+	SHeightMap		m_Map;
 	Vector4			m_vDirValue;
 	std::vector<TObject*> m_ObjList;
 	SBoxUser		m_BoxShape;

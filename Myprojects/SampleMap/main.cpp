@@ -54,6 +54,17 @@ LRESULT	 main::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 bool main::Init()
 {
 	HRESULT hr;
+	m_Map.CreateHeightMap(m_pd3dDevice, m_pd3dContext, L"../../data/map/HEIGHT_CASTLE.bmp");
+
+	SMapDesc desc;
+	desc.iNumCols = m_Map.m_iNumCols;
+	desc.iNumRows = m_Map.m_iNumRows;
+	desc.fCellDistance = 1;
+	desc.szTexFile = L"../../data/map/castle.jpg";
+	desc.szPS = L"ps.txt";
+	desc.szVS = L"vs.txt";
+
+	m_Map.CreateMap(m_pd3dDevice, m_pd3dContext, desc);
 
 	m_MinMap.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg");
@@ -66,7 +77,7 @@ bool main::Init()
 	m_matPlaneWorld = matScale * matRotation;
 
 	if (!m_BoxShape.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/tileA.jpg"))
+		L"../../data/bitmap/1KGCABK.bmp"))
 	{
 		return false;
 	}
@@ -75,11 +86,7 @@ bool main::Init()
 	{
 		return false;
 	}
-	if (!m_LineShape.Create(m_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/tileA.jpg"))
-	{
-		return false;
-	}
+
 
 	m_ModelCamera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
@@ -91,17 +98,8 @@ bool main::Init()
 	m_TopCamera.CreateViewMatrix({ 0,30,-0.1f }, { 0,0,0 });
 	fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_TopCamera.CreateOrthographic(
-		8, 8, 1.0f, 1000);
+		desc.iNumCols, desc.iNumRows, 1.0f, 1000);
 	m_TopCamera.Init();
-
-	SMapDesc desc;
-	desc.iNumCols = 9;
-	desc.iNumRows = 9;
-	desc.fCellDistance = 1;
-	desc.szTexFile = L"../../data/tileA.jpg";
-	desc.szVS = L"VS.txt";
-	desc.szPS = L"PS.txt";
-	m_Map.CreateMap(m_pd3dDevice, desc);
 	return true;
 }
 bool main::Frame()
@@ -166,6 +164,8 @@ bool main::Render()
 
 	// CULLING
 	vector<DWORD> vislbeIB;
+	vislbeIB.resize(m_Map.m_IndexList.size());
+	m_Map.m_iNumFaces = 0;
 	for (int iFace = 0; iFace < m_Map.m_IndexList.size() / 3; iFace++)
 	{
 		int a = m_Map.m_IndexList[iFace * 3 + 0];
@@ -181,16 +181,16 @@ bool main::Render()
 			BOOL bVisiable = pCamera->m_Frustum.ClassifyPoint(v[iV]);
 			if (bVisiable)
 			{
-				vislbeIB.push_back(a);
-				vislbeIB.push_back(b);
-				vislbeIB.push_back(c);
+				vislbeIB[m_Map.m_iNumFaces * 3 + 0] = a;
+				vislbeIB[m_Map.m_iNumFaces * 3 + 1] = b;
+				vislbeIB[m_Map.m_iNumFaces * 3 + 2] = c;
+				m_Map.m_iNumFaces++;
 				break;
 			}
 		}
 	}
 	if (vislbeIB.size() != 0)
 	{
-		m_Map.m_iNumFaces = vislbeIB.size() / 3;
 		m_pd3dContext->UpdateSubresource(m_Map.m_pIndexBuffer, 0 ,NULL, &vislbeIB.at(0), 0,0);
 	}
 	else
@@ -250,14 +250,7 @@ bool main::Render()
 		NULL); //&m_pMainCamera->m_matProj);
 	m_MinMap.Render(m_pd3dContext);
 
-	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
-	m_LineShape.Draw(m_pd3dContext,
-		Vector3(0, 0, 0), Vector3(100, 0, 0), Vector4(1, 0, 0, 1));
-	m_LineShape.Draw(m_pd3dContext,
-		Vector3(0, 0, 0), Vector3(0, 100, 0), Vector4(0, 1, 0, 1));
-	m_LineShape.Draw(m_pd3dContext,
-		Vector3(0, 0, 0), Vector3(0, 0, 100), Vector4(0, 0, 1, 1));
+
 	return true;
 }
 bool main::PostRender()
@@ -271,6 +264,6 @@ bool main::Release()
 	m_Map.Release();
 	m_BoxShape.Release();
 	m_PlaneShape.Release();
-	m_LineShape.Release();
+
 	return true;
 }

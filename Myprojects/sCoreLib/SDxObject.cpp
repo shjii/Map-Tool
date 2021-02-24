@@ -90,12 +90,12 @@ bool	SDxObject::PostRender(ID3D11DeviceContext*	pd3dContext)
 }
 bool	SDxObject::Release()
 {
-	m_pConstantBuffer->Release();
-	m_pVertexBuffer->Release();
-	m_pIndexBuffer->Release();
-	m_pInputLayout->Release();
-	m_pVertexShader->Release();
-	m_pPixelShader->Release();
+	if (m_pConstantBuffer != nullptr)m_pConstantBuffer->Release();
+	if (m_pVertexBuffer != nullptr)m_pVertexBuffer->Release();
+	if (m_pIndexBuffer != nullptr)m_pIndexBuffer->Release();
+	if (m_pInputLayout != nullptr)m_pInputLayout->Release();
+	if (m_pVertexShader != nullptr)m_pVertexShader->Release();
+	if (m_pPixelShader != nullptr)m_pPixelShader->Release();
 	return true;
 }
 

@@ -34,6 +34,9 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{60318a76-3881-488b-8d38-1490bd5b1c62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{3ce86e01-84a7-4f81-a449-abc5aeb8d3ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc.txt" />
@@ -152,6 +155,21 @@
     </ClCompile>
     <ClCompile Include="TMoveState.cpp">
       <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="SDxRT.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SFrustum.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SMiniMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SModelViewCamera.cpp">
+      <Filter>Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +310,21 @@
     </ClInclude>
     <ClInclude Include="TMoveState.h">
       <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="SDxRT.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SFrustum.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SMiniMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SModelViewCamera.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
