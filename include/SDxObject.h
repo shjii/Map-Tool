@@ -68,9 +68,17 @@ public:
 	C_STR		  m_szVertexShader;
 	C_STR		  m_szPixelShader;
 public:
+	Matrix    m_matScale;
+	Matrix    m_matRotation;
 	Matrix    m_matWorld;
 	Matrix    m_matView;
 	Matrix    m_matProj;
+public:
+	Vector3		m_vLook;
+	Vector3		m_vUp;
+	Vector3		m_vRight;
+	Vector3		m_vPos = { 0,0,0 };
+	Vector3		m_vTarget = { 0,0,0 };
 public:
 	SDataCB					m_cbData;
 	std::vector<PNCT_VERTEX>	m_VertexList;

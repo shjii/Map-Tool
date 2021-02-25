@@ -5,6 +5,7 @@ struct SMapDesc
 	int	iNumCols;
 	int iNumRows;
 	float fCellDistance;
+	float fScaleHeight;
 	T_STR szTexFile;
 	T_STR szVS;
 	T_STR szPS;
@@ -23,6 +24,9 @@ public:
 	vector<float> m_fHeightList;
 public:
 	virtual float	GetHeight(UINT index);
+	virtual float	GetHeightMap(float fPosX, float fPosZ);
+	virtual float	GetHeightMap(int row, int col);
+	virtual float	Lerp(float fStart, float fEnd, float fTangent);
 	virtual bool	CreateMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,SMapDesc  desc);
 	virtual bool    CreateVertexData() override;
 	virtual bool    CreateIndexData()override;

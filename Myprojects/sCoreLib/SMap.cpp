@@ -59,6 +59,49 @@ float SMap::GetHeight(UINT index)
 {
 	return 0.0f;
 }
+float SMap::GetHeightMap(float fPosX, float fPosZ)
+{
+	float fCellX = (float)(m_iNumCellCols * m_fCellDistance / 2.0f + fPosX);
+	float fCellZ = (float)(m_iNumCellRows * m_fCellDistance / 2.0f - fPosZ);
+
+	fCellX /= (float)m_fCellDistance;
+	fCellZ /= (float)m_fCellDistance;
+	float fVertxCol = ::floorf(fCellX);
+	float fVertxRow = ::floorf(fCellZ);
+	if (fVertxCol < 0.0f) fVertxCol = 0.0f;
+	if (fVertxRow < 0.0f) fVertxRow = 0.0f;
+	if ((float)(m_iNumCols - 2) < fVertxCol) fVertxCol = (float)(m_iNumCols - 2);
+	if ((float)(m_iNumRows - 2) < fVertxRow) fVertxRow = (float)(m_iNumRows - 2);
+	float A = GetHeightMap((int)fVertxRow, (int)fVertxCol);
+	float B = GetHeightMap((int)fVertxRow, (int)fVertxCol+1);
+	float C = GetHeightMap((int)fVertxRow+1, (int)fVertxCol);
+	float D = GetHeightMap((int)fVertxRow+1, (int)fVertxCol+1);
+
+	float fDeltaX = fCellX - fVertxCol;
+	float fDellaZ = fCellZ - fVertxRow;
+	float fHeight = 0.0f;
+	if (fDellaZ < (1.0f - fDeltaX))
+	{
+		float uy = B - A;
+		float vy = C - A;
+		fHeight = A + Lerp(0.0f, uy, fDeltaX) + Lerp(0.0f, vy, fDellaZ);
+	}
+	else
+	{
+		float uy = C - D;
+		float vy = B - D;
+		fHeight = D + Lerp(0.0f, uy, 1.0f - fDeltaX) + Lerp(0.0f, vy, 1.0f - fDellaZ);
+	}
+	return  fHeight;
+}
+float SMap::GetHeightMap(int row, int col)
+{
+	return m_VertexList[row * m_iNumRows + col].p.y;
+}
+float SMap::Lerp(float fStart, float fEnd, float fTangent)
+{
+	return fStart - (fStart * fTangent) + (fEnd * fTangent);
+}
 bool SMap::CreateMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, SMapDesc  desc)
 {
 	m_MapDesc = desc;

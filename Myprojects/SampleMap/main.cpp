@@ -60,6 +60,7 @@ bool main::Init()
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
+	desc.fScaleHeight = 10.0f;
 	desc.szTexFile = L"../../data/map/castle.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
@@ -150,9 +151,14 @@ bool main::Frame()
 		m_BoxShape.UpMovement(-1.0f);
 	}
 	m_BoxShape.Frame();
+
+	m_BoxShape.m_vPos.y = m_Map.GetHeightMap(m_BoxShape.m_matWorld._41, m_BoxShape.m_matWorld._43);
+
+
 	m_pMainCamera->m_vCameraTarget = m_BoxShape.m_vPos;
 
 	m_pMainCamera->FrameFrustum(m_pd3dContext);
+	m_BoxShape.m_matRotation = m_pMainCamera->m_matWorld;
 	return true;
 }
 bool main::Render()
@@ -163,40 +169,40 @@ bool main::Render()
 	m_pd3dContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
 	// CULLING
-	vector<DWORD> vislbeIB;
-	vislbeIB.resize(m_Map.m_IndexList.size());
-	m_Map.m_iNumFaces = 0;
-	for (int iFace = 0; iFace < m_Map.m_IndexList.size() / 3; iFace++)
-	{
-		int a = m_Map.m_IndexList[iFace * 3 + 0];
-		int b = m_Map.m_IndexList[iFace * 3 + 1];
-		int c = m_Map.m_IndexList[iFace * 3 + 2];
-		Vector3 v[3];
-		v[0] = m_Map.m_VertexList[a].p;
-		v[1] = m_Map.m_VertexList[b].p;
-		v[2] = m_Map.m_VertexList[c].p;
-		SModelViewCamera* pCamera = (SModelViewCamera*)m_pMainCamera;
-		for (int iV = 0; iV < 3; iV++)
-		{
-			BOOL bVisiable = pCamera->m_Frustum.ClassifyPoint(v[iV]);
-			if (bVisiable)
-			{
-				vislbeIB[m_Map.m_iNumFaces * 3 + 0] = a;
-				vislbeIB[m_Map.m_iNumFaces * 3 + 1] = b;
-				vislbeIB[m_Map.m_iNumFaces * 3 + 2] = c;
-				m_Map.m_iNumFaces++;
-				break;
-			}
-		}
-	}
-	if (vislbeIB.size() != 0)
-	{
-		m_pd3dContext->UpdateSubresource(m_Map.m_pIndexBuffer, 0 ,NULL, &vislbeIB.at(0), 0,0);
-	}
-	else
-	{
-		m_Map.m_iNumFaces = 0;
-	}
+	//vector<DWORD> vislbeIB;
+	//vislbeIB.resize(m_Map.m_IndexList.size());
+	//m_Map.m_iNumFaces = 0;
+	//for (int iFace = 0; iFace < m_Map.m_IndexList.size() / 3; iFace++)
+	//{
+	//	int a = m_Map.m_IndexList[iFace * 3 + 0];
+	//	int b = m_Map.m_IndexList[iFace * 3 + 1];
+	//	int c = m_Map.m_IndexList[iFace * 3 + 2];
+	//	Vector3 v[3];
+	//	v[0] = m_Map.m_VertexList[a].p;
+	//	v[1] = m_Map.m_VertexList[b].p;
+	//	v[2] = m_Map.m_VertexList[c].p;
+	//	SModelViewCamera* pCamera = (SModelViewCamera*)m_pMainCamera;
+	//	for (int iV = 0; iV < 3; iV++)
+	//	{
+	//		BOOL bVisiable = pCamera->m_Frustum.ClassifyPoint(v[iV]);
+	//		if (bVisiable)
+	//		{
+	//			vislbeIB[m_Map.m_iNumFaces * 3 + 0] = a;
+	//			vislbeIB[m_Map.m_iNumFaces * 3 + 1] = b;
+	//			vislbeIB[m_Map.m_iNumFaces * 3 + 2] = c;
+	//			m_Map.m_iNumFaces++;
+	//			break;
+	//		}
+	//	}
+	//}
+	//if (vislbeIB.size() != 0)
+	//{
+	//	m_pd3dContext->UpdateSubresource(m_Map.m_pIndexBuffer, 0 ,NULL, &vislbeIB.at(0), 0,0);
+	//}
+	//else
+	//{
+	//	m_Map.m_iNumFaces = 0;
+	//}
 
 	if (m_MinMap.Begin(m_pd3dContext))
 	{
@@ -213,7 +219,7 @@ bool main::Render()
 
 
 
-		m_BoxShape.SetMatrix(&m_BoxShape.m_matWorld,
+		m_BoxShape.SetMatrix(NULL,
 			&m_TopCamera.m_matView,
 			&m_TopCamera.m_matProj);
 		m_BoxShape.Render(m_pd3dContext);
@@ -233,14 +239,14 @@ bool main::Render()
 
 	}
 
-
+	
 
 	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_Map.Render(m_pd3dContext);
 
-	m_BoxShape.SetMatrix(&m_BoxShape.m_matWorld,
+	m_BoxShape.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_BoxShape.Render(m_pd3dContext);

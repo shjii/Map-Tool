@@ -2,7 +2,7 @@
 
 float SHeightMap::GetHeight(UINT index)
 {
-	return m_fHeightList[index] / 10.0f;
+	return m_fHeightList[index] / m_MapDesc.fScaleHeight;
 }
 bool SHeightMap::CreateHeightMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const TCHAR * pszFileName)
 {
