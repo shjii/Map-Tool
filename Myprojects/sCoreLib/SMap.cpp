@@ -127,3 +127,118 @@ SMap::~SMap()
 {
 
 }
+
+///////////////////
+
+void		SMap::InitNormal()
+{
+	m_NormalVector = new Vector3[m_iNumFaces];
+
+	for (int i = 0; i < m_iNumFaces; i++)
+	{
+		m_NormalVector[i] = Vector3(0.0f, 0.0f, 0.0f);
+	}
+	GenNormalLookupTable();
+}
+Vector3		SMap::Calculation(int a, int b, int c)
+{
+	Vector3 u = m_VertexList[b].p - m_VertexList[a].p;
+	Vector3 v = m_VertexList[c].p - m_VertexList[a].p;
+	return u.Cross(v);
+}
+void		SMap::FindingNormal()
+{
+	int j = 0;
+	for (int i = 0; i < m_iNumFaces * 3; i += 3)
+	{
+		int a = m_IndexList[i];
+		int b = m_IndexList[i + 1];
+		int c = m_IndexList[i + 2];
+		m_NormalVector[j] = Calculation(a, b, c);
+		j++;
+	}
+	j = 0;
+	for (int i = 0; i < m_iNumVertices; i++)
+	{
+		Vector3 avgNormal;
+		avgNormal = Vector3(0.0f, 0.0f, 0.0f);
+
+		// Find all the triangles that this vertex is a part of.
+		for (j = 0; j < 6; j++)
+		{
+			int triIndex;
+			triIndex = m_pNormalLookupTable[i * 6 + j];
+
+			// If the triangle index is valid, get the normal and average it in.
+			if (triIndex != -1)
+			{
+				avgNormal += m_NormalVector[triIndex];
+			}
+			else
+				break;
+		}
+		_ASSERT(j > 0);
+		//avgNormal.x /= (float)j;//.DivConst( (float)(j) );
+		//avgNormal.y /= (float)j;
+		//avgNormal.z /= (float)j;
+		//avgNormal.Normalize();
+
+		m_VertexList[i].n += avgNormal;
+	}
+	for (int iRow = 0; iRow < m_iNumRows; iRow++)
+	{
+		for (int iCol = 0; iCol < m_iNumCols; iCol++)
+		{
+			Vector3 vLightDir = { 0.0f,-1.0f,0.0f };
+			int  iVertexIndex = iRow * m_iNumCols + iCol;
+			//D3DXVec3Normalize(	&m_VertexList[iVertexIndex].n, 
+			//					&m_VertexList[iVertexIndex].n);
+			float fDot =
+				vLightDir.Dot(m_VertexList[iVertexIndex].n);
+			m_VertexList[iVertexIndex].c *= fDot;
+			m_VertexList[iVertexIndex].c.w = 1.0f;
+		}
+	}
+}
+
+void SMap::GenNormalLookupTable()
+{
+	// We're going to create a table that lists, for each vertex, the
+	// triangles which that vertex is a part of.
+
+	if (m_pNormalLookupTable != NULL)
+	{
+		free(m_pNormalLookupTable);
+		m_pNormalLookupTable = NULL;
+	}
+
+	// Each vertex may be a part of up to 6 triangles in the grid, so
+	// create a buffer to hold a pointer to the normal of each neighbor.
+	int buffersize = m_iNumRows * m_iNumCols * 6;
+
+	m_pNormalLookupTable = (int *)malloc(sizeof(void *) * buffersize);
+	for (int i = 0; i < buffersize; i++)
+		m_pNormalLookupTable[i] = -1;
+
+	// Now that the table is initialized, populate it with the triangle data.
+
+	// For each triangle
+	//   For each vertex in that triangle
+	//     Append the triangle number to lookuptable[vertex]
+	for (int i = 0; i < m_iNumFaces; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			// Find the next empty slot in the vertex's lookup table "slot"
+			for (int k = 0; k < 6; k++)
+			{
+				int vertex = m_IndexList[i * 3 + j];
+				if (m_pNormalLookupTable[vertex * 6 + k] == -1)
+				{
+					m_pNormalLookupTable[vertex * 6 + k] = i;
+					break;
+				}
+			}
+		}  // For each vertex that is part of the current triangle
+	} // For each triangle
+}

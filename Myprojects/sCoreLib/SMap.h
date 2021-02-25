@@ -33,6 +33,14 @@ public:
 	virtual bool	Frame() override;
 	virtual bool	Postrender(ID3D11DeviceContext* pd3dContext);
 public:
+	////
+	Vector3*	m_NormalVector;
+	int*		m_pNormalLookupTable;
+	void		InitNormal();
+	Vector3		Calculation(int a, int b, int c);
+	void		FindingNormal();
+	void		GenNormalLookupTable();
+public:
 	SMap();
 	virtual ~SMap();
 };

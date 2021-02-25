@@ -71,5 +71,4 @@ public:
 		Vector4* Light);
 	LRESULT	 MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
-
 TGAME_RUN;
