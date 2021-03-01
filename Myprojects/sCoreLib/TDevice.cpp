@@ -1,4 +1,9 @@
 #include "TDevice.h"
+namespace TBASIS_CORE_LIB
+{
+	ID3D11Device*  g_pd3dDevice = nullptr;
+	ID3D11DeviceContext* g_pImmediateContext = nullptr;
+}
 void	TDevice::SetMode(bool bFullScreen)
 {
 	m_bFullScreen = bFullScreen;
@@ -14,7 +19,7 @@ void TDevice::ResizeDevice(UINT w, UINT h)
 
 	DeleteDXResource();
 
-	m_pd3dContext->OMSetRenderTargets(0, NULL, NULL);
+	m_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
 	if (m_pRednerTargetView) m_pRednerTargetView->Release();
 	if (m_pDSV) m_pDSV->Release();
 
@@ -98,13 +103,15 @@ HRESULT		TDevice::CreateDevice()
 			SDKVersion,
 			&m_pd3dDevice,
 			&OutputFeatureLevel,
-			&m_pd3dContext);
+			&m_pImmediateContext);
 
 		if (SUCCEEDED(hr))
 		{
 			break;
 		}
 	}
+	g_pd3dDevice = m_pd3dDevice.Get();
+	g_pImmediateContext = m_pImmediateContext.Get();
 	return hr;
 }
 HRESULT		TDevice::CreateSwapChain()
@@ -125,7 +132,7 @@ HRESULT		TDevice::CreateSwapChain()
 	pSwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hr = m_pGIFactory->CreateSwapChain(
-		m_pd3dDevice,
+		m_pd3dDevice.Get(),
 		&pSwapChainDesc,
 		&m_pSwapChain);
 	return hr;
@@ -143,7 +150,7 @@ HRESULT		TDevice::SetRenderTargetView()
 HRESULT TDevice::SetDepthStencilView()
 {
 	// create depth texture
-	ID3D11Texture2D* pTexture = nullptr;
+	ComPtr<ID3D11Texture2D> pTexture = nullptr;
 	D3D11_TEXTURE2D_DESC texDesc;
 	ZeroMemory(&texDesc, sizeof(D3D11_TEXTURE2D_DESC));
 	texDesc.Width = g_rtClient.right;
@@ -166,11 +173,11 @@ HRESULT TDevice::SetDepthStencilView()
 	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Texture2D.MipSlice = 0;
 	hr = m_pd3dDevice->CreateDepthStencilView(
-		pTexture,
+		pTexture.Get(),
 		&dsvDesc,
-		&m_pDSV);
+		m_pDSV.GetAddressOf());
 
-	if (pTexture)pTexture->Release();
+	//if (pTexture)pTexture->Release();
 	if (FAILED(hr))
 	{
 		return false;
@@ -214,7 +221,7 @@ bool TDevice::Init()
 		return false;
 	}
 
-	SDxState::Set(m_pd3dDevice);
+	SDxState::Set(m_pd3dDevice.Get());
 
 	if (FAILED(m_pGIFactory->MakeWindowAssociation(m_hWnd,
 		DXGI_MWA_NO_WINDOW_CHANGES |
@@ -230,13 +237,13 @@ bool TDevice::Frame()
 }
 bool TDevice::PreRender()
 {
-	if (m_pd3dContext)
+	if (m_pImmediateContext.Get())
 	{
-		m_pd3dContext->RSSetViewports(1, &m_ViewPort);
-		m_pd3dContext->OMSetRenderTargets(1, &m_pRednerTargetView, m_pDSV);
+		m_pImmediateContext->RSSetViewports(1, &m_ViewPort);
+		m_pImmediateContext->OMSetRenderTargets(1, m_pRednerTargetView.GetAddressOf(), m_pDSV.Get());
 		float clearColor[] = { 0,0,0,1 };
-		m_pd3dContext->ClearRenderTargetView(m_pRednerTargetView, clearColor);
-		m_pd3dContext->ClearDepthStencilView(m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
+		m_pImmediateContext->ClearRenderTargetView(m_pRednerTargetView.Get(), clearColor);
+		m_pImmediateContext->ClearDepthStencilView(m_pDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 	}
 	return true;
 }
@@ -255,20 +262,13 @@ bool TDevice::PostRender()
 bool TDevice::Release()
 {
 	SDxState::Release();
-
-	m_pDSV->Release();
-	m_pRednerTargetView->Release();
-	m_pSwapChain->Release();
-	m_pd3dContext->Release();
-	m_pd3dDevice->Release();
-	m_pGIFactory->Release();
 	return true;
 }
 TDevice::TDevice()
 {
 	m_pGIFactory = nullptr;
 	m_pd3dDevice = nullptr;
-	m_pd3dContext = nullptr;
+	m_pImmediateContext = nullptr;
 	m_pSwapChain = nullptr;
 	m_pRednerTargetView = nullptr;
 }
