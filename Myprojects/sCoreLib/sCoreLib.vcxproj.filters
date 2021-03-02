@@ -165,10 +165,10 @@
     <ClCompile Include="SMiniMap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="SModelViewCamera.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="SFrustum.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SModelViewCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
@@ -320,10 +320,10 @@
     <ClInclude Include="SMiniMap.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="SModelViewCamera.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="SFrustum.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SModelViewCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>

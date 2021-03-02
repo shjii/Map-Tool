@@ -26,9 +26,6 @@ public:
 class SModelViewCamera : public SCamera
 {
 public:
-	//Matrix    m_matWorld;
-	SFrustum  m_Frustum;
-public:
 	SArcBall	m_WorldArcBall;
 	SArcBall	m_ViewArcBall;
 	Matrix		m_mModelLastRot;

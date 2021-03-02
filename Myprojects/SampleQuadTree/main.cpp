@@ -157,8 +157,10 @@ bool main::Init()
 	{
 		return false;
 	}
+	///
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
+	///
 	m_ModelCamera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_ModelCamera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
@@ -294,6 +296,9 @@ bool main::Render()
 			&m_TopCamera.m_matProj);
 		m_BoxShape.Render(g_pImmediateContext);
 		
+		DrawObject(&m_TopCamera.m_matView,
+			&m_TopCamera.m_matProj);
+
 		m_MinMap.End(g_pImmediateContext);
 
 				// ¹Ì´Ï¸Ê Á¤Áß¾Ó ¹èÄ¡

@@ -135,6 +135,7 @@ bool	TCore::PostRender()
 		Vector3(0, 0, 0), Vector3(0, 100, 0), Vector4(0, 1, 0, 1));
 	m_LineShape.Draw(g_pImmediateContext,
 		Vector3(0, 0, 0), Vector3(0, 0, 100), Vector4(0, 0, 1, 1));
+
 	g_Timer.Render();
 	g_Input.Render();
 	g_SoundMgr.Render();

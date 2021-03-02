@@ -59,7 +59,7 @@ public:
 	std::vector<TObject*> m_ObjList;
 	SBoxUser		m_BoxShape;
 	SShapePlane		m_PlaneShape;
-	SShapeLine		m_LineShape;
+	
 	SModelViewCamera  m_ModelCamera;
 	SCamera			m_TopCamera;
 public:

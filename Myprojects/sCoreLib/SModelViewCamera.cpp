@@ -47,6 +47,8 @@ Matrix SArcBall::GetRotationMatrix()
 {
 	return Matrix::CreateFromQuaternion(m_qNow);
 }
+
+
 bool SModelViewCamera::PostInit()
 {
 	Matrix matInvView = m_matView.Invert();
