@@ -117,6 +117,13 @@ void main::DrawObject(Matrix* pView, Matrix* pProj)
 bool main::Init()
 {
 	HRESULT hr;
+
+	if (!m_UserShape.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
+		L"../../data/bitmap/1KGCABK.bmp"))
+	{
+		return false;
+	}
+
 	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/HEIGHT_CASTLE.bmp");
 
 	SMapDesc desc;
@@ -130,7 +137,7 @@ bool main::Init()
 
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 
-	m_QuadTree.Build(129, 129);
+	//m_QuadTree.Build(129, 129);
 
 	m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg");
@@ -148,10 +155,10 @@ bool main::Init()
 		return false;
 	}
 	SAFE_NEW_ARRAY(m_pObject, S_BoxObject, NUM_OBJECTS);
-	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
-	{
-		m_QuadTree.AddObject(&m_pObject[iBox]);
-	}
+	//for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
+	//{
+	//	m_QuadTree.AddObject(&m_pObject[iBox]);
+	//}
 	if (!m_PlaneShape.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg"))
 	{
@@ -173,6 +180,12 @@ bool main::Init()
 	m_TopCamera.CreateOrthographic(
 		desc.iNumCols, desc.iNumRows, 1.0f, 1000);
 	m_TopCamera.Init();
+
+	m_QuadTree.m_iMaxDepthLimit = 3;
+	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera);
+	m_QuadTree.SetMinDivideSize(m_QuadTree.m_fMinDivideSize * m_Map.m_fCellDistance);
+	m_QuadTree.Build(&m_Map, m_Map.m_iNumCols, m_Map.m_iNumRows);
+
 	return true;
 }
 bool main::Frame()
@@ -200,37 +213,40 @@ bool main::Frame()
 
 	if (g_Input.GetKey('W') == KEY_HOLD)
 	{
-		m_BoxShape.FrontMovement(1.0f);
+		m_UserShape.FrontMovement(1.0f);
 	}
 	if (g_Input.GetKey('S') == KEY_HOLD)
 	{
-		m_BoxShape.FrontMovement(-1.0f);
+		m_UserShape.FrontMovement(-1.0f);
 	}
 	if (g_Input.GetKey('A') == KEY_HOLD)
 	{
-		m_BoxShape.RightMovement(-1.0f);
+		m_UserShape.RightMovement(-1.0f);
 	}
 	if (g_Input.GetKey('D') == KEY_HOLD)
 	{
-		m_BoxShape.RightMovement(1.0f);
+		m_UserShape.RightMovement(1.0f);
 	}
 	if (g_Input.GetKey('Q') == KEY_HOLD)
 	{
-		m_BoxShape.UpMovement(1.0f);
+		m_UserShape.UpMovement(1.0f);
 	}
 	if (g_Input.GetKey('E') == KEY_HOLD)
 	{
-		m_BoxShape.UpMovement(-1.0f);
+		m_UserShape.UpMovement(-1.0f);
 	}
-	m_BoxShape.Frame();
+	m_UserShape.Frame();
 
-	m_BoxShape.m_vPos.y = m_Map.GetHeightMap(m_BoxShape.m_matWorld._41, m_BoxShape.m_matWorld._43);
+	m_UserShape.m_vPos.y = m_Map.GetHeightMap(m_UserShape.m_matWorld._41, m_UserShape.m_matWorld._43);
 
 
-	m_pMainCamera->m_vCameraTarget = m_BoxShape.m_vPos;
+	m_pMainCamera->m_vCameraTarget = m_UserShape.m_vPos;
 
 	m_pMainCamera->FrameFrustum(g_pImmediateContext);
-	m_BoxShape.m_matRotation = m_pMainCamera->m_matWorld;
+
+	m_UserShape.m_matRotation = m_pMainCamera->m_matWorld;
+	m_pMainCamera->Frame();
+	m_QuadTree.Frame();
 	return true;
 }
 bool main::Render()
@@ -289,7 +305,10 @@ bool main::Render()
 		matWorld._42 = m_TopCamera.m_vCameraPos.y;
 		matWorld._43 = m_TopCamera.m_vCameraPos.z;
 
-
+		m_UserShape.SetMatrix(NULL,
+			&m_TopCamera.m_matView,
+			&m_TopCamera.m_matProj);
+		m_UserShape.Render(g_pImmediateContext);
 
 		m_BoxShape.SetMatrix(NULL,
 			&m_TopCamera.m_matView,
@@ -326,14 +345,25 @@ bool main::Render()
 		&m_pMainCamera->m_matProj);
 	m_BoxShape.Render(g_pImmediateContext);
 
+	m_UserShape.SetMatrix(NULL,
+		&m_pMainCamera->m_matView,
+		&m_pMainCamera->m_matProj);
+	m_UserShape.Render(g_pImmediateContext);
+
 	m_MinMap.SetMatrix(NULL,
 		NULL, //&m_pMainCamera->m_matView,
 		NULL); //&m_pMainCamera->m_matProj);
 	m_MinMap.Render(g_pImmediateContext);
 
+
+	m_QuadTree.Render(g_pImmediateContext);
+
 	DrawQuadLine(m_QuadTree.m_pRooSNode);
 	DrawObject(&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
+
+
+
 	return true;
 }
 bool main::PostRender()
@@ -343,10 +373,12 @@ bool main::PostRender()
 }
 bool main::Release()
 {
+	SAFE_DELETE_ARRAY(m_pObject);
+	m_QuadTree.Release();
 	m_MinMap.Release();
 	m_Map.Release();
+	m_UserShape.Release();
 	m_BoxShape.Release();
 	m_PlaneShape.Release();
-
 	return true;
 }

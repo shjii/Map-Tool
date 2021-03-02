@@ -26,7 +26,8 @@ public:
 	DWORD			m_dwDepth;
 	BOOL			m_isLeaf;
 	BOOL			m_isTile;
-
+	DWORD			m_dwLodLevel;
+	DWORD			m_dwLodType;
 	S_BOX			m_sBox;
 	vector<DWORD>	m_CornerIndex;
 	// 노드의 코너 정점 인덱스 및 위치

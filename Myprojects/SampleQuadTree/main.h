@@ -5,7 +5,7 @@
 #include "SModelViewCamera.h"
 #include "SHeightMap.h"
 #include "SMiniMap.h"
-#include "SQuadTree.h"
+#include "SMapRender.h"
 class SBoxUser : public SShapeBox
 {
 public:
@@ -49,7 +49,7 @@ public:
 class main : public TCore
 {
 public:
-	SQuadTree		m_QuadTree;
+	SMapRender		m_QuadTree;
 	S_BoxObject*	m_pObject;
 	S_BOX			m_TBoxBase;
 
@@ -57,6 +57,7 @@ public:
 	SHeightMap		m_Map;
 	Vector4			m_vDirValue;
 	std::vector<TObject*> m_ObjList;
+	SBoxUser		m_UserShape;
 	SBoxUser		m_BoxShape;
 	SShapePlane		m_PlaneShape;
 	

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SHeightMap.cpp" />
+    <ClCompile Include="SMapLOD.cpp" />
     <ClCompile Include="SMapRender.cpp" />
     <ClCompile Include="SNode.cpp" />
     <ClCompile Include="SQuadTree.cpp" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="main.h" />
     <ClInclude Include="SHeightMap.h" />
+    <ClInclude Include="SMapLOD.h" />
     <ClInclude Include="SMapRender.h" />
     <ClInclude Include="SNode.h" />
     <ClInclude Include="SQuadTree.h" />

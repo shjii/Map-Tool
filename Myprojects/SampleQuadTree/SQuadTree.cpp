@@ -17,14 +17,14 @@ bool SQuadTree::BuildTree(SNode* pNode)
 	{
 		for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
 		{
-			/*		if (m_bUsedIndexList)
-					{
-						DWORD dwIndex =
-							pNode->m_ChildList[iNode]->m_dwPositionIndex[1] * pow(2.0f, (float)pNode->m_ChildList[iNode]->m_dwDepth) + pNode->m_ChildList[iNode]->m_dwPositionIndex[0];
-						DWORD dwValue = pNode->m_ChildList[iNode]->m_dwDepth;
-						m_LevelList[dwValue][dwIndex] =
-							pNode->m_ChildList[iNode];
-					}*/
+			if (m_bUsedIndexList)
+			{
+				DWORD dwIndex =
+					pNode->m_ChildList[iNode]->m_dwPositionIndex[1] * pow(2.0f, (float)pNode->m_ChildList[iNode]->m_dwDepth) + pNode->m_ChildList[iNode]->m_dwPositionIndex[0];
+				DWORD dwValue = pNode->m_ChildList[iNode]->m_dwDepth;
+				m_LevelList[dwValue][dwIndex] =
+					pNode->m_ChildList[iNode];
+			}
 			BuildTree(pNode->m_ChildList[iNode]);
 		}
 	}

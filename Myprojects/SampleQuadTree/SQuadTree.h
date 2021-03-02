@@ -1,8 +1,8 @@
 #pragma once
-#include "SNode.h"
-#include "SCamera.h"
+#include "SMapLOD.h"
 #include <queue>
-class SQuadTree
+
+class SQuadTree : public SMapLOD
 {
 public:
 	ID3D11Device*			m_pd3dDevice;
