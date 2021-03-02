@@ -159,9 +159,6 @@
     <ClCompile Include="SDxRT.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="SFrustum.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="SMap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="SModelViewCamera.cpp">
       <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SFrustum.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,9 +314,6 @@
     <ClInclude Include="SDxRT.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="SFrustum.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="SMap.h">
       <Filter>Map</Filter>
     </ClInclude>
@@ -325,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="SModelViewCamera.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SFrustum.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
