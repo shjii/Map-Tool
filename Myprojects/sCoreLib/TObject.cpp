@@ -240,7 +240,8 @@ bool  TObject::Release()
 }
 bool TObject::PreRender(ID3D11DeviceContext*	pd3dContext)
 {
-	return true;
+
+	return SDxObject::PreRender(pd3dContext);;
 }
 bool  TObject::Render(ID3D11DeviceContext*	pd3dContext)
 {

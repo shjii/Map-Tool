@@ -103,11 +103,11 @@ void    TCore::CameraFrame()
 	}
 	if (g_Input.GetKey('A') == KEY_HOLD)
 	{
-		m_pMainCamera->RightMovement(1.0f);
+		m_pMainCamera->RightMovement(-1.0f);
 	}
 	if (g_Input.GetKey('D') == KEY_HOLD)
 	{
-		m_pMainCamera->RightMovement(-1.0f);
+		m_pMainCamera->RightMovement(1.0f);
 	}
 	if (g_Input.GetKey('Q') == KEY_HOLD)
 	{

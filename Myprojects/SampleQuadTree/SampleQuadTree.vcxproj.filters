@@ -27,12 +27,6 @@
     <ClCompile Include="SQuadTree.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SMapRender.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SMapLOD.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -45,12 +39,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SQuadTree.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SMapRender.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SMapLOD.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

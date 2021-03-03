@@ -682,12 +682,7 @@ namespace TBASIS_CORE_LIB
 	}
 	bool	SDxObject::PreRender(ID3D11DeviceContext*	pd3dContext)
 	{
-		return true;
-	}
-	bool	SDxObject::Render(ID3D11DeviceContext*	pd3dContext)
-	{
 		Update(pd3dContext);
-		PreRender(pd3dContext);
 		UINT iStride = sizeof(PNCT_VERTEX);
 		UINT iOffset = 0;
 		pd3dContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &iStride, &iOffset);
@@ -703,7 +698,11 @@ namespace TBASIS_CORE_LIB
 			pd3dContext->PSSetShaderResources(0, 1,
 				&m_pTexture->m_pTextureSRV);
 		}
-		//pd3dContext->Draw(m_VertexList.size(), 0);
+		return true;
+	}
+	bool	SDxObject::Render(ID3D11DeviceContext*	pd3dContext)
+	{
+		PreRender(pd3dContext);
 		PostRender(pd3dContext);
 		return true;
 	}
