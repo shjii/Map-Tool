@@ -49,14 +49,15 @@ public:
 class main : public TCore
 {
 public:
-	/*S_BOX			m_TBoxBase;
 	SMiniMap		m_MinMap;
+	SCamera			m_TopCamera;
+	/*S_BOX			m_TBoxBase;
 	SBoxUser		m_UserShape;
 	SBoxUser		m_BoxShape;
 	SShapePlane		m_PlaneShape;
 	std::vector<TObject*> m_ObjList;
 	SModelViewCamera  m_ModelCamera;
-	SCamera			m_TopCamera;*/
+	*/
 	SHeightMap		m_Map;
 	Vector4			m_vDirValue;
 	SQuadTree		m_QuadTree;
@@ -72,6 +73,6 @@ public:
 	Matrix CreateMatrixShadow(
 		Vector4* plane,
 		Vector4* Light);
-	LRESULT	 MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	//LRESULT	 MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 TGAME_RUN;

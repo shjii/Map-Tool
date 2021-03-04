@@ -20,8 +20,9 @@ SNode * SQuadTree::BuildNode(SMap * m_Map)
 	sNode->m_Depth = 0;
 	sNode->m_iCorner[TL] = 0;
 	sNode->m_iCorner[TR] = m_Map->m_iNumCols - 1 ;
-	sNode->m_iCorner[BL] = m_Map->m_iNumRows * m_Map->m_iNumRows - (m_Map->m_iNumRows - 1);
-	sNode->m_iCorner[BR] = m_Map->m_iNumCols * m_Map->m_iNumRows;
+	sNode->m_iCorner[BL] = m_Map->m_iNumVertices - m_Map->m_iNumCols;
+	sNode->m_iCorner[BR] = m_Map->m_iNumVertices - 1;
+
 	sNode->m_IndexList = m_Map->m_IndexList;
 	sNode->m_VertexList = m_Map->m_VertexList;
 	sNode->m_pIndexBuffer = m_Map->m_pIndexBuffer;
@@ -32,11 +33,11 @@ bool	SQuadTree::Division(SNode* Node)
 {
 	if (Node == NULL) return false;
 
-	
+	BoungigBox(Node);
 
 	if (Node->m_Depth >= m_MaxDepth)
 	{
-		
+		CreatorIndexBuffer(Node, m_Map->m_iNumCols, m_Map->m_iNumRows);
 		Node->m_LeafNode = true;
 		return false;
 	}
@@ -45,10 +46,23 @@ bool	SQuadTree::Division(SNode* Node)
 	float centerRow = (Node->m_iCorner[BL] - Node->m_iCorner[TL]) / 2;
 
 	// ¹ØÀ¸·Î row ¿·À¸·Î col
-	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL], Node->m_iCorner[TL] + centerCol, Node->m_iCorner[TL] + centerRow, Node->m_iCorner[TL] + centerRow + centerCol));
-	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerCol, Node->m_iCorner[TR], Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[TR] + centerRow));
-	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerRow, Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[BL], Node->m_iCorner[BL] + centerCol));
-	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[TR] + centerRow, Node->m_iCorner[BL] + centerCol, Node->m_iCorner[BR]));
+	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL], Node->m_iCorner[TL] + centerCol, Node->m_iCorner[TL] + centerRow, Node->m_iCorner[TL] + centerRow + centerCol));
+	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerCol, Node->m_iCorner[TR], Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[TR] + centerRow));
+	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerRow, Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[BL], Node->m_iCorner[BL] + centerCol));
+	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[TR] + centerRow, Node->m_iCorner[BL] + centerCol, Node->m_iCorner[BR]));
+	
+	float fWidthSplit = (Node->m_iCorner[1] - Node->m_iCorner[0]) / 2;
+	float fHeightSplit = (Node->m_iCorner[3] - Node->m_iCorner[2]) / 2;
+	UINT e0 = Node->m_iCorner[0] + fWidthSplit;
+	UINT e1 = Node->m_iCorner[0] + (m_Map->m_iNumCols * fHeightSplit);
+	UINT e2 = e0 + (m_Map->m_iNumCols * fHeightSplit);
+	UINT e3 = Node->m_iCorner[1] + (m_Map->m_iNumCols * fHeightSplit);;
+	UINT e4 = Node->m_iCorner[3] - fHeightSplit;
+	
+	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[0], e0, e1, e2));
+	Node->m_ChildNode.push_back(CreatorNode(Node, e0, Node->m_iCorner[1], e2, e3));
+	Node->m_ChildNode.push_back(CreatorNode(Node, e1, e2, Node->m_iCorner[2], e4));
+	Node->m_ChildNode.push_back(CreatorNode(Node, e2, e3, e4, Node->m_iCorner[3]));
 
 	return true;
 
@@ -115,12 +129,43 @@ bool SQuadTree::Render(ID3D11DeviceContext*	pd3dContext)
 	UINT iOffset = 0;
 	m_Map->PreRender(pd3dContext);
 	//	&m_pTexture->m_pTextureSRV);
-	pd3dContext->IASetIndexBuffer(m_RootNode->m_ChildNode[0]->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	pd3dContext->DrawIndexed(m_RootNode->m_ChildNode[0]->m_IndexList.size(), 0, 0);
+
+	for (int i = 0; i < m_DrawLIst.size(); i++)
+	{
+		pd3dContext->IASetIndexBuffer(m_DrawLIst[i]->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		pd3dContext->DrawIndexed(m_DrawLIst[i]->m_IndexList.size(), 0, 0);
+	}
 	
-	//pd3dContext->Draw(m_VertexList.size(), 0);
 	
 	return false;
+}
+
+Vector2 SQuadTree::GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD dwBR)
+{
+	DWORD dwStartRow = dwTL / m_Map->m_iNumCols;
+	DWORD dwEndRow = dwBL / m_Map->m_iNumCols;
+
+	DWORD dwStartCol = dwTL % m_Map->m_iNumCols;
+	DWORD dwEndCol = dwTR % m_Map->m_iNumCols;
+
+	Vector2 vHeight;
+	vHeight.x = -999999.0f;
+	vHeight.y = 999999.0f;
+	for (DWORD dwRow = dwStartRow; dwRow < dwEndRow; dwRow++)
+	{
+		for (DWORD dwCol = dwStartCol; dwCol < dwEndCol; dwCol++)
+		{
+			if (m_Map->m_VertexList[dwRow *  m_Map->m_iNumCols + dwCol].p.y > vHeight.x)
+			{
+				vHeight.x = m_Map->m_VertexList[dwRow *  m_Map->m_iNumCols + dwCol].p.y;
+			}
+			if (m_Map->m_VertexList[dwRow *  m_Map->m_iNumCols + dwCol].p.y < vHeight.y)
+			{
+				vHeight.y = m_Map->m_VertexList[dwRow *  m_Map->m_iNumCols + dwCol].p.y;
+			}
+		}
+	}
+	return vHeight;
 }
 
 void SQuadTree::BoungigBox(SNode * Node)
@@ -130,14 +175,49 @@ void SQuadTree::BoungigBox(SNode * Node)
 	//Node->m_VertexList[(int)Node->m_iCorner[2]];
 	//Node->m_VertexList[(int)Node->m_iCorner[3]];
 
+	Vector2 vHeight = GetHeightFromNode(Node->m_iCorner[0], Node->m_iCorner[1],
+		Node->m_iCorner[2], Node->m_iCorner[3]);
+
 	Node->m_Box.vMax = m_Map->m_VertexList[(int)Node->m_iCorner[0]].p;
 	Node->m_Box.vMin = m_Map->m_VertexList[(int)Node->m_iCorner[2]].p;
-	//Node->m_Box.vMax.y = vHeight.x;
-	//Node->m_Box.vMin.y = vHeight.y;
+	Node->m_Box.vMax.y = vHeight.x;
+	Node->m_Box.vMin.y = vHeight.y;
 		  
 	Node->m_Box.vCenter = (Node->m_Box.vMax + Node->m_Box.vMin) / 2.0f;
 	Node->m_Box.fExtent[0] = Node->m_Box.vMax.x - Node->m_Box.vCenter.x;
 	Node->m_Box.fExtent[1] = Node->m_Box.vMax.y - Node->m_Box.vCenter.y;
 	Node->m_Box.fExtent[2] = Node->m_Box.vMax.z - Node->m_Box.vCenter.z;
 
+}
+
+void	SQuadTree::DrawCheck(SNode* Node)
+{
+	S_POSITION a = m_mainCamera->m_Frustum.CheckPoitionOBBInPlane(&Node->m_Box);
+	if (a == P_BACK)return;
+
+	if (a == P_FRONT)
+	{
+		m_DrawLIst.push_back(Node);
+		return;
+	}
+
+	if (Node->m_LeafNode == true && a >= P_FRONT)
+	{
+		m_DrawLIst.push_back(Node);
+		return;
+	}
+	if (a == P_SPANNING)
+	{
+		DrawCheck(Node->m_ChildNode[0]);
+		DrawCheck(Node->m_ChildNode[1]);
+		DrawCheck(Node->m_ChildNode[2]);
+		DrawCheck(Node->m_ChildNode[3]);
+	}
+}
+
+bool	SQuadTree::Frame()
+{
+	m_DrawLIst.clear();
+	DrawCheck(m_RootNode);
+	return true;
 }

@@ -68,30 +68,35 @@ void main::DrawObject(Matrix* pView, Matrix* pProj)
 	}
 }
 */
-LRESULT	 main::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	if (m_pMainCamera == nullptr) return -1;
-	m_pMainCamera->WndProc(hWnd, message, wParam, lParam);
-	return -1;
-}
+//LRESULT	 main::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+//{
+//	if (m_pMainCamera == nullptr) return -1;
+//	m_pMainCamera->WndProc(hWnd, message, wParam, lParam);
+//	return -1;
+//}
+
 bool main::Init()
 {
 	HRESULT hr;
 
-	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/HEIGHT_CASTLE.bmp");
+	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/heightMap513.bmp");
 
 	SMapDesc desc;
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
-	desc.fScaleHeight = 10.0f;
-	desc.szTexFile = L"../../data/map/castle.jpg";
+	desc.fScaleHeight = 1.0f;
+	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
+
+	m_pMainCamera->m_Frustum.Create(g_pd3dDevice);
 
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
+
+	m_QuadTree.m_mainCamera = m_pMainCamera;
 	m_QuadTree.m_MaxDepth = 3;
 	m_QuadTree.Build(&m_Map);
 	///
@@ -145,6 +150,8 @@ bool main::Frame()
 	{
 		m_UserShape.UpMovement(-1.0f);
 	}*/
+	m_pMainCamera->Frame();
+	m_QuadTree.Frame();
 	return true;
 }
 bool main::Render()
@@ -158,6 +165,7 @@ bool main::Render()
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	//m_Map.Render(g_pImmediateContext);
+
 	m_QuadTree.Render(g_pImmediateContext);
 	return true;
 }

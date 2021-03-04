@@ -50,7 +50,7 @@ bool TCore::GameInit()
 		g_rtClient.bottom, pBackBuffer);
 	if (pBackBuffer) pBackBuffer->Release();
 
-	m_Camera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
+	m_Camera.CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_Camera.Init();

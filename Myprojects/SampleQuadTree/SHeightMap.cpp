@@ -55,3 +55,4 @@ bool SHeightMap::CreateHeightMap(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 	pTexture->Release();
 	return true;
 }
+

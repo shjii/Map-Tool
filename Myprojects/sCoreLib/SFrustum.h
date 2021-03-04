@@ -2,13 +2,7 @@
 #include "TStd.h"
 #include "SShape.h"
 
-enum S_POSITION
-{
-	P_BACK = 0,    // Point is positioned behind plane
-	P_FRONT,   // Point is positioned in front of plane	
-	P_ONPLANE, // Point is positioned on plane
-	P_SPANNING // Point is spanning plane
-};
+
 struct SPlane
 {
 	float a, b, c, d;
@@ -32,6 +26,14 @@ struct SPlane
 		c = n.z;
 		d = -n.Dot(v);
 	}
+	void	Normalize()
+	{
+		float fMag = sqrt(a*a + b * b + c * c);
+		a = a / fMag;
+		b = b / fMag;
+		c = c / fMag;
+		d = d / fMag;
+	}
 };
 class SFrustum
 {
@@ -39,6 +41,10 @@ public:
 	SShapeBox m_FrustumObj;
 	vector<PNCT_VERTEX>	m_VertexList;
 	vector<SPlane>		m_Plane;
+	Vector3 m_vFrustum[8];
+	Matrix      m_mWorld;
+	Matrix		m_mView;
+	Matrix		m_mProj;
 public:
 	virtual bool Create(ID3D11Device*	pd3dDevice);
 	virtual bool Frame();
@@ -47,5 +53,9 @@ public:
 	BOOL		ClassifyBox(SShapeBox box);
 	BOOL		CheckOBBInPlane(S_BOX* pBox);
 	S_POSITION	CheckPoitionOBBInPlane(S_BOX* pBox);
+	bool		CreateFrustum();
+	void		SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);
+	void		ExtractPlanesD3D(vector<SPlane>& pPlanes, const Matrix& comboMatrix);
+	SPlane		CreatePlane(Vector3 v0, Vector3 v1, Vector3 v2);
 };
 

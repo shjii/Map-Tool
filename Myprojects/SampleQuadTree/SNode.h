@@ -16,6 +16,7 @@ public:
 	ID3D11Buffer*				m_pConstantBuffer;
 	int		m_Depth;
 public:
-
+	SNode();
+	~SNode();
 };
 

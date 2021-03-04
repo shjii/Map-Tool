@@ -18,6 +18,15 @@ using namespace Microsoft::WRL;
 
 using namespace std;
 
+
+enum S_POSITION
+{
+	P_BACK = 0,    // µÚ
+	P_FRONT,   // Point is positioned in front of plane	
+	P_ONPLANE, // Point is positioned on plane
+	P_SPANNING // Point is spanning plane
+};
+
 namespace TBASIS_CORE_LIB
 {
 	struct TKeyMap

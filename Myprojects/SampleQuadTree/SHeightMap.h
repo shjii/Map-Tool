@@ -1,5 +1,6 @@
 #pragma once
 #include "SMap.h"
+#include "SQuadTree.h"
 class SHeightMap :
 	public SMap
 {
