@@ -84,20 +84,18 @@ bool main::Init()
 	SMapDesc desc;
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
-	desc.fCellDistance = 1;
-	desc.fScaleHeight = 1.0f;
+	desc.fCellDistance = 50;
+	desc.fScaleHeight = 20.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
 
-	m_pMainCamera->m_Frustum.Create(g_pd3dDevice);
-
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
-
+	
 	m_QuadTree.m_mainCamera = m_pMainCamera;
-	m_QuadTree.m_MaxDepth = 3;
+	m_QuadTree.m_MaxDepth = 5;
 	m_QuadTree.Build(&m_Map);
 	///
 
@@ -162,8 +160,8 @@ bool main::Render()
 	g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
 	m_Map.SetMatrix(NULL,
-		&m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
+		&m_pMainCamera->m_mView,
+		&m_pMainCamera->m_mProj);
 	//m_Map.Render(g_pImmediateContext);
 
 	m_QuadTree.Render(g_pImmediateContext);
