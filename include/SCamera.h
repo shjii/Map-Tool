@@ -2,16 +2,16 @@
 #include "TStd.h"
 #include "SShape.h"
 #include "SFrustum.h"
-class SCamera
+
+class SCamera : public SFrustum
 {
-public:
-	SFrustum    m_Frustum;
+public:	
 	float		m_pSpeed;
 	Vector3		m_vCameraPos = { 10,0,-10 };
 	Vector3		m_vCameraTarget = { 0,0,0 };
-	Matrix      m_matWorld;
-	Matrix		m_matView;
-	Matrix		m_matProj;
+	//Matrix      m_matWorld;
+	//Matrix		m_matView;
+	//Matrix		m_matProj;
 	Vector3		m_vLook;
 	Vector3		m_vUp;
 	Vector3		m_vRight;
@@ -23,6 +23,10 @@ public:
 	int			m_fWheelDelta;
 	Vector4		m_vDirValue;
 	POINT		m_ptPrePosition;
+public:
+	Vector3	m_vDefaultEye;
+	Vector3	m_vDefaultLookAt;
+	Vector3 m_vTargetPos;
 public:
 	virtual  int WndProc(
 		HWND hWnd,
@@ -54,6 +58,7 @@ public:
 	virtual bool Frame();
 	virtual bool DrawFrustum(ID3D11DeviceContext*	pd3dContext,
 		Matrix* pmatView, Matrix* pmatProj);
+	virtual	S_POSITION	CheckPoitionOBBInPlane(S_BOX* pBox);
 public:
 	SCamera();
 	virtual ~SCamera();

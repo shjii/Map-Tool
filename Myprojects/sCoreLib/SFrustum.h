@@ -6,6 +6,7 @@
 struct SPlane
 {
 	float a, b, c, d;
+
 	void Create(Vector3 v0, Vector3 v1, Vector3 v2)
 	{
 		Vector3 n;
@@ -41,7 +42,7 @@ public:
 	SShapeBox m_FrustumObj;
 	vector<PNCT_VERTEX>	m_VertexList;
 	vector<SPlane>		m_Plane;
-	Vector3 m_vFrustum[8];
+	Vector3		m_vFrustum[8];
 	Matrix      m_mWorld;
 	Matrix		m_mView;
 	Matrix		m_mProj;
@@ -52,7 +53,7 @@ public:
 	BOOL		ClassifyPoint(Vector3 v);
 	BOOL		ClassifyBox(SShapeBox box);
 	BOOL		CheckOBBInPlane(S_BOX* pBox);
-	S_POSITION	CheckPoitionOBBInPlane(S_BOX* pBox);
+	virtual	S_POSITION	CheckPoitionOBBInPlane(S_BOX* pBox);
 	bool		CreateFrustum();
 	void		SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);
 	void		ExtractPlanesD3D(vector<SPlane>& pPlanes, const Matrix& comboMatrix);

@@ -36,7 +36,7 @@ S_POSITION SFrustum::CheckPoitionOBBInPlane(S_BOX * pBox)
 	S_POSITION  s_Position;
 
 	s_Position = P_FRONT;
-	int a = 0;
+
 	for (int iPlane = 0; iPlane < 6; iPlane++)
 	{
 		vDir = pBox->vAxis[0] * pBox->fExtent[0];
@@ -48,17 +48,19 @@ S_POSITION SFrustum::CheckPoitionOBBInPlane(S_BOX * pBox)
 
 		fPlaneToCenter = m_Plane[iPlane].a * pBox->vCenter.x + m_Plane[iPlane].b*pBox->vCenter.y +
 			m_Plane[iPlane].c * pBox->vCenter.z + m_Plane[iPlane].d;
-		a++;
-		//if (fPlaneToCenter <= distance)
+
+		if (fPlaneToCenter <= distance)
+		{
+			s_Position = P_SPANNING;
+		}
+
 		if (fPlaneToCenter + 1.0f < -distance)
 		{
-			a--;
+			return P_BACK;
 		}
 	}
-	
-	if (a == 0) return P_BACK;
-	if (a == 6) return P_FRONT;
-	return P_SPANNING;
+
+	return s_Position;
 }
 bool SFrustum::Create(ID3D11Device * pd3dDevice)
 {
@@ -75,20 +77,14 @@ bool SFrustum::Create(ID3D11Device * pd3dDevice)
 	m_VertexList[1].p = Vector3(1.0f, 1.0f, 0.0f);
 	m_VertexList[2].p = Vector3(1.0f, -1.0f, 0.0f);
 	m_VertexList[3].p = Vector3(-1.0f, -1.0f, 0.0f);
-
 	m_VertexList[8].p = Vector3(1.0f, 1.0f, 0.0f);
 	m_VertexList[11].p = Vector3(1.0f, -1.0f, 0.0f);
-
 	m_VertexList[13].p = Vector3(-1.0f, 1.0f, 0.0f);
 	m_VertexList[14].p = Vector3(-1.0f, -1.0f, 0.0f);
-
 	m_VertexList[18].p = Vector3(1.0f, 1.0f, 0.0f);
 	m_VertexList[19].p = Vector3(-1.0f, 1.0f, 0.0f);
-
-
 	m_VertexList[20].p = Vector3(-1.0f, -1.0f, 0.0f);
 	m_VertexList[21].p = Vector3(1.0f, -1.0f, 0.0f);
-
 	m_Plane.resize(6);
 	return true;
 }
@@ -146,14 +142,9 @@ bool SFrustum::CreateFrustum()
 	Matrix m_matViewProj = m_mView * m_mProj;
 	ExtractPlanesD3D(m_Plane, m_matViewProj);
 
-	// view * proj의 역행렬을 구한다.
+
 	m_matViewProj.Invert();
-	// 상단
-	// 5    6
-	// 1    2
-	// 하단
-	// 4    7
-	// 0    3  
+
 	m_vFrustum[0] = Vector3(-1.0f, -1.0f, 0.0f);
 	m_vFrustum[1] = Vector3(-1.0f, 1.0f, 0.0f);
 	m_vFrustum[2] = Vector3(1.0f, 1.0f, 0.0f);
@@ -164,13 +155,6 @@ bool SFrustum::CreateFrustum()
 	m_vFrustum[6] = Vector3(1.0f, 1.0f, 1.0f);
 	m_vFrustum[7] = Vector3(1.0f, -1.0f, 1.0f);
 
-	// Vertex_최종 = Vertex_local * Matrix_world * Matrix_view * Matrix_Proj 인데,
-	// Vertex_world = Vertex_local * Matrix_world이므로,
-	// Vertex_최종 = Vertex_world * Matrix_view * Matrix_Proj 이다.
-	// Vertex_최종 = Vertex_world * ( Matrix_view * Matrix_Proj ) 에서
-	// 역행렬( Matrix_view * Matrix_Proj )^-1를 양변에 곱하면
-	// Vertex_최종 * 역행렬( Matrix_view * Matrix_Proj )^-1 = Vertex_World 가 된다.
-	// 그러므로, m_vFrustum * matInv = Vertex_world가 되어, 월드좌표계의 프러스텀 좌표를 얻을 수 있다.
 	for (int iVertex = 0; iVertex < 8; iVertex++)
 	{
 		m_vFrustum[iVertex] = Vector3::Transform(m_vFrustum[iVertex], m_matViewProj);
@@ -178,12 +162,12 @@ bool SFrustum::CreateFrustum()
 	}
 	m_Plane.resize(6);
 	// 노말 방향 안쪽으로
-	m_Plane[0]=	CreatePlane(m_vFrustum[5], m_vFrustum[0], m_vFrustum[1]);	// 좌 평면(left)
-	m_Plane[1]=	CreatePlane(m_vFrustum[3], m_vFrustum[6], m_vFrustum[2]);	// 우 평면(right)
-	m_Plane[2]=	CreatePlane(m_vFrustum[5], m_vFrustum[2], m_vFrustum[6]);	// 상 평면(top)
-	m_Plane[3]=	CreatePlane(m_vFrustum[0], m_vFrustum[7], m_vFrustum[3]);	// 하 평면(bottom)
-	m_Plane[4]=	CreatePlane(m_vFrustum[0], m_vFrustum[2], m_vFrustum[1]);	// 근 평면(near)
-	m_Plane[5]=	CreatePlane(m_vFrustum[6], m_vFrustum[4], m_vFrustum[5]);	// 원 평면(far)
+	m_Plane[0]=	CreatePlane(m_vFrustum[5], m_vFrustum[0], m_vFrustum[1]);	
+	m_Plane[1]=	CreatePlane(m_vFrustum[3], m_vFrustum[6], m_vFrustum[2]);	
+	m_Plane[2]=	CreatePlane(m_vFrustum[5], m_vFrustum[2], m_vFrustum[6]);	
+	m_Plane[3]=	CreatePlane(m_vFrustum[0], m_vFrustum[7], m_vFrustum[3]);	
+	m_Plane[4]=	CreatePlane(m_vFrustum[0], m_vFrustum[2], m_vFrustum[1]);	
+	m_Plane[5]=	CreatePlane(m_vFrustum[6], m_vFrustum[4], m_vFrustum[5]);	
 	return true;
 }
 SPlane SFrustum::CreatePlane(Vector3 v0, Vector3 v1, Vector3 v2)

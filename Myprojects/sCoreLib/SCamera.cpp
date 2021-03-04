@@ -46,9 +46,9 @@ bool		SCamera::CreateViewMatrix(Vector3 p,Vector3 t,Vector3 u)
 	m_vCameraPos = p;
 	m_vCameraTarget = t;
 	m_fDistance = (m_vCameraPos - m_vCameraTarget).Length();
-	m_matView = Matrix::CreateLookAt(p, t, u);
+	m_mView = Matrix::CreateLookAt(p, t, u);
 	Matrix mInvView;
-	mInvView = m_matView.Invert();
+	mInvView = m_mView.Invert();
 	Vector3* pZBasis = (Vector3*)&mInvView._31;
 
 	m_vDirValue.y = atan2f(pZBasis->x, pZBasis->z);
@@ -59,12 +59,12 @@ bool		SCamera::CreateViewMatrix(Vector3 p,Vector3 t,Vector3 u)
 	return true;
 }
 bool		SCamera::CreateProjMatrix(
-	float fN,
-	float fF,
 	float fFov,
-	float fAspect)
+	float fAspect,
+	float fN,
+	float fF)
 {
-	m_matProj = Matrix::CreatePerspectiveFieldOfView(
+	m_mProj = Matrix::CreatePerspectiveFieldOfView(
 		fFov, fAspect, fN, fF);
 	return true;
 }
@@ -72,7 +72,7 @@ bool		SCamera::CreateOrthographic(
 	float width, float height,
 	float zNearPlane, float zFarPlane)
 {
-	m_matProj = Matrix::CreateOrthographic(
+	m_mProj = Matrix::CreateOrthographic(
 		width, height,
 		zNearPlane, zFarPlane);
 	return true;
@@ -127,21 +127,21 @@ void SCamera::UpBase(float fDir)
 }
 void SCamera::UpdateVector()
 {
-	m_vLook.x = m_matView._13;
-	m_vLook.y = m_matView._23;
-	m_vLook.z = m_matView._33;
-	m_vUp.x = m_matView._12;
-	m_vUp.y = m_matView._22;
-	m_vUp.z = m_matView._32;
-	m_vRight.x = m_matView._11;
-	m_vRight.y = m_matView._21;
-	m_vRight.z = m_matView._31;
+	m_vLook.x = m_mView._13;
+	m_vLook.y = m_mView._23;
+	m_vLook.z = m_mView._33;
+	m_vUp.x = m_mView._12;
+	m_vUp.y = m_mView._22;
+	m_vUp.z = m_mView._32;
+	m_vRight.x = m_mView._11;
+	m_vRight.y = m_mView._21;
+	m_vRight.z = m_mView._31;
 
 	m_vLook.Normalize();
 	m_vUp.Normalize();
 	m_vRight.Normalize();
-	m_Frustum.SetMatrix(&m_matWorld,&m_matView,&m_matProj);
-	m_Frustum.CreateFrustum();
+	SFrustum::SetMatrix(&m_mWorld,&m_mView,&m_mProj);
+	SFrustum::CreateFrustum();
 }
 bool SCamera::Init()
 {
@@ -152,7 +152,7 @@ bool SCamera::Frame()
 {
 	//SFrustum::Frame();
 	Vector3 vUp = { 0,1,0 };
-	m_matView = Matrix::CreateLookAt(
+	m_mView = Matrix::CreateLookAt(
 		m_vCameraPos,
 		m_vCameraTarget,
 		vUp);
@@ -173,3 +173,8 @@ SCamera::~SCamera()
 {
 
 }
+S_POSITION	SCamera::CheckPoitionOBBInPlane(S_BOX* pBox)
+{
+	return SFrustum::CheckPoitionOBBInPlane(pBox);
+}
+
