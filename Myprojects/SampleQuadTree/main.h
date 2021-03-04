@@ -5,7 +5,7 @@
 #include "SModelViewCamera.h"
 #include "SHeightMap.h"
 #include "SMiniMap.h"
-#include "SMapRender.h"
+#include "SQuadTree.h"
 class SBoxUser : public SShapeBox
 {
 public:
@@ -49,23 +49,20 @@ public:
 class main : public TCore
 {
 public:
-	SMapRender		m_QuadTree;
-	S_BoxObject*	m_pObject;
-	S_BOX			m_TBoxBase;
-
+	/*S_BOX			m_TBoxBase;
 	SMiniMap		m_MinMap;
-	SHeightMap		m_Map;
-	Vector4			m_vDirValue;
-	std::vector<TObject*> m_ObjList;
 	SBoxUser		m_UserShape;
 	SBoxUser		m_BoxShape;
 	SShapePlane		m_PlaneShape;
-	
+	std::vector<TObject*> m_ObjList;
 	SModelViewCamera  m_ModelCamera;
-	SCamera			m_TopCamera;
-public:
-	Matrix			m_matBoxWorld;
-	Matrix			m_matPlaneWorld;
+	SCamera			m_TopCamera;*/
+	SHeightMap		m_Map;
+	Vector4			m_vDirValue;
+	SQuadTree		m_QuadTree;
+//public:
+//	Matrix			m_matBoxWorld;
+//	Matrix			m_matPlaneWorld;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -76,7 +73,5 @@ public:
 		Vector4* plane,
 		Vector4* Light);
 	LRESULT	 MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	bool DrawQuadLine(SNode* pNode);
-	void DrawObject(Matrix* pView, Matrix* pProj);
 };
 TGAME_RUN;

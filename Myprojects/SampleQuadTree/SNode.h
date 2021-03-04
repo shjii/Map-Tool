@@ -1,52 +1,21 @@
 #pragma once
 #include "SFrustum.h"
 
-class SBaseObj
-{
-public:
-	S_BOX	m_sBox;
-public:
-	SBaseObj() {}
-	virtual ~SBaseObj() {}
-};
-
-class S_BoxObject : public SBaseObj
-{
-public:
-	Matrix	m_matWorld;
-	Vector3	m_vPosition;
-	Vector4	m_vColor;
-public:
-	S_BoxObject();
-};
-
 class SNode
 {
 public:
-	DWORD			m_dwDepth;
-	BOOL			m_isLeaf;
-	BOOL			m_isTile;
-	DWORD			m_dwLodLevel;
-	DWORD			m_dwLodType;
-	S_BOX			m_sBox;
-	vector<DWORD>	m_CornerIndex;
-	// 노드의 코너 정점 인덱스 및 위치
-	vector<Vector3>		m_CornerList;
-	vector<SNode*>		m_ChildList;
-	vector<SNode*>		m_NeighborList;
-	vector<SBaseObj*>	m_ObjectList;
-	// 추가
-	DWORD				m_dwPositionIndex[2];// X,Y	
-	D3D11_BOX			m_BoxVB;
-	D3D11_BOX			m_BoxIB;
-	UINT				m_iBeginVB;
-	UINT				m_iBeginIB;
-	vector<DWORD>		m_IndexList;
-	vector <PNCT_VERTEX>	m_VertexList;
-	ComPtr<ID3D11Buffer>	m_pVertexBuffer;
-	ComPtr<ID3D11Buffer>	m_pIndexBuffer;
+	S_BOX						m_Box;
+	float						m_iCorner[4];
+	vector<Vector3>				m_CornerList;
+	vector<SNode*>				m_ChildNode;
+	bool						m_LeafNode;
+	std::vector<PNCT_VERTEX>	m_VertexList;
+	std::vector<DWORD>			m_IndexList;
+	ID3D11Buffer*				m_pVertexBuffer;
+	ID3D11Buffer*				m_pIndexBuffer;
+	ID3D11Buffer*				m_pConstantBuffer;
+	int		m_Depth;
 public:
-	SNode();
-	virtual ~SNode();
+
 };
 
