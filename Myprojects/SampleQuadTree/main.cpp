@@ -124,14 +124,14 @@ bool main::Init()
 		return false;
 	}
 
-	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/HEIGHT_CASTLE.bmp");
+	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/heightMap513.bmp");
 
 	SMapDesc desc;
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
 	desc.fScaleHeight = 10.0f;
-	desc.szTexFile = L"../../data/map/castle.jpg";
+	desc.szTexFile = L"../../data/map/detail.bmp";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
 
@@ -182,7 +182,8 @@ bool main::Init()
 	m_TopCamera.Init();
 
 	m_QuadTree.m_iMaxDepthLimit = 3;
-	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera);
+	m_QuadTree.m_pCamera = m_pMainCamera;
+	//m_QuadTree.Update(g_pd3dDevice, m_pMainCamera);
 	m_QuadTree.SetMinDivideSize(m_QuadTree.m_fMinDivideSize * m_Map.m_fCellDistance);
 	m_QuadTree.Build(&m_Map, m_Map.m_iNumCols, m_Map.m_iNumRows);
 
@@ -335,15 +336,15 @@ bool main::Render()
 
 	
 
-	m_Map.SetMatrix(NULL,
-		&m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
-	m_Map.Render(g_pImmediateContext);
+	//m_Map.SetMatrix(NULL,
+	//	&m_pMainCamera->m_matView,
+	//	&m_pMainCamera->m_matProj);
+	//m_Map.Render(g_pImmediateContext);
 
-	m_BoxShape.SetMatrix(NULL,
-		&m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
-	m_BoxShape.Render(g_pImmediateContext);
+	//m_BoxShape.SetMatrix(NULL,
+	//	&m_pMainCamera->m_matView,
+	//	&m_pMainCamera->m_matProj);
+	//m_BoxShape.Render(g_pImmediateContext);
 
 	m_UserShape.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,

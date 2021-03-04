@@ -23,6 +23,38 @@ BOOL SFrustum::CheckOBBInPlane(S_BOX*  pBox)
 	}
 	return TRUE;
 }
+S_POSITION SFrustum::CheckPoitionOBBInPlane(S_BOX * pBox)
+{
+	float		fPlaneToCenter = 0.0;
+	float		fDistance = 0.0f;
+	Vector3 vDir;
+	S_POSITION  s_Position;
+
+	s_Position = P_FRONT;
+	for (int iPlane = 0; iPlane < 6; iPlane++)
+	{
+		vDir = pBox->vAxis[0] * pBox->fExtent[0];
+		fDistance = fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+		vDir = pBox->vAxis[1] * pBox->fExtent[1];
+		fDistance += fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+		vDir = pBox->vAxis[2] * pBox->fExtent[2];
+		fDistance += fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+
+		fPlaneToCenter = m_Plane[iPlane].a * pBox->vCenter.x + m_Plane[iPlane].b*pBox->vCenter.y +
+			m_Plane[iPlane].c * pBox->vCenter.z + m_Plane[iPlane].d;
+
+		if (fPlaneToCenter <= fDistance)
+		{
+			s_Position = P_SPANNING;
+		}
+
+		if (fPlaneToCenter + 1.0f < -fDistance)
+		{
+			return P_BACK;
+		}
+	}
+	return s_Position;
+}
 bool SFrustum::Create(ID3D11Device * pd3dDevice)
 {
 	if (!m_FrustumObj.Create(pd3dDevice, L"vs.txt", L"ps.txt", L""))

@@ -10,7 +10,7 @@ bool		SMapRender::Build(SMap* pMap, DWORD dwWidth, DWORD dwHeight)
 
 	m_pRooSNode = CreateNode(NULL, 0, dwWidth - 1, dwWidth * (dwHeight - 1), dwWidth * dwHeight - 1);
 
-	InitLevelOrder(m_pRooSNode, m_iMaxDepthLimit);
+	//InitLevelOrder(m_pRooSNode, m_iMaxDepthLimit);
 
 	m_pIndexBuffer.Attach(CreateIndexBuffer(g_pd3dDevice, NULL, m_iNumFace * 3, sizeof(DWORD)));
 
@@ -23,7 +23,7 @@ bool		SMapRender::Build(SMap* pMap, DWORD dwWidth, DWORD dwHeight)
 
 		int iNumTileRender = pow(4.0f, m_iMaxDepth);
 		// <><<>><><><
-		m_iNumCell = (dwWidth - 1) / pow(2.0f, (float)m_iMaxDepth);
+		int m_iNumCell = (dwWidth - 1) / pow(2.0f, (float)m_iMaxDepth);
 		m_IndexList.resize(m_iNumCell * m_iNumCell * 2 * 3);
 
 		int iIndex = 0;
@@ -54,9 +54,6 @@ SNode*		SMapRender::CreateNode(SNode* pParentNode, DWORD dwTL, DWORD dwTR, DWORD
 	assert(pNode);
 
 	pNode->m_isLeaf = FALSE;
-	//pNode->m_ChildList.resize(4);
-	//pNode->m_CornerList.resize(4);
-	//pNode->m_CornerIndex.resize(4);
 	pNode->m_CornerIndex.push_back(dwTL);
 	pNode->m_CornerIndex.push_back(dwTR);
 	pNode->m_CornerIndex.push_back(dwBL);
@@ -205,59 +202,62 @@ bool		SMapRender::Release()
 }
 bool		SMapRender::Render(ID3D11DeviceContext*    pContext)
 {
+
+	pContext->DrawIndexed(m_IndexList.size(), 0, 0);
+
 	//m_DrawPatchNodeList 생성
-	m_DrawPatchNodeList.clear();
+	//m_DrawPatchNodeList.clear();
 	// 카메라에 보이는 노드리스트에서 리프노드(패치단위)의 노드를 얻는다.
-	GetDrawPatchNode();
+	//GetDrawPatchNode();
 
-	m_pMap->PreRender(pContext);
-	UINT stride = m_pMap->m_VertexList.size();
-	UINT offset = 0;
-	pContext->UpdateSubresource(m_pMap->m_pConstantBuffer, 0, NULL, &m_pMap->m_cbData, 0, 0);
+	//m_pMap->PreRender(pContext);
+	//UINT stride = m_pMap->m_VertexList.size();
+	//UINT offset = 0;
+	//pContext->UpdateSubresource(m_pMap->m_pConstantBuffer, 0, NULL, &m_pMap->m_cbData, 0, 0);
 
-	if (m_bSharedVertexBuffer)
-	{
-		size_t dstibOffset = 0;
-		size_t ibOffset = 0;
-		// 방법 -1-
-		pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//if (m_bSharedVertexBuffer)
+	//{
+	//	size_t dstibOffset = 0;
+	//	size_t ibOffset = 0;
+	//	 방법 -1-
+	//	pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-		for (int iNode = 0; iNode < m_DrawPatchNodeList.size(); iNode++)
-		{
-			SNode* pNode = m_DrawPatchNodeList[iNode];
-			// 방법 -1-
-			//pContext->DrawIndexed(pNode->m_IndexList.size(), pNode->m_iBeginIB, 0);
+	//	for (int iNode = 0; iNode < m_DrawPatchNodeList.size(); iNode++)
+	//	{
+	//		SNode* pNode = m_DrawPatchNodeList[iNode];
+	//		 방법 -1-
+	//		pContext->DrawIndexed(pNode->m_IndexList.size(), pNode->m_iBeginIB, 0);
 
-			//방법-2- 실시간 업데이트 랜더링
-	/*		pNode->m_BoxIB.left = dstibOffset;
-			pNode->m_BoxIB.right = dstibOffset + pNode->m_IndexList.size()*sizeof(DWORD);
-			pNode->m_BoxIB.top = 0;		pNode->m_BoxIB.bottom = 1;
-			pNode->m_BoxIB.front = 0;	pNode->m_BoxIB.back = 1;
+	//		방법-2- 실시간 업데이트 랜더링
+	///*		pNode->m_BoxIB.left = dstibOffset;
+	//		pNode->m_BoxIB.right = dstibOffset + pNode->m_IndexList.size()*sizeof(DWORD);
+	//		pNode->m_BoxIB.top = 0;		pNode->m_BoxIB.bottom = 1;
+	//		pNode->m_BoxIB.front = 0;	pNode->m_BoxIB.back = 1;
 
-			g_pImmediateContext->UpdateSubresource(m_pMap->m_dxobj.g_pIndexBuffer.Get(), 0,
-				&pNode->m_BoxIB, (void*)&pNode->m_IndexList.at(0), 0, 0);
+	//		g_pImmediateContext->UpdateSubresource(m_pMap->m_dxobj.g_pIndexBuffer.Get(), 0,
+	//			&pNode->m_BoxIB, (void*)&pNode->m_IndexList.at(0), 0, 0);
 
-			pNode->m_iBeginIB = ibOffset;
-			ibOffset += pNode->m_IndexList.size();
-			dstibOffset = pNode->m_BoxIB.right;*/
+	//		pNode->m_iBeginIB = ibOffset;
+	//		ibOffset += pNode->m_IndexList.size();
+	//		dstibOffset = pNode->m_BoxIB.right;*/
 
-			// 방법 -3-직접 노드 인덱스 버퍼를 사용하여 단위 랜더링
-			pContext->IASetIndexBuffer(pNode->m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-			pContext->DrawIndexed(pNode->m_IndexList.size(), 0, 0);
-		}
-		//방법-2-
-		//pContext->DrawIndexed(ibOffset, 0, 0);
-	}
-	else
-	{
-		pContext->IASetIndexBuffer(m_pTileIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-		for (int iNode = 0; iNode < m_DrawPatchNodeList.size(); iNode++)
-		{
-			SNode* pNode = m_DrawPatchNodeList[iNode];
-			pContext->IASetVertexBuffers(0, 1, pNode->m_pVertexBuffer.GetAddressOf(), &stride, &offset);
-			pContext->DrawIndexed(m_IndexList.size(), 0, 0);
-		}
-	}
+	//		 방법 -3-직접 노드 인덱스 버퍼를 사용하여 단위 랜더링
+	//		pContext->IASetIndexBuffer(pNode->m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//		pContext->DrawIndexed(pNode->m_IndexList.size(), 0, 0);
+	//	}
+	//	방법-2-
+	//	pContext->DrawIndexed(ibOffset, 0, 0);
+	//}
+	//else
+	//{
+	//	pContext->IASetIndexBuffer(m_pTileIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//	for (int iNode = 0; iNode < m_DrawPatchNodeList.size(); iNode++)
+	//	{
+	//		SNode* pNode = m_DrawPatchNodeList[iNode];
+	//		pContext->IASetVertexBuffers(0, 1, pNode->m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+	//		pContext->DrawIndexed(m_IndexList.size(), 0, 0);
+	//	}
+	//}
 	return true;
 }
 bool		SMapRender::CreateVertexList(SNode* pNode)

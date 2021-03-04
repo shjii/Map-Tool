@@ -1,6 +1,7 @@
 #pragma once
 #include "SQuadTree.h"
 #include "SMap.h"
+#include "SNode.h"
 
 class SMapRender :	public SQuadTree
 {
@@ -33,4 +34,3 @@ public:
 	SMapRender();
 	virtual ~SMapRender();
 };
-

@@ -22,8 +22,8 @@ bool SQuadTree::BuildTree(SNode* pNode)
 				DWORD dwIndex =
 					pNode->m_ChildList[iNode]->m_dwPositionIndex[1] * pow(2.0f, (float)pNode->m_ChildList[iNode]->m_dwDepth) + pNode->m_ChildList[iNode]->m_dwPositionIndex[0];
 				DWORD dwValue = pNode->m_ChildList[iNode]->m_dwDepth;
-				m_LevelList[dwValue][dwIndex] =
-					pNode->m_ChildList[iNode];
+				/*m_LevelList[dwValue][dwIndex] =
+					pNode->m_ChildList[iNode];*/
 			}
 			BuildTree(pNode->m_ChildList[iNode]);
 		}
@@ -176,65 +176,65 @@ bool SQuadTree::Frame()
 
 void SQuadTree::VisibleNode(SNode* pNode)
 {
-	////assert(m_pCamera);
-	//if (pNode->m_dwDepth < (DWORD)m_iRenderDepth) return;
+	//assert(m_pCamera);
+	if (pNode->m_dwDepth < (DWORD)m_iRenderDepth) return;
 
-	//if (m_pCamera->CheckOBBInPlane(&pNode->m_sBox))
-	//{
-	//	VisibleObject(pNode);
-	//	for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
-	//	{
-	//		VisibleNode(pNode->m_ChildList[iNode]);
-	//	}
-	//}
+	if (m_pCamera->m_Frustum.CheckOBBInPlane(&pNode->m_sBox))
+	{
+		VisibleObject(pNode);
+		for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
+		{
+			VisibleNode(pNode->m_ChildList[iNode]);
+		}
+	}
 }
 void SQuadTree::VisibleObject(SNode* pNode)
 {
 	for (int iObj = 0; iObj < pNode->m_ObjectList.size(); iObj++)
 	{
-		/*if (m_pCamera->CheckOBBInPlane(&pNode->m_ObjectList[iObj]->m_sBox))
+		if (m_pCamera->m_Frustum.CheckOBBInPlane(&pNode->m_ObjectList[iObj]->m_sBox))
 		{
 			m_DrawObjList.push_back(pNode->m_ObjectList[iObj]);
-		}*/
+		}
 	}
 }
 void SQuadTree::DrawFindNode(SNode* pNode)
 {
-	//assert(pNode);
+	assert(pNode);
 
-	//T_POSITION t_Pos = m_pCamera->CheckPoitionOBBInPlane(&pNode->m_sBox);
-	//if (pNode->m_dwDepth < (DWORD)m_iRenderDepth ||
-	//	t_Pos == P_BACK)
-	//{
-	//	return;
-	//}
+	S_POSITION t_Pos = m_pCamera->m_Frustum.CheckPoitionOBBInPlane(&pNode->m_sBox);
+	if (pNode->m_dwDepth < (DWORD)m_iRenderDepth ||
+		t_Pos == P_BACK)
+	{
+		return;
+	}
 	//GetLodSubIndex(pNode);
 
-	//// 리프노드 일 경우는 완전히 제외되지 않았다면(걸쳐 있거나 완전 포함)추가한다.
-	//if (pNode->m_isLeaf &&  t_Pos != P_BACK)
-	//{
-	//	m_DrawNodeList.push_back(pNode);
-	//	VisibleObject(pNode);
-	//	return;
-	//}
-	//// 완전히 포함되어 있으면 자식을 탐색하지 않고 노드를 추가한다.
-	//if (t_Pos == P_FRONT)
-	//{
-	//	m_DrawNodeList.push_back(pNode);
-	//	VisibleNode(pNode);
-	//	return;
-	//}
+	// 리프노드 일 경우는 완전히 제외되지 않았다면(걸쳐 있거나 완전 포함)추가한다.
+	if (pNode->m_isLeaf &&  t_Pos != P_BACK)
+	{
+		m_DrawNodeList.push_back(pNode);
+		VisibleObject(pNode);
+		return;
+	}
+	// 완전히 포함되어 있으면 자식을 탐색하지 않고 노드를 추가한다.
+	if (t_Pos == P_FRONT)
+	{
+		m_DrawNodeList.push_back(pNode);
+		VisibleNode(pNode);
+		return;
+	}
 
-	//// 걸쳐져 있는 노드에 포함된 오브젝트 체크
-	//if (t_Pos == P_SPANNING)
-	//{
-	//	VisibleObject(pNode);
-	//}
+	// 걸쳐져 있는 노드에 포함된 오브젝트 체크
+	if (t_Pos == P_SPANNING)
+	{
+		VisibleObject(pNode);
+	}
 
-	//for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
-	//{
-	//	DrawFindNode(pNode->m_ChildList[iNode]);
-	//}
+	for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
+	{
+		DrawFindNode(pNode->m_ChildList[iNode]);
+	}
 }
 void SQuadTree::SetRenderDepth(DWORD dwDepth)
 {

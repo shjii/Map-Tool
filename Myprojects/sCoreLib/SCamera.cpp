@@ -148,6 +148,7 @@ bool SCamera::Init()
 }
 bool SCamera::Frame()
 {
+	//SFrustum::Frame();
 	Vector3 vUp = { 0,1,0 };
 	m_matView = Matrix::CreateLookAt(
 		m_vCameraPos,

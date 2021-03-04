@@ -3,48 +3,20 @@
 string solution(string new_id) {
 	string answer = "";
 
-	// 1단계 모든 대문자를 대응되는 소문자로 치환
-	transform(new_id.begin(), new_id.end(), new_id.begin(), ::tolower);
-	// 2단계 3단계 4단계
-	bool t = false;
-	for (int a = 0; a < new_id.size(); a++)
+	int iVertexIndex = 0;
+	for (int dwRow = 0; dwRow <= 16; dwRow++)
 	{
-		if (answer.size() >= 15) break;
-
-		if (islower(new_id[a]) || atoi(&new_id[a]) != 0 || new_id[a] == '-' ||
-			new_id[a] == '_' || new_id[a] == '0')
+		for (int dwCol = 48; dwCol <= 63; dwCol++)
 		{
-			answer += new_id[a];
-		}
-
-		if (new_id[a] == '.')
-		{
-			if (a != 0)
-			{
-				if (t == false)answer += new_id[a];
-			}
-			t = true;
-		}
-		else
-		{
-			t = false;
+			iVertexIndex++;
 		}
 	}
-	//5단계
-	if (answer.empty()) answer = "aaa";
-	//6단계
-	while (answer.back() == '.')
-	{
-		answer.pop_back();
-	}
-
-
-	while (answer.size() < 3)
-	{
-		answer.push_back(answer.back());
-	}
+	
 	return answer;
 }
+
+
+
 
 int main()
 {

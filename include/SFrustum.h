@@ -1,6 +1,14 @@
 #pragma once
 #include "TStd.h"
 #include "SShape.h"
+
+enum S_POSITION
+{
+	P_BACK = 0,    // Point is positioned behind plane
+	P_FRONT,   // Point is positioned in front of plane	
+	P_ONPLANE, // Point is positioned on plane
+	P_SPANNING // Point is spanning plane
+};
 struct SPlane
 {
 	float a, b, c, d;
@@ -38,5 +46,6 @@ public:
 	BOOL		ClassifyPoint(Vector3 v);
 	BOOL		ClassifyBox(SShapeBox box);
 	BOOL		CheckOBBInPlane(S_BOX* pBox);
+	S_POSITION	CheckPoitionOBBInPlane(S_BOX* pBox);
 };
 
