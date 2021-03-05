@@ -735,6 +735,7 @@ namespace TBASIS_CORE_LIB
 	bool    SDxObject::CreateVertexData() {
 		return true;
 	};
+
 	bool    SDxObject::CreateIndexData() {
 		return true;
 	};
