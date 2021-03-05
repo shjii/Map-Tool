@@ -84,29 +84,22 @@ bool main::Init()
 	SMapDesc desc;
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
-	desc.fCellDistance = 50;
-	desc.fScaleHeight = 20.0f;
+	desc.fCellDistance = 1;
+	desc.fScaleHeight = 1.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
 
+	m_pMainCamera->m_Frustum.Create(g_pd3dDevice);
+
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
-	
-	m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/tileA.jpg");
 
 	m_QuadTree.m_mainCamera = m_pMainCamera;
-	m_QuadTree.m_MaxDepth = 5;
+	m_QuadTree.m_MaxDepth = 3;
 	m_QuadTree.Build(&m_Map);
 	///
-
-	m_TopCamera.CreateViewMatrix({ 0,30,-0.1f }, { 0,0,0 });
-	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
-	m_TopCamera.CreateOrthographic(
-		desc.iNumCols, desc.iNumRows, 1.0f, 1000);
-	m_TopCamera.Init();
 
 	return true;
 }
@@ -168,34 +161,10 @@ bool main::Render()
 	g_pImmediateContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
-	if (m_MinMap.Begin(g_pImmediateContext))
-	{
-		m_Map.SetMatrix(NULL,
-			&m_TopCamera.m_mView,
-			&m_TopCamera.m_mProj);
-		m_Map.Render(g_pImmediateContext);
-
-		Matrix matWorld;
-		matWorld._41 = m_TopCamera.m_vCameraPos.x;
-		matWorld._42 = m_TopCamera.m_vCameraPos.y;
-		matWorld._43 = m_TopCamera.m_vCameraPos.z;
-
-		m_MinMap.End(g_pImmediateContext);
-	}
-
-
 	m_Map.SetMatrix(NULL,
-		&m_pMainCamera->m_mView,
-		&m_pMainCamera->m_mProj);
-
-
-	m_MinMap.SetMatrix(NULL,
-		NULL, //&m_pMainCamera->m_matView,
-		NULL); //&m_pMainCamera->m_matProj);
-	m_MinMap.Render(g_pImmediateContext);
-
-	///////////////
-	m_Map.Render(g_pImmediateContext);
+		&m_pMainCamera->m_matView,
+		&m_pMainCamera->m_matProj);
+	//m_Map.Render(g_pImmediateContext);
 
 	m_QuadTree.Render(g_pImmediateContext);
 	return true;

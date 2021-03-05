@@ -50,14 +50,12 @@ bool TCore::GameInit()
 		g_rtClient.bottom, pBackBuffer);
 	if (pBackBuffer) pBackBuffer->Release();
 
-	
-	m_Camera.CreateViewMatrix({ 0,10,-10 }, { 0,0,0 });
-
+	m_Camera.CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
-
-	m_Camera.CreateProjMatrix(TBASIS_PI / 4.0f, 1.0f, 0.1f, 1000.0f);
+	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_Camera.Init();
 	m_pMainCamera = &m_Camera;
+
 	if (!m_LineShape.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg"))
 	{
@@ -129,8 +127,8 @@ bool	TCore::PreRender()
 bool	TCore::PostRender()
 {
 
-	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_mView,
-		&m_pMainCamera->m_mProj);
+	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
+		&m_pMainCamera->m_matProj);
 	m_LineShape.Draw(g_pImmediateContext,
 		Vector3(0, 0, 0), Vector3(100, 0, 0), Vector4(1, 0, 0, 1));
 	m_LineShape.Draw(g_pImmediateContext,
@@ -193,6 +191,5 @@ TCore::TCore()
 }
 TCore::~TCore()
 {
-	///////////
-	
+
 }

@@ -51,7 +51,7 @@ Matrix SArcBall::GetRotationMatrix()
 
 bool SModelViewCamera::PostInit()
 {
-	Matrix matInvView = m_mView.Invert();
+	Matrix matInvView = m_matView.Invert();
 	m_ViewArcBall.m_qNow = Quaternion::CreateFromRotationMatrix(matInvView);
 	m_ViewArcBall.m_qNow.Normalize();
 	return true;
@@ -121,7 +121,7 @@ bool SModelViewCamera::Frame()
 	CreateViewMatrix(m_vCameraPos, m_vCameraTarget);
 
 	//WORLD
-	Matrix mInvView = m_mView.Invert();
+	Matrix mInvView = m_matView.Invert();
 	mInvView._41 = 0.0f;
 	mInvView._42 = 0.0f;
 	mInvView._43 = 0.0f;
@@ -129,11 +129,11 @@ bool SModelViewCamera::Frame()
 	Matrix mModelRotInv = m_mModelLastRot.Invert();
 
 	Matrix mModelRot = m_WorldArcBall.GetRotationMatrix();
-	m_mWorld = m_mWorld * m_mView * mModelRotInv * mModelRot * mInvView;
+	m_matWorld = m_matWorld * m_matView * mModelRotInv * mModelRot * mInvView;
 
-	m_mWorld._41 = 0;
-	m_mWorld._42 = 0;
-	m_mWorld._43 = 0;
+	m_matWorld._41 = 0;
+	m_matWorld._42 = 0;
+	m_matWorld._43 = 0;
 	m_mModelLastRot = mModelRot;
 
 	UpdateVector();
@@ -143,26 +143,26 @@ bool SModelViewCamera::Frame()
 }
 bool SModelViewCamera::FrameFrustum(ID3D11DeviceContext * pd3dContext)
 {
-	Matrix matInViewProj = m_mView * m_mProj;
+	Matrix matInViewProj = m_matView * m_matProj;
 	matInViewProj = matInViewProj.Invert();
 	for (int iVertex = 0; iVertex < 24; iVertex++)
 	{
-		Vector3& v = m_VertexList[iVertex].p;
-		m_FrustumObj.m_VertexList[iVertex].p = Vector3::Transform(v, matInViewProj);
+		Vector3& v = m_Frustum.m_VertexList[iVertex].p;
+		m_Frustum.m_FrustumObj.m_VertexList[iVertex].p = Vector3::Transform(v, matInViewProj);
 	}
-	pd3dContext->UpdateSubresource(m_FrustumObj.m_pVertexBuffer, 0 ,NULL, &m_FrustumObj.m_VertexList.at(0), 0 ,0);
-	Frame();
+	pd3dContext->UpdateSubresource(m_Frustum.m_FrustumObj.m_pVertexBuffer, 0 ,NULL, &m_Frustum.m_FrustumObj.m_VertexList.at(0), 0 ,0);
+	m_Frustum.Frame();
 	return true;
 }
 bool SModelViewCamera::CrateFrustum(ID3D11Device * pd3dDevice, ID3D11DeviceContext * d3dContext)
 {
-	Create(pd3dDevice);
+	m_Frustum.Create(pd3dDevice);
 	return true;
 }
 bool SModelViewCamera::DrawFrustum(ID3D11DeviceContext * pd3dContext, Matrix * pmatView, Matrix * pmatProj)
 {
-	m_FrustumObj.SetMatrix(NULL, pmatView, pmatProj);
-	m_FrustumObj.Render(pd3dContext);
+	m_Frustum.m_FrustumObj.SetMatrix(NULL, pmatView, pmatProj);
+	m_Frustum.m_FrustumObj.Render(pd3dContext);
 	return true;
 }
 SModelViewCamera::SModelViewCamera()
@@ -171,5 +171,5 @@ SModelViewCamera::SModelViewCamera()
 }
 SModelViewCamera::~SModelViewCamera()
 {
-	m_FrustumObj.Release();
+	m_Frustum.m_FrustumObj.Release();
 }

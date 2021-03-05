@@ -124,7 +124,7 @@ void SQuadTree::CreatorIndexBuffer(SNode* Node, float row, float col)
 
 bool SQuadTree::Render(ID3D11DeviceContext*	pd3dContext)
 {
-	
+
 	UINT iStride = sizeof(PNCT_VERTEX);
 	UINT iOffset = 0;
 	m_Map->PreRender(pd3dContext);
@@ -178,7 +178,7 @@ void SQuadTree::BoungigBox(SNode * Node)
 	Vector2 vHeight = GetHeightFromNode(Node->m_iCorner[0], Node->m_iCorner[1],
 		Node->m_iCorner[2], Node->m_iCorner[3]);
 
-	Node->m_Box.vMax = m_Map->m_VertexList[(int)Node->m_iCorner[1]].p;
+	Node->m_Box.vMax = m_Map->m_VertexList[(int)Node->m_iCorner[0]].p;
 	Node->m_Box.vMin = m_Map->m_VertexList[(int)Node->m_iCorner[2]].p;
 	Node->m_Box.vMax.y = vHeight.x;
 	Node->m_Box.vMin.y = vHeight.y;
@@ -192,31 +192,27 @@ void SQuadTree::BoungigBox(SNode * Node)
 
 void	SQuadTree::DrawCheck(SNode* Node)
 {
-	if (Node->m_LeafNode)
-	{
-		m_DrawLIst.push_back(Node);
-		return;
-	}
-	for (int iNode = 0; iNode < Node->m_ChildNode.size(); iNode++)
-	{
-		DrawCheck(Node->m_ChildNode[iNode]);
-	}
-	/*S_POSITION a = m_mainCamera->CheckPoitionOBBInPlane(&Node->m_Box);
-	if (Node->m_LeafNode &&  a != P_BACK)
-	{
-		m_DrawLIst.push_back(Node);
-		return;
-	}
+	S_POSITION a = m_mainCamera->m_Frustum.CheckPoitionOBBInPlane(&Node->m_Box);
+	if (a == P_BACK)return;
+
 	if (a == P_FRONT)
 	{
 		m_DrawLIst.push_back(Node);
 		return;
 	}
 
-	for (int iNode = 0; iNode < Node->m_ChildNode.size(); iNode++)
+	if (Node->m_LeafNode == true && a >= P_FRONT)
 	{
-		DrawCheck(Node->m_ChildNode[iNode]);
-	}*/
+		m_DrawLIst.push_back(Node);
+		return;
+	}
+	if (a == P_SPANNING)
+	{
+		DrawCheck(Node->m_ChildNode[0]);
+		DrawCheck(Node->m_ChildNode[1]);
+		DrawCheck(Node->m_ChildNode[2]);
+		DrawCheck(Node->m_ChildNode[3]);
+	}
 }
 
 bool	SQuadTree::Frame()

@@ -20,7 +20,7 @@ void SDebugCamera::Update(Vector4 data)
 	matRoation._42 = m_vCameraPos.y;
 	matRoation._43 = m_vCameraPos.z;
 
-	m_mView = matRoation.Invert();
+	m_matView = matRoation.Invert();
 	m_fWheelDelta = 0;
 }
 
