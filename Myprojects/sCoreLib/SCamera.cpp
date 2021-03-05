@@ -140,8 +140,8 @@ void SCamera::UpdateVector()
 	m_vLook.Normalize();
 	m_vUp.Normalize();
 	m_vRight.Normalize();
-	m_Frustum.SetMatrix(&m_matWorld,&m_matView,&m_matProj);
-	m_Frustum.CreateFrustum();
+	SetMatrix(&m_matWorld,&m_matView,&m_matProj);
+	CreateFrustum();
 }
 bool SCamera::Init()
 {

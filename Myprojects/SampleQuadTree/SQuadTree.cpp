@@ -192,8 +192,16 @@ void SQuadTree::BoungigBox(SNode * Node)
 
 void	SQuadTree::DrawCheck(SNode* Node)
 {
-	
-	S_POSITION a = m_mainCamera->CheckPoitionOBBInPlane(&Node->m_Box);
+	if (Node->m_LeafNode)
+	{
+		m_DrawLIst.push_back(Node);
+		return;
+	}	
+	for (int iNode = 0; iNode < Node->m_ChildNode.size(); iNode++)
+	{
+		DrawCheck(Node->m_ChildNode[iNode]);
+	}
+	/*S_POSITION a = m_mainCamera->CheckPoitionOBBInPlane(&Node->m_Box);
 	if (Node->m_LeafNode &&  a != P_BACK)
 	{
 		m_DrawLIst.push_back(Node);
@@ -208,7 +216,7 @@ void	SQuadTree::DrawCheck(SNode* Node)
 	for (int iNode = 0; iNode < Node->m_ChildNode.size(); iNode++)
 	{
 		DrawCheck(Node->m_ChildNode[iNode]);
-	}
+	}*/
 }
 
 bool	SQuadTree::Frame()
