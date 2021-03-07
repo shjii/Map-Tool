@@ -22,6 +22,7 @@ public:
 	int			m_fWheelDelta;
 	Vector4		m_vDirValue;
 	POINT		m_ptPrePosition;
+	float		m_fFarPlane;
 public:
 	virtual  int WndProc(
 		HWND hWnd,

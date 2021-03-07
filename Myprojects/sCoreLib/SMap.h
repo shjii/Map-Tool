@@ -32,6 +32,7 @@ public:
 	virtual bool    CreateIndexData()override;
 	virtual bool	Frame() override;
 	virtual bool	Postrender(ID3D11DeviceContext* pd3dContext);
+	virtual void	UpdateIndexBuffer(ID3D11DeviceContext*  pContext, DWORD* pdwIndexArray, int iFaceCount);
 public:
 	////
 	Vector3*	m_NormalVector;

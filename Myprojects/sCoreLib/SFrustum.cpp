@@ -25,40 +25,35 @@ BOOL SFrustum::CheckOBBInPlane(S_BOX*  pBox)
 }
 S_POSITION SFrustum::CheckPoitionOBBInPlane(S_BOX * pBox)
 {
-	// 1. 모두 포함하면  =1
-	// 2. 겹치면         =2
-	// 3. 밖에있으면     =0
-
-
 	float		fPlaneToCenter = 0.0;
 	float		distance = 0.0f;
 	Vector3 vDir;
 	S_POSITION  s_Position;
 
 	s_Position = P_FRONT;
-	int a = 0;
 	for (int iPlane = 0; iPlane < 6; iPlane++)
 	{
 		vDir = pBox->vAxis[0] * pBox->fExtent[0];
-		distance = fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+		distance = abs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
 		vDir = pBox->vAxis[1] * pBox->fExtent[1];
-		distance += fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+		distance += abs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
 		vDir = pBox->vAxis[2] * pBox->fExtent[2];
-		distance += fabs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
+		distance += abs(m_Plane[iPlane].a * vDir.x + m_Plane[iPlane].b*vDir.y + m_Plane[iPlane].c * vDir.z);
 
 		fPlaneToCenter = m_Plane[iPlane].a * pBox->vCenter.x + m_Plane[iPlane].b*pBox->vCenter.y +
 			m_Plane[iPlane].c * pBox->vCenter.z + m_Plane[iPlane].d;
-		a++;
-		//if (fPlaneToCenter <= distance)
+
+		if (fPlaneToCenter <= distance)
+		{
+			s_Position = P_SPANNING;
+		}
+
 		if (fPlaneToCenter + 1.0f < -distance)
 		{
-			a--;
+			return P_BACK;
 		}
 	}
-	
-	if (a == 0) return P_BACK;
-	if (a == 6) return P_FRONT;
-	return P_SPANNING;
+	return s_Position;
 }
 bool SFrustum::Create(ID3D11Device * pd3dDevice)
 {
@@ -95,31 +90,31 @@ bool SFrustum::Create(ID3D11Device * pd3dDevice)
 
 bool SFrustum::Frame()
 {
-	//if (m_Plane.size() <= 0) return true;
-	//m_Plane[0].Create(
-	//	m_FrustumObj.m_VertexList[2].p,
-	//	m_FrustumObj.m_VertexList[1].p,
-	//	m_FrustumObj.m_VertexList[0].p);
-	//m_Plane[1].Create(
-	//	m_FrustumObj.m_VertexList[6].p,
-	//	m_FrustumObj.m_VertexList[5].p,
-	//	m_FrustumObj.m_VertexList[4].p);
-	//m_Plane[2].Create(
-	//	m_FrustumObj.m_VertexList[10].p,
-	//	m_FrustumObj.m_VertexList[9].p,
-	//	m_FrustumObj.m_VertexList[8].p);
-	//m_Plane[3].Create(
-	//	m_FrustumObj.m_VertexList[14].p,
-	//	m_FrustumObj.m_VertexList[13].p,
-	//	m_FrustumObj.m_VertexList[12].p);
-	//m_Plane[4].Create(
-	//	m_FrustumObj.m_VertexList[18].p,
-	//	m_FrustumObj.m_VertexList[17].p,
-	//	m_FrustumObj.m_VertexList[16].p);
-	//m_Plane[5].Create(
-	//	m_FrustumObj.m_VertexList[22].p,
-	//	m_FrustumObj.m_VertexList[21].p,
-	//	m_FrustumObj.m_VertexList[20].p);
+	if (m_Plane.size() <= 0) return true;
+	m_Plane[0].Create(
+		m_FrustumObj.m_VertexList[2].p,
+		m_FrustumObj.m_VertexList[1].p,
+		m_FrustumObj.m_VertexList[0].p);
+	m_Plane[1].Create(
+		m_FrustumObj.m_VertexList[6].p,
+		m_FrustumObj.m_VertexList[5].p,
+		m_FrustumObj.m_VertexList[4].p);
+	m_Plane[2].Create(
+		m_FrustumObj.m_VertexList[10].p,
+		m_FrustumObj.m_VertexList[9].p,
+		m_FrustumObj.m_VertexList[8].p);
+	m_Plane[3].Create(
+		m_FrustumObj.m_VertexList[14].p,
+		m_FrustumObj.m_VertexList[13].p,
+		m_FrustumObj.m_VertexList[12].p);
+	m_Plane[4].Create(
+		m_FrustumObj.m_VertexList[18].p,
+		m_FrustumObj.m_VertexList[17].p,
+		m_FrustumObj.m_VertexList[16].p);
+	m_Plane[5].Create(
+		m_FrustumObj.m_VertexList[22].p,
+		m_FrustumObj.m_VertexList[21].p,
+		m_FrustumObj.m_VertexList[20].p);
 	return true;
 }
 
@@ -147,7 +142,7 @@ bool SFrustum::CreateFrustum()
 	ExtractPlanesD3D(m_Plane, m_matViewProj);
 
 	// view * proj의 역행렬을 구한다.
-	m_matViewProj.Invert();
+	m_matViewProj = m_matViewProj.Invert();
 	// 상단
 	// 5    6
 	// 1    2
@@ -198,6 +193,15 @@ SPlane SFrustum::CreatePlane(Vector3 v0, Vector3 v1, Vector3 v2)
 	s.a = vNormal.x;	s.b = vNormal.y;	s.c = vNormal.z;
 	s.d = -(s.a*v0.x + s.b * v0.y + s.c * v0.z);
 	return s;
+}
+SFrustum::SFrustum()
+{
+}
+SFrustum::~SFrustum()
+{
+	m_FrustumObj.Release();
+	m_VertexList.clear();
+	m_Plane.clear();
 }
 void SFrustum::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
 {

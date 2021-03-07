@@ -48,12 +48,19 @@ bool    SMap::CreateIndexData()
 }
 bool	SMap::Frame()
 {
+
 	return true;
 }
 bool SMap::Postrender(ID3D11DeviceContext * pd3dContext)
 {
 	pd3dContext->DrawIndexed(m_iNumFaces * 3, 0, 0);
 	return true;
+}
+void SMap::UpdateIndexBuffer(ID3D11DeviceContext * pContext, DWORD * pdwIndexArray, int iFaceCount)
+{
+	assert(pdwIndexArray);
+	m_iNumFaces = iFaceCount;
+	pContext->UpdateSubresource(m_pIndexBuffer, 0, NULL, pdwIndexArray, 0, 0);
 }
 float SMap::GetHeight(UINT index)
 {

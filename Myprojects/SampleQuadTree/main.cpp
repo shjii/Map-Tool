@@ -93,17 +93,17 @@ bool main::Init()
 	m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg");
 
-	m_pMainCamera->m_Frustum.Create(g_pd3dDevice);
+	m_pMainCamera->Create(g_pd3dDevice);
 
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
 
 	m_QuadTree.m_mainCamera = m_pMainCamera;
-	m_QuadTree.m_MaxDepth = 3;
+	m_QuadTree.m_MaxDepth = 5;
 	m_QuadTree.Build(&m_Map);
 	///
-	m_TopCamera.CreateViewMatrix({ 0,300,-0.1f }, { 0,0,0 });
+	m_TopCamera.CreateViewMatrix({ 0,1000,-0.1f }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_TopCamera.CreateOrthographic(
 		desc.iNumCols, desc.iNumRows, 1.0f, 1000);

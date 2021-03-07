@@ -57,5 +57,8 @@ public:
 	void		SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj);
 	void		ExtractPlanesD3D(vector<SPlane>& pPlanes, const Matrix& comboMatrix);
 	SPlane		CreatePlane(Vector3 v0, Vector3 v1, Vector3 v2);
+public:
+	SFrustum();
+	virtual ~SFrustum();
 };
 

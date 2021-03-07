@@ -64,6 +64,7 @@ bool		SCamera::CreateProjMatrix(
 	float fFov,
 	float fAspect)
 {
+	m_fFarPlane = fAspect;
 	m_matProj = Matrix::CreatePerspectiveFieldOfView(
 		fFov, fAspect, fN, fF);
 	return true;
@@ -165,7 +166,7 @@ bool SCamera::DrawFrustum(ID3D11DeviceContext * pd3dContext, Matrix * pmatView, 
 }
 SCamera::SCamera()
 {
-	m_pSpeed = 30.0f;
+	m_pSpeed = 100.0f;
 	m_bDrag = false;
 	m_fWheelDelta = 0;
 }
