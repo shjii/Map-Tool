@@ -85,7 +85,7 @@ bool main::Init()
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
-	desc.fScaleHeight = 10.0f;
+	desc.fScaleHeight = 100.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
@@ -182,10 +182,6 @@ bool main::Render()
 		m_Map.Render(g_pImmediateContext);
 		//m_QuadTree.Render(g_pImmediateContext);
 		m_MinMap.End(g_pImmediateContext);
-	//	Matrix matWorld;
-	//	matWorld._41 = m_TopCamera.m_vCameraPos.x;
-	//	matWorld._42 = m_TopCamera.m_vCameraPos.y;
-	//	matWorld._43 = m_TopCamera.m_vCameraPos.z;
 	}
 
 	m_Map.SetMatrix(NULL,
