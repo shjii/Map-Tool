@@ -4,7 +4,7 @@ bool	SQuadTree::Build(SMap* m_Map)
 	this->m_Map = m_Map;
 
 	Face = m_Map->m_iNumCellCols * m_Map->m_iNumCellRows * 2;
-	m_IndexList = new DWORD[Face * 2 * 3];
+	m_IndexList.resize(Face * 2 * 3);
 	m_RootNode = BuildNode(m_Map);
 	SetLOD(m_MaxDepth);
 	BoungigBox(m_RootNode);
@@ -81,8 +81,8 @@ SNode* SQuadTree::CreatorNode(SNode* Node, float tl, float tr, float bl, float b
 	pNode->m_Depth = Node->m_Depth + 1;
 
 	ldiv_t divValue = ldiv(tl, m_Map->m_iNumRows);
-	pNode->m_dwPositionIndex[0] = divValue.rem / (tr - tl); // 나머지-> X
-	pNode->m_dwPositionIndex[1] = divValue.quot / (tr - tl);//몫 -> Y
+	pNode->m_dwPositionIndex[0] = divValue.rem / (tr - tl);
+	pNode->m_dwPositionIndex[1] = divValue.quot / (tr - tl);
 
 	m_LevelLIst[pNode->m_Depth].push_back(pNode);
 	CreatorIndexBuffer(Node, m_Map->m_iNumCols, m_Map->m_iNumRows);
@@ -224,14 +224,17 @@ void	SQuadTree::DrawCheck(SNode* Node)
 	//{
 	//	DrawCheck(Node->m_ChildNode[iNode]);
 	//}
+
 	S_POSITION a = m_mainCamera->CheckPoitionOBBInPlane(&Node->m_Box);
 	if (Node->m_LeafNode &&  a != P_BACK)
 	{
+		GetLodSubIndex(Node);
 		m_DrawLIst.push_back(Node);
 		return;
 	}
 	if (a == P_FRONT)
 	{
+		GetLodSubIndex(Node);
 		m_DrawLIst.push_back(Node);
 		return;
 	}
@@ -332,24 +335,23 @@ DWORD SQuadTree::GetLodSubIndex(SNode* Node)
 	int iNumPatchIndex = m_iNumCell;
 	float fRatio = GetExpansionRatio(Node->m_Box.vCenter);
 	DWORD dwCurentRatio = (DWORD)(fRatio * m_iPatchLodCount);
-	DWORD dwMaxRatio = (DWORD)(fRatio * m_iPatchLodCount + 0.5f);
+	/*DWORD dwMaxRatio = (DWORD)(fRatio * m_iPatchLodCount + 0.5f);
 	DWORD dwMinRatio = (DWORD)(fRatio * m_iPatchLodCount - 0.5f);
-
-	if (Node->m_LODLevel < dwCurentRatio)
-	{
-		if (Node->m_LODLevel < dwMinRatio)		// B
-		{
-			Node->m_LODLevel = dwCurentRatio;
-		}
-	}
-	else if (Node->m_LODLevel > dwCurentRatio)
-	{
-		if (Node->m_LODLevel > dwMaxRatio)		// B
-		{
-			Node->m_LODLevel = dwCurentRatio;
-		}
-	}
-	///예외처리
+	//if (Node->m_LODLevel < dwCurentRatio)
+	//{
+	//	if (Node->m_LODLevel < dwMinRatio)		
+	//	{
+	//		Node->m_LODLevel = dwCurentRatio;
+	//	}
+	//}
+	//else if (Node->m_LODLevel > dwCurentRatio)
+	//{
+	//	if (Node->m_LODLevel > dwMaxRatio)		
+	//	{
+	//		Node->m_LODLevel = dwCurentRatio;
+	//	}
+	//}*/
+	Node->m_LODLevel = dwCurentRatio;
 	if ((DWORD)m_iPatchLodCount < Node->m_LODLevel)
 	{
 		Node->m_LODLevel -= 1;

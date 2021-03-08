@@ -22,7 +22,7 @@ public:
 	int m_iNumCell;
 	int m_iPatchLodCount;
 	int Face;
-	DWORD*			m_IndexList;
+	vector<DWORD>			m_IndexList;
 public:
 	bool	Build(SMap* m_Map);
 	SNode*	BuildNode(SMap* m_Map);

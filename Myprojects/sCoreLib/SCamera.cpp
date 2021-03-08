@@ -64,7 +64,7 @@ bool		SCamera::CreateProjMatrix(
 	float fFov,
 	float fAspect)
 {
-	m_fFarPlane = fAspect;
+	m_fFarPlane = fF;
 	m_matProj = Matrix::CreatePerspectiveFieldOfView(
 		fFov, fAspect, fN, fF);
 	return true;

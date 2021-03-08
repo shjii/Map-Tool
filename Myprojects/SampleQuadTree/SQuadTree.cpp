@@ -104,8 +104,6 @@ void SQuadTree::CreatorIndexBuffer(SNode* Node, float row, float col)
 	{
 		for (DWORD dwCol = dwStartCol; dwCol < dwEndCol; dwCol++)
 		{
-			//0	1    4   
-			//2	   3 5
 			DWORD dwNextRow = dwRow + 1;
 			DWORD dwNextCol = dwCol + 1;
 			Node->m_IndexList[dwCurentIndex++] = dwRow * col + dwCol;

@@ -4,6 +4,7 @@
 class SNode
 {
 public:
+	int							m_LODLevel;
 	S_BOX						m_Box;
 	float						m_iCorner[4];
 	vector<Vector3>				m_CornerList;
@@ -14,7 +15,6 @@ public:
 	ID3D11Buffer*				m_pVertexBuffer;
 	ID3D11Buffer*				m_pIndexBuffer;
 	ID3D11Buffer*				m_pConstantBuffer;
-	int							m_LODLevel;
 	int							m_LODType;
 	vector<SNode*>				m_NeghborList;
 	int		m_Depth;

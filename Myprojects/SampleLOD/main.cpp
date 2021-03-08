@@ -85,7 +85,7 @@ bool main::Init()
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
-	desc.fScaleHeight = 1.0f;
+	desc.fScaleHeight = 10.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
@@ -94,7 +94,9 @@ bool main::Init()
 		L"../../data/bitmap/tileA.jpg");
 
 	m_pMainCamera->Create(g_pd3dDevice);
-
+	m_pMainCamera->CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
+	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
+	m_pMainCamera->CreateProjMatrix(1, 500, TBASIS_PI / 4.0f, fAspect);
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 	m_Map.InitNormal();
 	m_Map.FindingNormal();
@@ -104,7 +106,6 @@ bool main::Init()
 	m_QuadTree.Build(&m_Map);
 	///
 	m_TopCamera.CreateViewMatrix({ 0,1000,-0.1f }, { 0,0,0 });
-	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_TopCamera.CreateOrthographic(
 		desc.iNumCols, desc.iNumRows, 1.0f, 1000);
 	m_TopCamera.Init();
@@ -160,8 +161,8 @@ bool main::Frame()
 	
 	m_QuadTree.Frame();
 
-	m_Map.UpdateIndexBuffer(g_pImmediateContext, m_QuadTree.m_IndexList, m_QuadTree.Face);
-
+	m_Map.UpdateIndexBuffer(g_pImmediateContext, &m_QuadTree.m_IndexList.at(0), m_QuadTree.Face);
+	m_Map.m_IndexList = m_QuadTree.m_IndexList;
 	m_Map.Frame();
 	m_pMainCamera->Frame();
 	return true;
@@ -178,8 +179,8 @@ bool main::Render()
 		m_Map.SetMatrix(NULL,
 			&m_TopCamera.m_matView,
 			&m_TopCamera.m_matProj);
-		//m_Map.Render(g_pImmediateContext);
-		m_QuadTree.Render(g_pImmediateContext);
+		m_Map.Render(g_pImmediateContext);
+		//m_QuadTree.Render(g_pImmediateContext);
 		m_MinMap.End(g_pImmediateContext);
 	//	Matrix matWorld;
 	//	matWorld._41 = m_TopCamera.m_vCameraPos.x;
