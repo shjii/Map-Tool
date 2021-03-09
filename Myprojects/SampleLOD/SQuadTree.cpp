@@ -226,6 +226,7 @@ void	SQuadTree::DrawCheck(SNode* Node)
 	//}
 
 	S_POSITION a = m_mainCamera->CheckPoitionOBBInPlane(&Node->m_Box);
+	GetLodSubIndex(Node);
 	if (Node->m_LeafNode &&  a != P_BACK)
 	{
 		GetLodSubIndex(Node);
@@ -317,10 +318,11 @@ void	SQuadTree::GetDrowList()
 } 
 void SQuadTree::AddDrowList(SNode* Node)
 {
+	
 	if (Node->m_LeafNode == true)
 	{
-		m_LODDrawLIst.push_back(Node);
 		GetLodSubIndex(Node);
+		m_LODDrawLIst.push_back(Node);
 		return;
 	}
 
@@ -335,22 +337,6 @@ DWORD SQuadTree::GetLodSubIndex(SNode* Node)
 	int iNumPatchIndex = m_iNumCell;
 	float fRatio = GetExpansionRatio(Node->m_Box.vCenter);
 	DWORD dwCurentRatio = (DWORD)(fRatio * m_iPatchLodCount);
-	/*DWORD dwMaxRatio = (DWORD)(fRatio * m_iPatchLodCount + 0.5f);
-	DWORD dwMinRatio = (DWORD)(fRatio * m_iPatchLodCount - 0.5f);
-	//if (Node->m_LODLevel < dwCurentRatio)
-	//{
-	//	if (Node->m_LODLevel < dwMinRatio)		
-	//	{
-	//		Node->m_LODLevel = dwCurentRatio;
-	//	}
-	//}
-	//else if (Node->m_LODLevel > dwCurentRatio)
-	//{
-	//	if (Node->m_LODLevel > dwMaxRatio)		
-	//	{
-	//		Node->m_LODLevel = dwCurentRatio;
-	//	}
-	//}*/
 	Node->m_LODLevel = dwCurentRatio;
 	if ((DWORD)m_iPatchLodCount < Node->m_LODLevel)
 	{
