@@ -248,6 +248,9 @@ void SQuadTree::BoungigBox(SNode * Node)
 	Node->m_Box.fExtent[1] = Node->m_Box.vMax.y - Node->m_Box.vCenter.y;
 	Node->m_Box.fExtent[2] = Node->m_Box.vMax.z - Node->m_Box.vCenter.z;
 
+	Node->m_Sphere.vCenter = Node->m_Box.vCenter;
+	Node->m_Sphere.fRadius = (Node->m_Box.vMax - Node->m_Box.vCenter).Length();
+
 }
 
 void	SQuadTree::DrawCheck(SNode* Node)

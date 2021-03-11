@@ -7,6 +7,7 @@ public:
 	int							m_LODType;
 	int							m_LODLevel;
 	S_BOX						m_Box;
+	S_SPHERE					m_Sphere;
 	float						m_iCorner[4];
 	vector<Vector3>				m_CornerList;
 	vector<SNode*>				m_ChildNode;
