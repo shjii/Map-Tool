@@ -62,6 +62,11 @@ void SMap::UpdateIndexBuffer(ID3D11DeviceContext * pContext, DWORD * pdwIndexArr
 	m_iNumFaces = iFaceCount;
 	pContext->UpdateSubresource(m_pIndexBuffer, 0, NULL, pdwIndexArray, 0, 0);
 }
+void SMap::UpdateVertexBuffer(ID3D11DeviceContext * pContext, PNCT_VERTEX* Vertex, int iFaceCount)
+{
+	assert(Vertex);
+	pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, Vertex, iFaceCount, 0);
+}
 float SMap::GetHeight(UINT index)
 {
 	return 0.0f;
@@ -210,8 +215,7 @@ void		SMap::FindingNormal()
 
 void SMap::GenNormalLookupTable()
 {
-	// We're going to create a table that lists, for each vertex, the
-	// triangles which that vertex is a part of.
+	
 
 	if (m_pNormalLookupTable != NULL)
 	{
@@ -219,19 +223,12 @@ void SMap::GenNormalLookupTable()
 		m_pNormalLookupTable = NULL;
 	}
 
-	// Each vertex may be a part of up to 6 triangles in the grid, so
-	// create a buffer to hold a pointer to the normal of each neighbor.
 	int buffersize = m_iNumRows * m_iNumCols * 6;
 
 	m_pNormalLookupTable = (int *)malloc(sizeof(void *) * buffersize);
 	for (int i = 0; i < buffersize; i++)
 		m_pNormalLookupTable[i] = -1;
 
-	// Now that the table is initialized, populate it with the triangle data.
-
-	// For each triangle
-	//   For each vertex in that triangle
-	//     Append the triangle number to lookuptable[vertex]
 	for (int i = 0; i < m_iNumFaces; i++)
 	{
 		for (int j = 0; j < 3; j++)

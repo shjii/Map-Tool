@@ -98,8 +98,9 @@ bool main::Init()
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_pMainCamera->CreateProjMatrix(1, 500, TBASIS_PI / 4.0f, fAspect);
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
-	m_Map.InitNormal();
-	m_Map.FindingNormal();
+
+	//m_Map.InitNormal();
+	//m_Map.FindingNormal();
 
 	m_QuadTree.GetUpdata(m_pMainCamera);
 	m_QuadTree.m_MaxDepth = 5;
@@ -133,45 +134,10 @@ bool main::Frame()
 		SDxState::m_CullMode = D3D11_CULL_FRONT;
 		SDxState::SetRasterizerState(g_pd3dDevice);
 	}
-	if (g_Input.GetKey(VK_RBUTTON) == KEY_PUSH)
+	if (g_Input.GetKey(VK_RBUTTON) == KEY_HOLD)
 	{
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
-		BoolColl = false;
-		float Max = 99999;
-		float f = 10.0f;
-		Vector3 Pick;
-		for (int i = 0; i < m_QuadTree.m_LODDrawLIst.size(); i++)
-		{
-			//if (Collision.AABBToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir))
-			//{
-			//	BoolColl = true;
-			//	m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
-			//}
-
-			if (Collision.SphereToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
-			{
-				m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
-				float fDistance = (m_Mouse.Orig - Collision.m_vIntersection).Length();
-				if (fDistance < Max)
-				{
-					Pick = Collision.m_vIntersection;
-					Max = fDistance;
-					BoolColl = true;
-				}
-			}
-		}
-		if (BoolColl)
-		{
-			for (int i = 0; i < m_Map.m_VertexList.size(); i++)
-			{
-				float fDist = (m_Map.m_VertexList[i].p - Pick).Length();
-				if (fDist < f)
-				{
-					m_Map.m_VertexList[i].p.y = m_Map.m_VertexList[i].p.y + 1.0f - sinf((fDist / f));
-				}
-			}
-			g_pImmediateContext->UpdateSubresource(m_Map.m_pVertexBuffer, 0, NULL, &m_Map.m_VertexList.at(0), 0, 0);
-		}
+		BoolColl = true;
 	}
 
 	/*
@@ -222,7 +188,7 @@ bool main::Render()
 			&m_TopCamera.m_matView,
 			&m_TopCamera.m_matProj);
 		m_Map.Render(g_pImmediateContext);
-		m_QuadTree.Render(g_pImmediateContext);
+		//m_QuadTree.Render(g_pImmediateContext);
 		//for (int i = 0; i < m_SelectNode.size(); i++)
 		//{
 		//	Draw(m_SelessssssctNode[i], g_pImmediateContext);
@@ -237,6 +203,48 @@ bool main::Render()
 	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
+
+	if (BoolColl == true)
+	{
+		BoolColl = false;
+		float Max = 99999;
+		float f = 10.0f;
+		Vector3 Pick;
+		for (int i = 0; i < m_QuadTree.m_LODDrawLIst.size(); i++)
+		{
+			//if (Collision.AABBToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir))
+			//{
+			//	BoolColl = true;
+			//	m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
+			//}
+
+			if (Collision.SphereToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
+			{
+				m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
+				float fDistance = (m_Mouse.Orig - Collision.m_vIntersection).Length();
+				if (fDistance < Max)
+				{
+					Pick = Collision.m_vIntersection;
+					Max = fDistance;
+					BoolColl = true;
+				}
+			}
+		}
+		if (BoolColl)
+		{
+			for (int i = 0; i < m_Map.m_VertexList.size(); i++)
+			{
+				float fDist = (m_Map.m_VertexList[i].p - Pick).Length();
+				if (fDist < f)
+				{
+					m_Map.m_VertexList[i].p.y = m_Map.m_VertexList[i].p.y + 5.0f - sinf((fDist / f));
+				}
+			}
+		}
+		m_Map.UpdateVertexBuffer(g_pImmediateContext, &m_Map.m_VertexList.at(0), 0);
+		BoolColl = false;
+	}
+	
 	m_Map.Render(g_pImmediateContext);
 	//for (int i = 0; i < m_SelectNode.size(); i++)
 	//{

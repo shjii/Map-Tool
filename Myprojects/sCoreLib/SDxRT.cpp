@@ -38,9 +38,9 @@ HRESULT		SDxRT::SetRenderTargetView()
 }
 bool  SDxRT::Release()
 {
-	m_pSRV->Release();
-	m_pRTV->Release();
-	m_pDSV->Release();
+	if(m_pSRV != nullptr)m_pSRV->Release();
+	if(m_pRTV != nullptr)m_pRTV->Release();
+	if(m_pDSV != nullptr)m_pDSV->Release();
 	return true;
 }
 HRESULT SDxRT::SetDepthStencilView()
