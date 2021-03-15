@@ -90,8 +90,8 @@ bool main::Init()
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
 
-	m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
-		L"../../data/bitmap/tileA.jpg");
+	//m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
+	//	L"../../data/bitmap/tileA.jpg");
 
 	m_pMainCamera->Create(g_pd3dDevice);
 	m_pMainCamera->CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
@@ -106,10 +106,10 @@ bool main::Init()
 	m_QuadTree.m_MaxDepth = 5;
 	m_QuadTree.Build(&m_Map);
 	///
-	m_TopCamera.CreateViewMatrix({ 0,1000,-0.1f }, { 0,0,0 });
-	m_TopCamera.CreateOrthographic(
-		desc.iNumCols, desc.iNumRows, 1.0f, 1000);
-	m_TopCamera.Init();
+	//m_TopCamera.CreateViewMatrix({ 0,1000,-0.1f }, { 0,0,0 });
+	//m_TopCamera.CreateOrthographic(
+	//	desc.iNumCols, desc.iNumRows, 1.0f, 1000);
+	//m_TopCamera.Init();
 	return true;
 }
 bool main::Frame()
@@ -182,23 +182,23 @@ bool main::Render()
 	g_pImmediateContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
-	if (m_MinMap.Begin(g_pImmediateContext))
-	{
-		m_Map.SetMatrix(NULL,
-			&m_TopCamera.m_matView,
-			&m_TopCamera.m_matProj);
-		m_Map.Render(g_pImmediateContext);
-		//m_QuadTree.Render(g_pImmediateContext);
-		//for (int i = 0; i < m_SelectNode.size(); i++)
-		//{
-		//	Draw(m_SelessssssctNode[i], g_pImmediateContext);
-		//}
-		m_MinMap.End(g_pImmediateContext);
-	//	Matrix matWorld;
-	//	matWorld._41 = m_TopCamera.m_vCameraPos.x;
-	//	matWorld._42 = m_TopCamera.m_vCameraPos.y;
-	//	matWorld._43 = m_TopCamera.m_vCameraPos.z;
-	}
+	//if (m_MinMap.Begin(g_pImmediateContext))
+	//{
+	//	m_Map.SetMatrix(NULL,
+	//		&m_TopCamera.m_matView,
+	//		&m_TopCamera.m_matProj);
+	//	m_Map.Render(g_pImmediateContext);
+	//	//m_QuadTree.Render(g_pImmediateContext);
+	//	//for (int i = 0; i < m_SelectNode.size(); i++)
+	//	//{
+	//	//	Draw(m_SelessssssctNode[i], g_pImmediateContext);
+	//	//}
+	//	m_MinMap.End(g_pImmediateContext);
+	////	Matrix matWorld;
+	////	matWorld._41 = m_TopCamera.m_vCameraPos.x;
+	////	matWorld._42 = m_TopCamera.m_vCameraPos.y;
+	////	matWorld._43 = m_TopCamera.m_vCameraPos.z;
+	//}
 
 	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
@@ -252,10 +252,10 @@ bool main::Render()
 	//}
 	//m_QuadTree.Render(g_pImmediateContext);
 
-	m_MinMap.SetMatrix(NULL,
-		NULL, //&m_pMainCamera->m_matView,
-		NULL); //&m_pMainCamera->m_matProj);
-	m_MinMap.Render(g_pImmediateContext);
+	//m_MinMap.SetMatrix(NULL,
+	//	NULL, //&m_pMainCamera->m_matView,
+	//	NULL); //&m_pMainCamera->m_matProj);
+	//m_MinMap.Render(g_pImmediateContext);
 
 	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);

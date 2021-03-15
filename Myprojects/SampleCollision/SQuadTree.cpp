@@ -210,6 +210,7 @@ Vector2 SQuadTree::GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD d
 bool SQuadTree::Release()
 {
 	//if(m_Map != nullptr)m_Map->Release();
+	delete m_RootNode;
 	m_DrawLIst.clear();
 	return false;
 }
