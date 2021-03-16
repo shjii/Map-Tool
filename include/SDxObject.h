@@ -67,7 +67,14 @@ struct S_BOX
 	Vector3		vAxis[3];
 	float		fExtent[3];
 };
-
+struct STri
+{
+	PNCT_VERTEX  vVertex[3];
+	Vector3  vNormal;
+	int		 iSubIndex;
+	STri(int Index) : iSubIndex(Index) {}
+	STri() : iSubIndex(-1) {}
+};
 struct SDataCB
 {
 	Matrix  matWorld;
