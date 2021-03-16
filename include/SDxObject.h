@@ -134,6 +134,7 @@ namespace TBASIS_CORE_LIB
 		Vector3		m_vTarget = { 0,0,0 };
 	public:
 		SDataCB					m_cbData;
+		std::vector<STri>			m_TriangleList;
 		std::vector<PNCT_VERTEX>	m_VertexList;
 		std::vector<DWORD>		m_IndexList;
 		ID3D11Buffer*			m_pVertexBuffer;

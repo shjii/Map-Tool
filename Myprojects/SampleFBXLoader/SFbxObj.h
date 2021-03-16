@@ -6,6 +6,7 @@
 typedef std::unordered_map<FbxNode*, TObject*>	sMeshMap;
 class SFbxObj
 {
+public:
 	static FbxManager*	g_pSDKManager;
 	FbxImporter*		m_pFbxImporter;
 	FbxScene*			m_pFBXScene;
@@ -21,6 +22,7 @@ public:
 	Matrix ParesTransform(FbxNode* Node, Matrix& matParent);
 	void ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, TObject* obj);
 	string ParseMaterial(FbxSurfaceMaterial* pMtrl);
+	void ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int vertexIndex, int uvIndex, FbxVector2& uv);
 public:
 	SFbxObj();
 };

@@ -88,6 +88,56 @@ Matrix SFbxObj::ParesTransform(FbxNode* Node, Matrix& matParent)
 	return matWorld;
 }
 
+void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int vertexIndex, int uvIndex, FbxVector2& uv)
+{
+	FbxLayerElementUV *pFbxLayerElementUV = pUVset;
+
+	if (pFbxLayerElementUV == nullptr) {
+		return;
+	}
+
+	switch (pFbxLayerElementUV->GetMappingMode())
+	{
+	case FbxLayerElementUV::eByControlPoint:
+	{
+		switch (pFbxLayerElementUV->GetReferenceMode())
+		{
+		case FbxLayerElementUV::eDirect:
+		{
+			FbxVector2 fbxUv = pFbxLayerElementUV->GetDirectArray().GetAt(vertexIndex);
+			uv.mData[0] = fbxUv.mData[0];
+			uv.mData[1] = fbxUv.mData[1];
+			break;
+		}
+		case FbxLayerElementUV::eIndexToDirect:
+		{
+			int id = pFbxLayerElementUV->GetIndexArray().GetAt(vertexIndex);
+			FbxVector2 fbxUv = pFbxLayerElementUV->GetDirectArray().GetAt(id);
+			uv.mData[0] = fbxUv.mData[0];
+			uv.mData[1] = fbxUv.mData[1];
+			break;
+		}
+		}
+		break;
+	}
+	case FbxLayerElementUV::eByPolygonVertex:
+	{
+		switch (pFbxLayerElementUV->GetReferenceMode())
+		{
+			// Always enters this part for the example model
+		case FbxLayerElementUV::eDirect:
+		case FbxLayerElementUV::eIndexToDirect:
+		{
+			uv.mData[0] = pFbxLayerElementUV->GetDirectArray().GetAt(uvIndex).mData[0];
+			uv.mData[1] = pFbxLayerElementUV->GetDirectArray().GetAt(uvIndex).mData[1];
+			break;
+		}
+		}
+		break;
+	}
+	}
+}
+
 void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, TObject* obj)
 {
 	vector<FbxLayerElementUV*> VertexUVSets;
@@ -160,12 +210,14 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, TObject* obj)
 				{
 					FbxLayerElementUV* pUVSet = VertexUVSets[iUVIndex];
 					FbxVector2 uv(0,0);
-					//ReadTextureCoord();
-
+					ReadTextureCoord(pFbxMesh, pUVSet, iCornerIndices[iIndex],u[iIndex],uv);
+					v.t.x = uv.mData[0];
+					v.t.y = 1.0f - uv.mData[1];
 				}
+				tri.vVertex[iIndex] = v;
 			}
+			obj->m_TriangleList.push_back(tri);
 		}
-
 	}
 }
 
@@ -204,8 +256,8 @@ void SFbxObj::ParseNode(FbxNode * Node, Matrix matParent)
 	int dwChild = Node->GetChildCount();
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
 	{
-		shared_ptr<TObject> obj = make_shared<TObject>();
-		obj->m_szName = to_mw(Node->GetName());
+		FbxNode* pChildNode = Node->GetChild(dwObj);
+		ParseNode(pChildNode, matWorld);
 	}
 }
 
