@@ -24,5 +24,6 @@ public:
 	bool Release();
 public:
 	SNode();
+	~SNode();
 };
 

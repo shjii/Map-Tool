@@ -139,11 +139,12 @@ HRESULT		TDevice::CreateSwapChain()
 }
 HRESULT		TDevice::SetRenderTargetView()
 {
+	HRESULT hr = NULL;
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		(LPVOID*)&pBackBuffer);
-	HRESULT hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL,
-		&m_pRednerTargetView);
+		hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL,
+			m_pRednerTargetView.GetAddressOf());
 	if (pBackBuffer) pBackBuffer->Release();
 	return hr;
 }

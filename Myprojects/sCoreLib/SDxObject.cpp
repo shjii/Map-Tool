@@ -708,7 +708,15 @@ namespace TBASIS_CORE_LIB
 	}
 	bool	SDxObject::PostRender(ID3D11DeviceContext*	pd3dContext)
 	{
-		pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
+		if (m_pIndexBuffer == nullptr)
+		{
+			pd3dContext->Draw(m_VertexList.size(), 0);
+		}
+		else
+		{
+			pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
+		}
+		
 		return true;
 	}
 	bool	SDxObject::Release()
@@ -779,6 +787,7 @@ namespace TBASIS_CORE_LIB
 	}
 	bool	SDxObject::CreateIndexBuffer()
 	{
+		if (m_IndexList.empty()) return false;
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 		bd.ByteWidth = sizeof(DWORD) * m_IndexList.size();
