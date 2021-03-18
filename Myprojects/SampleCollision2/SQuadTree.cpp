@@ -212,17 +212,6 @@ bool SQuadTree::Release()
 	//if(m_Map != nullptr)m_Map->Release();
 	delete m_RootNode;
 	m_DrawLIst.clear();
-	for (int i = 0; i < m_LevelLIst.size(); i++)
-	{
-		for (int j = 0; j < m_LevelLIst[i].size(); j++)
-		{
-			if (m_LevelLIst[j][i])
-			{
-				delete m_LevelLIst[j][i];
-				m_LevelLIst[j][i] = NULL;
-			}
-		}
-	}
 	m_LevelLIst.clear();
 	return false;
 }

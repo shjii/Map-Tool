@@ -47,6 +47,8 @@ bool SFbxObj::Initialize(string fileName)
 	if (bRet == false) return false;
 	bRet = m_pFbxImporter->Import(m_pFBXScene);
 
+	FbxAxisSystem::MayaZUp.ConvertScene(m_pFBXScene);
+	FbxAxisSystem SceneAxisSystem = m_pFBXScene->GetGlobalSettings().GetAxisSystem();
 	FbxGeometryConverter IGomConverter(g_pSDKManager);
 	IGomConverter.Triangulate(m_pFBXScene, true);
 	return true;
@@ -138,7 +140,7 @@ void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int
 	}
 }
 
-void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, TObject* obj)
+void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 {
 	vector<FbxLayerElementUV*> VertexUVSets;
 	int iLayerCount = pFbxMesh->GetLayerCount();
@@ -163,8 +165,19 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, TObject* obj)
 		{
 			continue;
 		}
-		fbxMaterialList.push_back(ParseMaterial(pMtrl));
+		obj->fbxMaterialList.push_back(to_mw(ParseMaterial(pMtrl)));
 	}
+	FbxAMatrix geom1;
+	FbxAMatrix geom2;
+	FbxVector4 trans = Node->GetGeometricTranslation(FbxNode::eSourcePivot);
+	FbxVector4 rot = Node->GetGeometricRotation(FbxNode::eSourcePivot);
+	FbxVector4 scale = Node->GetGeometricScaling(FbxNode::eSourcePivot);
+	geom2.SetT(trans);
+	geom2.SetR(rot);
+	geom2.SetS(scale);
+	geom1 = Node->EvaluateGlobalTransform(1.0f);
+	obj->m_matWorld = DxConvertMatrix(ConvertMatrixA(Node->EvaluateGlobalTransform(1.0f)));
+	geom1 = geom1.Inverse();
 
 	int iPolyCount = pFbxMesh->GetPolygonCount();
 	int iTriangleCount = pFbxMesh->GetControlPointsCount();
@@ -230,7 +243,15 @@ string SFbxObj::ParseMaterial(FbxSurfaceMaterial* pMtrl)
 		const FbxFileTexture* tex = Property.GetSrcObject<FbxFileTexture>();
 		if (tex != nullptr)
 		{
-			return tex->GetFileName();
+			const CHAR* szFileName = tex->GetFileName();
+			CHAR Drive[MAX_PATH];
+			CHAR Dir[MAX_PATH];
+			CHAR FName[MAX_PATH];
+			CHAR Ext[MAX_PATH];
+			_splitpath_s(szFileName, Drive, Dir, FName, Ext);
+			std::string texName = FName;
+			texName += Ext;
+			return texName;
 		}
 	}
 	return "";
@@ -243,7 +264,7 @@ void SFbxObj::ParseNode(FbxNode * Node, Matrix matParent)
 	{
 		return;
 	}
-	TObject* obj = new TObject;
+	SModelObject* obj = new SModelObject;
 	obj->m_szName = to_mw(Node->GetName());
 	
 	m_sMeshMap[Node] = obj;

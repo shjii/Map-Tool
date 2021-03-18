@@ -17,7 +17,6 @@ SNode::SNode()
 
 SNode::~SNode()
 {
-	// 노드의 코너 정점 인덱스 및 위치
 	if (!m_CornerList.empty()) m_CornerList.clear();
 
 	for (int i = 0; i < m_ChildNode.size(); i++)
