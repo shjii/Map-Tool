@@ -143,6 +143,7 @@ void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int
 void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 {
 	vector<FbxLayerElementUV*> VertexUVSets;
+	vector<FbxLayerElementMaterial*> pMaterialSetList;
 	int iLayerCount = pFbxMesh->GetLayerCount();
 	for (int iLayer = 0; iLayer < iLayerCount; iLayer++)
 	{
@@ -155,9 +156,14 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 		{
 			VertexUVSets.push_back(pLayer->GetUVs());
 		}
+		if (pFbxMesh->GetLayer(iLayer)->GetMaterials() != nullptr)
+		{
+			pMaterialSetList.push_back(pFbxMesh->GetLayer(iLayer)->GetMaterials());
+		}
 	}
 	vector<string> fbxMaterialList;
 	int iNumMtrl = Node->GetMaterialCount();
+	if(iNumMtrl > 1)obj->m_subMesh.resize(iNumMtrl);
 	for (int iMtrl = 0; iMtrl < iNumMtrl; iMtrl++)
 	{
 		FbxSurfaceMaterial* pMtrl = Node->GetMaterial(iMtrl);
@@ -166,6 +172,8 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 			continue;
 		}
 		obj->fbxMaterialList.push_back(to_mw(ParseMaterial(pMtrl)));
+		
+		//// Ãß°¡ 
 	}
 	FbxAMatrix geom1;
 	FbxAMatrix geom2;
@@ -176,7 +184,7 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 	geom2.SetR(rot);
 	geom2.SetS(scale);
 	geom1 = Node->EvaluateGlobalTransform(1.0f);
-	obj->m_matWorld = DxConvertMatrix(ConvertMatrixA(Node->EvaluateGlobalTransform(1.0f)));
+	//obj->m_matWorld = DxConvertMatrix(ConvertMatrixA(Node->EvaluateGlobalTransform(1.0f)));
 	geom1 = geom1.Inverse();
 
 	int iPolyCount = pFbxMesh->GetPolygonCount();
@@ -190,6 +198,31 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 
 		int iCornerIndices[3];
 		STri tri;
+
+		int iSubMtrl = 0;
+		if (pMaterialSetList.size() > 0)
+		{
+			switch (pMaterialSetList[0]->GetMappingMode())
+			{
+			case FbxLayerElement::eByPolygon:
+			{
+				switch (pMaterialSetList[0]->GetReferenceMode())
+				{
+				case FbxLayerElement::eIndex:
+				{
+					iSubMtrl = iPoly;
+				}break;
+				case FbxLayerElement::eIndexToDirect:
+				{
+					iSubMtrl = pMaterialSetList[0]->GetIndexArray().GetAt(iPoly);
+					obj->m_subMesh[iSubMtrl].m_count++;
+				}break;
+				}
+			}
+		}
+	}
+
+
 		for (int iTriangle = 0; iTriangle < iTriangleCount; iTriangle++)
 		{
 			INT iVertIndex[3] = { 0, (INT)iTriangle + 2, (INT)iTriangle + 1 };
@@ -212,13 +245,14 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 			for (int iIndex = 0; iIndex < 3; iIndex++)
 			{
 				PNCT_VERTEX v;
-				v.p.x = pVertexPosiions[iCornerIndices[iIndex]].mData[0];
-				v.p.y = pVertexPosiions[iCornerIndices[iIndex]].mData[2];
-				v.p.z = pVertexPosiions[iCornerIndices[iIndex]].mData[1];
+				auto fina = geom2.MultT(pVertexPosiions[iCornerIndices[iIndex]]);
+				v.p.x = fina.mData[0];
+				v.p.y = fina.mData[2];
+				v.p.z = fina.mData[1];
 				v.c = Vector4(1,1,1,1);
-				v.n.x = vNormals[iCornerIndices[iIndex]].mData[0];
-				v.n.y = vNormals[iCornerIndices[iIndex]].mData[2];
-				v.n.z = vNormals[iCornerIndices[iIndex]].mData[1];
+				v.n.x = 0;// vNormals[iCornerIndices[iIndex]].mData[0];
+				v.n.y = 0;//vNormals[iCornerIndices[iIndex]].mData[2];
+				v.n.z = 0;//vNormals[iCornerIndices[iIndex]].mData[1];
 				for (int iUVIndex = 0; iUVIndex < VertexUVSets.size(); iUVIndex++)
 				{
 					FbxLayerElementUV* pUVSet = VertexUVSets[iUVIndex];
@@ -229,7 +263,14 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				}
 				tri.vVertex[iIndex] = v;
 			}
-			obj->m_TriangleList.push_back(tri);
+			if (iNumMtrl <= 1)
+			{
+				obj->m_TriangleList.push_back(tri);
+			}
+			else
+			{
+				obj->m_subMesh[iSubMtrl].m_TriangleList.push_back(tri);
+			}	
 		}
 	}
 }
@@ -250,7 +291,12 @@ string SFbxObj::ParseMaterial(FbxSurfaceMaterial* pMtrl)
 			CHAR Ext[MAX_PATH];
 			_splitpath_s(szFileName, Drive, Dir, FName, Ext);
 			std::string texName = FName;
-			texName += Ext;
+			string a = Ext;
+			if (a == ".tga")
+			{
+				a = ".dds";
+			}
+			texName += a;
 			return texName;
 		}
 	}

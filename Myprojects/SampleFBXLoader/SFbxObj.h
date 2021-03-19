@@ -28,10 +28,19 @@ static Matrix ConvertMatrixA(const FbxMatrix& matrix)
 	}
 	return matResult;
 }
+struct subMesh
+{
+	std::vector<STri>			m_TriangleList;
+	ComPtr<ID3D11Buffer>		m_pVertexBuffer;
+	std::vector<PNCT_VERTEX>	m_VertexList;
+	STexture*					m_pTexture;
+	int							m_count;
+};
 class SModelObject : public TObject
 {
 public:
-	vector<wstring> fbxMaterialList;
+	vector<wstring>		fbxMaterialList;
+	vector<subMesh>		m_subMesh;
 };
 typedef std::unordered_map<FbxNode*, SModelObject*>	sMeshMap;
 class SFbxObj

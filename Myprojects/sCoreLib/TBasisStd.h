@@ -25,6 +25,7 @@
 
 #pragma warning (disable:4244)       // 경고 무시  warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다
 
+
 namespace TBASIS_CORE_LIB
 {
 	typedef std::basic_string<TCHAR>		T_STR;
