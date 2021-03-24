@@ -1,7 +1,7 @@
 #include "main.h"
 bool main::Init()
 {
-	m_fbxObj.Load("../../data/3DS/ship.FBX");
+	m_fbxObj.Load("../../data/3DS/rockBlobFive.FBX");
 	//m_fbxObj.Load("../../data/3DS/BoxtoBox.FBX");
 	for (auto data : m_fbxObj.m_sMeshMap)
 	{
@@ -17,7 +17,7 @@ bool main::Init()
 				pObject->m_VertexList[iIndex + 1] = pObject->m_TriangleList[iFace].vVertex[1];
 				pObject->m_VertexList[iIndex + 2] = pObject->m_TriangleList[iFace].vVertex[2];
 			}
-			T_STR loadTexName = L"../../data/bitmap/";
+			T_STR loadTexName = L"../../data/3DS/";
 			loadTexName += pObject->fbxMaterialList[0];
 			if (!pObject->Create(TBASIS_CORE_LIB::g_pd3dDevice, L"vs.txt", L"ps.txt", loadTexName))
 			{
@@ -36,8 +36,6 @@ bool main::Init()
 					pObject->m_subMesh[i].m_VertexList[iIndex + 1] = pObject->m_subMesh[i].m_TriangleList[iFace].vVertex[1];
 					pObject->m_subMesh[i].m_VertexList[iIndex + 2] = pObject->m_subMesh[i].m_TriangleList[iFace].vVertex[2];
 				}
-				T_STR loadTexName = L"../../data/bitmap/";
-				loadTexName += pObject->fbxMaterialList[0];
 				ID3D11Buffer* vb = CreateVertexBuffer(g_pd3dDevice, &pObject->m_subMesh[i].m_VertexList.at(0),
 														pObject->m_subMesh[i].m_VertexList.size(), sizeof(PNCT_VERTEX));
 				pObject->m_subMesh[i].m_pVertexBuffer.Attach(vb);
@@ -56,26 +54,6 @@ bool main::Init()
 }
 bool main::Frame()
 {
-	if (g_Input.GetKey('0') == KEY_PUSH)
-	{
-		SDxState::m_FillMode = D3D11_FILL_WIREFRAME;
-		SDxState::SetRasterizerState(g_pd3dDevice);
-	}
-	if (g_Input.GetKey('9') == KEY_PUSH)
-	{
-		SDxState::m_FillMode = D3D11_FILL_SOLID;
-		SDxState::SetRasterizerState(g_pd3dDevice);
-	}
-	if (g_Input.GetKey('8') == KEY_PUSH)
-	{
-		SDxState::m_CullMode = D3D11_CULL_BACK;
-		SDxState::SetRasterizerState(g_pd3dDevice);
-	}
-	if (g_Input.GetKey('7') == KEY_PUSH)
-	{
-		SDxState::m_CullMode = D3D11_CULL_FRONT;
-		SDxState::SetRasterizerState(g_pd3dDevice);
-	}
 	return true;
 }
 bool main::Render()
@@ -94,9 +72,13 @@ bool main::Render()
 			for (int i = 0; i < pObject->m_subMesh.size(); i++)
 			{
 				pObject->m_VertexList = pObject->m_subMesh[i].m_VertexList;
-				pObject->m_pVertexBuffer = pObject->m_subMesh[i].m_pVertexBuffer.Get();
+			//	pObject->m_pVertexBuffer = pObject->m_subMesh[i].m_pVertexBuffer.Get();
 				pObject->m_pTexture = pObject->m_subMesh[i].m_pTexture;
-				pObject->Render(g_pImmediateContext);
+				pObject->PreRender(g_pImmediateContext);
+				UINT iStride = sizeof(PNCT_VERTEX);
+				UINT iOffset = 0;
+				g_pImmediateContext->IASetVertexBuffers(0, 1, pObject->m_subMesh[i].m_pVertexBuffer.GetAddressOf(), &iStride, &iOffset);
+				pObject->PostRender(g_pImmediateContext);
 			}
 		}
 	}
@@ -104,6 +86,7 @@ bool main::Render()
 }
 bool main::Release()
 {
+	m_fbxObj.m_dxMatrixMap.clear();
 	for (auto data : m_fbxObj.m_sMeshMap)
 	{
 		SModelObject* pObject = (SModelObject*)data.second;

@@ -218,7 +218,6 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				case FbxLayerElement::eIndexToDirect:
 				{
 					iSubMtrl = pMaterialSetList[0]->GetIndexArray().GetAt(iPoly);
-					obj->m_subMesh[iSubMtrl].m_count++;
 				}break;
 				}
 			}
@@ -252,9 +251,16 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				v.p.x = fina.mData[0];
 				v.p.y = fina.mData[2];
 				v.p.z = fina.mData[1];
-
-				FbxColor color = ReadColor(pFbxMesh, VertexColorSet.size(), VertexColorSet[0],iCornerIndices[iIndex], iBasePolyIndex + iVertIndex[iIndex]);
-
+				FbxColor color;
+				if (VertexColorSet.empty())
+				{
+					color.Set(1,1,1,1);
+				}
+				else
+				{
+					color = ReadColor(pFbxMesh, VertexColorSet.size(), VertexColorSet[0], iCornerIndices[iIndex], iBasePolyIndex + iVertIndex[iIndex]);
+				}
+			
 				v.c.x = (float)color.mRed;
 				v.c.y = (float)color.mGreen;
 				v.c.z = (float)color.mBlue;
@@ -307,7 +313,7 @@ string SFbxObj::ParseMaterial(FbxSurfaceMaterial* pMtrl)
 			_splitpath_s(szFileName, Drive, Dir, FName, Ext);
 			std::string texName = FName;
 			string a = Ext;
-			if (a == ".tga")
+			if (a == ".tga" || a == ".TGA")
 			{
 				a = ".dds";
 			}

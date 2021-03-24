@@ -31,8 +31,8 @@ static Matrix ConvertMatrixA(const FbxMatrix& matrix)
 struct subMesh
 {
 	std::vector<STri>			m_TriangleList;
-	ComPtr<ID3D11Buffer>		m_pVertexBuffer;
 	std::vector<PNCT_VERTEX>	m_VertexList;
+	ComPtr<ID3D11Buffer>		m_pVertexBuffer;
 	STexture*					m_pTexture;
 	int							m_count;
 	~subMesh()
@@ -45,7 +45,7 @@ class SModelObject : public TObject
 public:
 	vector<wstring>		fbxMaterialList;
 	vector<subMesh>		m_subMesh;
-	~SModelObject()
+	virtual ~SModelObject()
 	{
 
 	}
