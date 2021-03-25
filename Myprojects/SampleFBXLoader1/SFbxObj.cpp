@@ -353,11 +353,6 @@ void SFbxObj::ParseNode(FbxNode * Node, Matrix matParent)
 		ParseNode(pChildNode, matWorld);
 	}
 }
-
-void SFbxObj::ParseAnimat(FbxScene * FBXScene)
-{
-}
-
 SFbxObj::SFbxObj()
 {
 	m_pFbxImporter = nullptr;

@@ -40,11 +40,29 @@ struct subMesh
 
 	}
 };
+struct SScene
+{
+	int iFirstFrame;
+	int iLastFrame;
+	int iFrameSpeed; // 30
+	int iTickPerFrame;// 160
+	int iNumMesh;
+	int iDeltaTick; // 1frame
+	float fDeltaTime;
+	float fFirstTime;
+	float fLastTime;
+};
+struct SAnimTrack
+{
+	int   iTick;
+	Matrix mat;
+};
 class SModelObject : public TObject
 {
 public:
 	vector<wstring>		fbxMaterialList;
 	vector<subMesh>		m_subMesh;
+	vector<SAnimTrack>	animlist;
 	virtual ~SModelObject()
 	{
 
@@ -55,6 +73,8 @@ typedef std::vector<SModelObject*>	sMeshList;
 class SFbxObj
 {
 public:
+	SScene				m_Scene;
+	float				m_fTick = 0;
 	static FbxManager*	g_pSDKManager;
 	FbxImporter*		m_pFbxImporter;
 	FbxScene*			m_pFBXScene;
@@ -74,6 +94,8 @@ public:
 	void ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int vertexIndex, int uvIndex, FbxVector2& uv);
 	FbxColor ReadColor(const FbxMesh* mesh, DWORD dwVertexColorCount, FbxLayerElementVertexColor* pVertexColorSet, DWORD dwDCCIndex, DWORD dwVertexIndex);
 	FbxVector4 ReadNormal(const FbxMesh* mesh, int controlPointIndex, int vertexCounter);
+	void ParseAnimStack(FbxScene * FBXScene, FbxString* AnimStackNameArray);
+	void ParseNodeAnimation(FbxNode* Node);
 public:
 	SFbxObj();
 };

@@ -16,6 +16,7 @@ bool main::Init()
 
 	for (int i = 0; i < ARRAYSIZE(fbxobject); i++)
 	{
+		int c = ARRAYSIZE(fbxobject);
 		shared_ptr<SFbxObj> obj = make_shared<SFbxObj>();
 
 		if (!obj->Load(fbxobject[i])) continue;
@@ -76,8 +77,8 @@ bool main::Init()
 					}
 				}
 			}
-			ObjList.push_back(obj);
 		}
+		ObjList.push_back(obj);
 	}
 	return true;
 }
@@ -109,9 +110,29 @@ bool main::Render()
 {
 	for (int i = 0; i < ObjList.size(); i++)
 	{
+		ObjList[i]->m_fTick += g_fSecondPerFrame *
+			ObjList[i]->m_Scene.iFrameSpeed *
+			ObjList[i]->m_Scene.iTickPerFrame;// *0.1f;
+
+		if (ObjList[i]->m_fTick >=
+			(ObjList[i]->m_Scene.iLastFrame *
+				ObjList[i]->m_Scene.iTickPerFrame))
+		{
+			ObjList[i]->m_fTick = 0;
+		}
 		for (auto data : ObjList[i]->m_sMeshList)
 		{
+			Matrix matWorld = Matrix::Identity;
 			SModelObject* pObject = data;
+			for (int iTick = 0; iTick < pObject->animlist.size(); iTick++)
+			{
+				if (pObject->animlist[iTick].iTick >= ObjList[i]->m_fTick)
+				{
+					matWorld = pObject->animlist[iTick].mat;
+					break;
+				}
+			}
+			
 			if (pObject->m_subMesh.size() <= 0)
 			{
 				if (pObject->m_TriangleList.empty()) continue;
@@ -128,7 +149,7 @@ bool main::Render()
 					pObject->m_cbData.vColor[0] = m_pMainCamera->m_vLook.x;
 					pObject->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
 					pObject->m_cbData.vColor[2] = m_pMainCamera->m_vLook.z;
-					pObject->SetMatrix(&pObject->m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+					pObject->SetMatrix(&matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 					pObject->m_VertexList = pObject->m_subMesh[i].m_VertexList;
 					//	pObject->m_pVertexBuffer = pObject->m_subMesh[i].m_pVertexBuffer.Get();
 					pObject->m_pTexture = pObject->m_subMesh[i].m_pTexture;

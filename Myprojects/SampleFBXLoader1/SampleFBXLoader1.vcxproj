@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SFbxAnimaton.cpp" />
     <ClCompile Include="SFbxObj.cpp" />
   </ItemGroup>
   <ItemGroup>
