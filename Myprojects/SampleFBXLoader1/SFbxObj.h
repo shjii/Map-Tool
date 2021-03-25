@@ -51,6 +51,7 @@ public:
 	}
 };
 typedef std::unordered_map<FbxNode*, SModelObject*>	sMeshMap;
+typedef std::vector<SModelObject*>	sMeshList;
 class SFbxObj
 {
 public:
@@ -59,6 +60,7 @@ public:
 	FbxScene*			m_pFBXScene;
 	unordered_map<string, Matrix> m_dxMatrixMap;
 	sMeshMap			m_sMeshMap;
+	sMeshList			m_sMeshList;
 public:
 	bool Load(string	fileName);
 	bool LoadFBX(string	fileName);

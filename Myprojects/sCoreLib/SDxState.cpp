@@ -62,7 +62,7 @@ bool SDxState::Set(ID3D11Device* pd3dDevice)
 
 	// update
 	m_FillMode = D3D11_FILL_SOLID;
-	m_CullMode = D3D11_CULL_NONE;
+	m_CullMode = D3D11_CULL_BACK;
 	SetRasterizerState(pd3dDevice);
 	return true;
 }

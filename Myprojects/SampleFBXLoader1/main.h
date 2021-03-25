@@ -3,7 +3,8 @@
 #include "SFbxObj.h"
 class main : public TCore
 {
-	SFbxObj m_fbxObj;
+	vector<shared_ptr<SFbxObj>> ObjList;
+	//SFbxObj m_fbxObj;
 public:
 	bool Init() override;
 	bool Frame() override;

@@ -2,12 +2,12 @@
 Texture2D g_txDiffuse;// : register(t0);
 SamplerState g_Sample;// : register(s0);
 
-cbuffer SDataCB
+cbuffer TDataCB
 {
 	float4x4  g_matWorld: packoffset(c0);
 	float4x4  g_matView: packoffset(c4);
 	float4x4  g_matProj: packoffset(c8);
-	float4 vColor : packoffset(c12.x);
+	float4 vColor : packoffset(c12); // light vector
 	float  fTime  : packoffset(c13.x);
 	float  fGameTime  : packoffset(c13.y);
 };
@@ -31,7 +31,8 @@ PS_OUTPUT PS( VS_OUTPUT vIn)
 	float3 vLight = normalize(vColor.xyz);
 	float c = dot( vIn.n, -vLight );
 	float4 vLightColor = float4(c,c,c,1);
-	vOut.c =  vFinalColor * vLightColor;
+	float4 vAmbint = float4(0.3f,0.3f,0.3f,1.0f);
+	vOut.c =  vFinalColor * (vAmbint+vLightColor);
 	return vOut;
 }
 PS_OUTPUT PSLine( VS_OUTPUT vIn)

@@ -17,7 +17,7 @@ bool SFbxObj::LoadFBX(string fileName)
 		return false;
 	}
 	FbxNode* RootNode = m_pFBXScene->GetRootNode();
-	PreProcess(RootNode);
+	//PreProcess(RootNode);
 	ParseNode(RootNode, Matrix::Identity);
 	ParseAnimat(m_pFBXScene);
 	return true;
@@ -90,9 +90,9 @@ Matrix SFbxObj::ParesTransform(FbxNode* Node, Matrix& matParent)
 	return matWorld;
 }
 
-void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int vertexIndex, int uvIndex, FbxVector2& uv)
-{
-	FbxLayerElementUV *pFbxLayerElementUV = pUVset;
+void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVSet, int vertexIndex, int uvIndex, FbxVector2& uv) {
+
+	FbxLayerElementUV *pFbxLayerElementUV = pUVSet;
 
 	if (pFbxLayerElementUV == nullptr) {
 		return;
@@ -140,6 +140,7 @@ void SFbxObj::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int
 	}
 }
 
+
 void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 {
 	vector<FbxLayerElementUV*> VertexUVSets;
@@ -162,7 +163,7 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 			pMaterialSetList.push_back(pFbxMesh->GetLayer(iLayer)->GetMaterials());
 		}
 	}
-	vector<string> fbxMaterialList;
+	
 	int iNumMtrl = Node->GetMaterialCount();
 	if(iNumMtrl > 1)obj->m_subMesh.resize(iNumMtrl);
 	for (int iMtrl = 0; iMtrl < iNumMtrl; iMtrl++)
@@ -183,7 +184,7 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 	geom2.SetT(trans);
 	geom2.SetR(rot);
 	geom2.SetS(scale);
-	//obj->m_matWorld = DxConvertMatrix(ConvertMatrixA(geom2));
+	obj->m_matWorld = DxConvertMatrix(ConvertMatrixA(Node->EvaluateGlobalTransform(1.0f)));
 
 	FbxAMatrix normalMatrix = geom2;
 	normalMatrix = normalMatrix.Inverse();
@@ -273,14 +274,16 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				v.n.x = fina.mData[0]; // x
 				v.n.y = fina.mData[2]; // z
 				v.n.z = fina.mData[1]; // y
-
-				for (int iUVIndex = 0; iUVIndex < VertexUVSets.size(); iUVIndex++)
+				if (VertexUVSets.size())
 				{
-					FbxLayerElementUV* pUVSet = VertexUVSets[iUVIndex];
-					FbxVector2 uv(0,0);
-					ReadTextureCoord(pFbxMesh, pUVSet, iCornerIndices[iIndex],u[iIndex],uv);
-					v.t.x = uv.mData[0];
-					v.t.y = 1.0f - uv.mData[1];
+					for (int iUVIndex = 0; iUVIndex < 1/*VertexUVSets.size()*/; iUVIndex++)
+					{
+						FbxLayerElementUV* pUVSet = VertexUVSets[iUVIndex];
+						FbxVector2 uv(0,0);
+						ReadTextureCoord(pFbxMesh, pUVSet, iCornerIndices[iIndex],u[iIndex],uv);
+						v.t.x = uv.mData[0];
+						v.t.y = 1.0f - uv.mData[1];
+					}
 				}
 				tri.vVertex[iIndex] = v;
 			}
@@ -293,6 +296,7 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				obj->m_subMesh[iSubMtrl].m_TriangleList.push_back(tri);
 			}	
 		}
+		iBasePolyIndex += iPolySize;
 	}
 }
 
@@ -334,6 +338,7 @@ void SFbxObj::ParseNode(FbxNode * Node, Matrix matParent)
 	SModelObject* obj = new SModelObject;
 	obj->m_szName = to_mw(Node->GetName());
 	
+	m_sMeshList.push_back(obj);
 	m_sMeshMap[Node] = obj;
 	Matrix matWorld = ParesTransform(Node, matParent);
 	obj->m_matWorld = matWorld;
