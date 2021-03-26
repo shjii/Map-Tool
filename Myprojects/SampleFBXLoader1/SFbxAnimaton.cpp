@@ -58,6 +58,7 @@ void SFbxObj::ParseNodeAnimation(FbxNode* Node)
 	auto anim = m_pFBXScene->GetEvaluator();
 #endif
 	float fCurrentTime = 0.0f;
+	int a = 0;
 	while (fCurrentTime <= m_Scene.fLastTime)
 	{
 		FbxTime t;
@@ -66,10 +67,23 @@ void SFbxObj::ParseNodeAnimation(FbxNode* Node)
 		SAnimTrack track;
 		track.iTick = fCurrentTime * 30 * 160;
 		track.mat = DxConvertMatrix(ConvertMatrixA(mat));
-
-		auto data = m_sMeshMap.find(Node);
-		data->second->animlist.push_back(track);
 		fCurrentTime += m_Scene.fDeltaTime;
+		auto data = m_sMeshMap.find(Node);
+
+		if (data->second->animlist.empty())
+		{
+			data->second->animlist.push_back(track);
+			a++;
+			continue;
+		}
+
+		if (track.mat != data->second->animlist[a - 1].mat)
+		{
+			data->second->animlist.push_back(track);
+			a++;
+		}
+		
+		
 	}
 	int dwChild = Node->GetChildCount();
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
@@ -77,4 +91,37 @@ void SFbxObj::ParseNodeAnimation(FbxNode* Node)
 		FbxNode* pChildNode = Node->GetChild(dwObj);
 		ParseNodeAnimation(pChildNode);
 	}
+}
+
+bool SFbxObj::ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata)
+{
+	int iDeformerCount = pFbxMesh->GetDeformerCount(FbxDeformer::eSkin);
+	if (iDeformerCount == 0)
+	{
+		return false;
+	}
+	int iVertexCount = pFbxMesh->GetControlPointsCount();
+	skindata->Alloc(iVertexCount, 8);
+
+	for (int dwDeformerIndex = 0; dwDeformerIndex < iDeformerCount; dwDeformerIndex++)
+	{
+		auto pSkin = reinterpret_cast<FbxSkin*>(pFbxMesh->GetDeformer(dwDeformerIndex, FbxDeformer::eSkin));
+		DWORD dwClusterCount = pSkin->GetClusterCount();
+		for (int dwClusterIndex = 0; dwClusterIndex < dwClusterCount; dwClusterIndex++)
+		{
+			auto pCluster = pSkin->GetCluster(dwClusterIndex);
+			int dwClusterSize = pCluster->GetControlPointIndicesCount();
+			auto pLink = pCluster->GetLink();
+
+			int iBoneIndex = skindata->GetBoneCount();
+			skindata->InfluenceNodes.push_back(pLink);
+			int* pIndices = pCluster->GetControlPointIndices();
+			double* pWeights = pCluster->GetControlPointWeights();
+			for (int i = 0; i < dwClusterSize; i++)
+			{
+				skindata->InsertWeight(pIndices[i],iBoneIndex, pWeights[i]);
+			}
+		}
+	}
+	return true;
 }

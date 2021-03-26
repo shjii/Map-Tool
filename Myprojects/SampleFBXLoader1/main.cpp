@@ -7,11 +7,11 @@ bool main::Init()
 	const char* fbxobject[] =
 	{
 		"../../data/3DS/Turret_Deploy1.fbx",
-		/*"../../data/3DS/rockBlobFive.fbx",
-		"../../data/3DS/rockBlobFour.fbx",
-		"../../data/3DS/ship.fbx",
-		"../../data/3DS/SM_Rock.fbx",
-		"../../data/3DS/SM_House_Var01.fbx",*/
+		//"../../data/3DS/rockBlobFive.fbx",
+		//"../../data/3DS/rockBlobFour.fbx",
+		//"../../data/3DS/ship.fbx",
+		//"../../data/3DS/SM_Rock.fbx",
+		//"../../data/3DS/SM_House_Var01.fbx",
 	};
 
 	for (int i = 0; i < ARRAYSIZE(fbxobject); i++)
@@ -126,7 +126,12 @@ bool main::Render()
 			SModelObject* pObject = data;
 			for (int iTick = 0; iTick < pObject->animlist.size(); iTick++)
 			{
-				if (pObject->animlist[iTick].iTick >= ObjList[i]->m_fTick)
+				if (pObject->animlist.size() == 1)
+				{
+					matWorld = pObject->animlist[iTick].mat;
+					break;
+				}
+				else if (pObject->animlist[iTick].iTick >= ObjList[i]->m_fTick)
 				{
 					matWorld = pObject->animlist[iTick].mat;
 					break;

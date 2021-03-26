@@ -54,15 +54,38 @@ struct SScene
 };
 struct SAnimTrack
 {
-	int   iTick;
-	Matrix mat;
+	int		iTick;
+	Matrix	mat;
 };
+class SkinData
+{
+public:
+	static int						iNumMaxWeight;
+	vector<FbxNode*>				InfluenceNodes;
+	unordered_map<T_STR, Matrix>	m_matBindPoseMap;
+
+	size_t							dwVertexCount;
+	DWORD							dwVertexStride;
+	unique_ptr<int[]>				pBoneIndices;
+	unique_ptr<float[]>				pBoneWeights;
+public:
+	void	Alloc(size_t dwCount, DWORD dwStride);
+	int*	GetIndices(size_t dwIndex);
+	float*	GetWeights(size_t dwIndex);
+	DWORD	GetBoneCount() const;
+	void	InsertWeight(size_t dwIndex, DWORD dwBoneIndex, float fBoneWeight);
+public:
+	SkinData() : dwVertexCount(0), dwVertexStride(0) {}
+	~SkinData() {}
+};
+
 class SModelObject : public TObject
 {
 public:
 	vector<wstring>		fbxMaterialList;
 	vector<subMesh>		m_subMesh;
 	vector<SAnimTrack>	animlist;
+	int					animlistcount;
 	virtual ~SModelObject()
 	{
 
@@ -96,6 +119,8 @@ public:
 	FbxVector4 ReadNormal(const FbxMesh* mesh, int controlPointIndex, int vertexCounter);
 	void ParseAnimStack(FbxScene * FBXScene, FbxString* AnimStackNameArray);
 	void ParseNodeAnimation(FbxNode* Node);
+	////////
+	bool ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata);
 public:
 	SFbxObj();
 };
