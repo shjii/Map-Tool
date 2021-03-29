@@ -17,7 +17,7 @@ bool SFbxObj::LoadFBX(string fileName)
 		return false;
 	}
 	FbxNode* RootNode = m_pFBXScene->GetRootNode();
-	//PreProcess(RootNode);
+	PreProcess(RootNode);
 	ParseNode(RootNode, Matrix::Identity);
 	ParseAnimat(m_pFBXScene);
 	return true;
@@ -65,6 +65,8 @@ void SFbxObj::PreProcess(FbxNode * Node)
 	if (iter == m_dxMatrixMap.end())
 	{
 		m_dxMatrixMap[Node->GetName()] = mat;
+		m_pNodeMap[Node] = m_pMatrixList.size();
+		m_pMatrixList.push_back(mat);
 	}
 	int dwChild = Node->GetChildCount();
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
@@ -174,9 +176,12 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 			continue;
 		}
 		obj->fbxMaterialList.push_back(to_mw(ParseMaterial(pMtrl)));
-		
-		//// Ãß°¡ 
 	}
+
+	bool bSkinnedMesh = ParseMeshSkinningMap(pFbxMesh, obj->WeightList);
+	obj->m_bSkinnedMesh = bSkinnedMesh;
+
+
 	FbxAMatrix geom2;
 	FbxVector4 trans = Node->GetGeometricTranslation(FbxNode::eSourcePivot);
 	FbxVector4 rot = Node->GetGeometricRotation(FbxNode::eSourcePivot);
@@ -255,20 +260,20 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 				FbxColor color;
 				if (VertexColorSet.empty())
 				{
-					color.Set(1,1,1,1);
+					color.Set(1, 1, 1, 1);
 				}
 				else
 				{
 					color = ReadColor(pFbxMesh, VertexColorSet.size(), VertexColorSet[0], iCornerIndices[iIndex], iBasePolyIndex + iVertIndex[iIndex]);
 				}
-			
+
 				v.c.x = (float)color.mRed;
 				v.c.y = (float)color.mGreen;
 				v.c.z = (float)color.mBlue;
 				v.c.w = 1;
 
 
-				FbxVector4 normal = ReadNormal(pFbxMesh,iCornerIndices[iIndex],	iBasePolyIndex + iVertIndex[iIndex]);
+				FbxVector4 normal = ReadNormal(pFbxMesh, iCornerIndices[iIndex], iBasePolyIndex + iVertIndex[iIndex]);
 				fina = normalMatrix.MultT(normal);
 
 				v.n.x = fina.mData[0]; // x
@@ -279,23 +284,48 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObject* obj)
 					for (int iUVIndex = 0; iUVIndex < 1/*VertexUVSets.size()*/; iUVIndex++)
 					{
 						FbxLayerElementUV* pUVSet = VertexUVSets[iUVIndex];
-						FbxVector2 uv(0,0);
-						ReadTextureCoord(pFbxMesh, pUVSet, iCornerIndices[iIndex],u[iIndex],uv);
+						FbxVector2 uv(0, 0);
+						ReadTextureCoord(pFbxMesh, pUVSet, iCornerIndices[iIndex], u[iIndex], uv);
 						v.t.x = uv.mData[0];
 						v.t.y = 1.0f - uv.mData[1];
 					}
 				}
+
+				IW_VERTEX iw;
+				if (obj->m_bSkinnedMesh)
+				{
+					SWeight* pW = &obj->WeightList[iCornerIndices[iIndex]];
+					for (int i = 0; i < pW->Index.size(); i++)
+					{
+						if (1 < 4)
+						{
+							iw.i1[i] = pW->Index[i];
+							iw.w1[i] = pW->Weight[i];
+						}
+						else
+						{
+							iw.i2[i - 4] = pW->Index[i];
+							iw.w2[i - 4] = pW->Weight[i];
+						}
+					}
+				}
+				else
+				{
+					iw.i1[0] = 0;
+					iw.w1[0] = 1.0f;
+				}
 				tri.vVertex[iIndex] = v;
+				tri.vVertexIW[iIndex] = iw;
 			}
-			if (iNumMtrl <= 1)
-			{
-				obj->m_TriangleList.push_back(tri);
+				if (iNumMtrl <= 1)
+				{
+					obj->m_TriangleList.push_back(tri);
+				}
+				else
+				{
+					obj->m_subMesh[iSubMtrl].m_TriangleList.push_back(tri);
+				}	
 			}
-			else
-			{
-				obj->m_subMesh[iSubMtrl].m_TriangleList.push_back(tri);
-			}	
-		}
 		iBasePolyIndex += iPolySize;
 	}
 }

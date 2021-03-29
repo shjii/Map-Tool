@@ -125,3 +125,34 @@ bool SFbxObj::ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata)
 	}
 	return true;
 }
+
+bool SFbxObj::ParseMeshSkinningMap(const FbxMesh* pFbxMesh, vector< SWeight>& skindata)
+{
+	int iDeformerCount = pFbxMesh->GetDeformerCount(FbxDeformer::eSkin);
+	if (iDeformerCount == 0)
+	{
+		return false;
+	}
+	int iVertexCount = pFbxMesh->GetControlPointsCount();
+	skindata.resize(iVertexCount);
+	for (int dwDeformerIndex = 0; dwDeformerIndex < iDeformerCount; dwDeformerIndex++)
+	{
+		auto pSkin = reinterpret_cast<FbxSkin*>(pFbxMesh->GetDeformer(dwDeformerIndex, FbxDeformer::eSkin));
+		DWORD dwClusterCount = pSkin->GetClusterCount();
+		for (int dwClusterIndex = 0; dwClusterIndex < dwClusterCount; dwClusterIndex++)
+		{
+			auto pCluster = pSkin->GetCluster(dwClusterIndex);
+			int dwClusterSize = pCluster->GetControlPointIndicesCount();
+			auto data = m_pNodeMap.find(pCluster->GetLink());
+			int iBoneIndex = data->second;
+			int* pIndices = pCluster->GetControlPointIndices();
+			double* pWeights = pCluster->GetControlPointWeights();
+			for (int i = 0; i < dwClusterSize; i++)
+			{
+				skindata[pIndices[i]].Index.push_back(iBoneIndex);
+				skindata[pIndices[i]].Weight.push_back(pWeights[i]);
+			}
+		}
+	}
+	return true;
+}

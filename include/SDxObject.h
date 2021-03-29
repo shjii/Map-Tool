@@ -49,6 +49,20 @@ struct PNCT_VERTEX
 		p = vp, n = vn, c = vc, t = vt;
 	}
 };
+struct IW_VERTEX
+{
+	float		i1[4];
+	float		w1[4];
+	float		i2[4];
+	float		w2[4];
+	IW_VERTEX()
+	{
+		i1[0] = i1[1] = i1[2] = i1[3] = 0.0f;
+		w1[0] = w1[1] = w1[2] = w1[3] = 0.0f;
+		i2[0] = i2[1] = i2[2] = i2[3] = 0.0f;
+		i2[0] = i2[1] = i2[2] = i2[3] = 0.0f;
+	}
+};
 struct S_SPHERE
 {
 	Vector3		vCenter;
@@ -70,6 +84,7 @@ struct S_BOX
 struct STri
 {
 	PNCT_VERTEX  vVertex[3];
+	IW_VERTEX  vVertexIW[3];
 	Vector3  vNormal;
 	int		 iSubIndex;
 	STri(int Index) : iSubIndex(Index) {}

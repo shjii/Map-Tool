@@ -6,7 +6,8 @@ bool main::Init()
 
 	const char* fbxobject[] =
 	{
-		"../../data/3DS/Turret_Deploy1.fbx",
+		"../../data/3DS/man.fbx",
+		//"../../data/3DS/Turret_Deploy1.fbx",
 		//"../../data/3DS/rockBlobFive.fbx",
 		//"../../data/3DS/rockBlobFour.fbx",
 		//"../../data/3DS/ship.fbx",

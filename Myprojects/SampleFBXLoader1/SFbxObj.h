@@ -40,6 +40,11 @@ struct subMesh
 
 	}
 };
+struct SWeight
+{
+	vector<int> Index;
+	vector<float> Weight;
+};
 struct SScene
 {
 	int iFirstFrame;
@@ -85,7 +90,8 @@ public:
 	vector<wstring>		fbxMaterialList;
 	vector<subMesh>		m_subMesh;
 	vector<SAnimTrack>	animlist;
-	int					animlistcount;
+	vector<SWeight>		WeightList;
+	bool				m_bSkinnedMesh = false;
 	virtual ~SModelObject()
 	{
 
@@ -102,6 +108,8 @@ public:
 	FbxImporter*		m_pFbxImporter;
 	FbxScene*			m_pFBXScene;
 	unordered_map<string, Matrix> m_dxMatrixMap;
+	unordered_map<FbxNode*, int> m_pNodeMap;
+	vector<Matrix> m_pMatrixList;
 	sMeshMap			m_sMeshMap;
 	sMeshList			m_sMeshList;
 public:
@@ -121,6 +129,7 @@ public:
 	void ParseNodeAnimation(FbxNode* Node);
 	////////
 	bool ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata);
+	bool ParseMeshSkinningMap(const FbxMesh* pFbxMesh, vector< SWeight>& skindata);
 public:
 	SFbxObj();
 };
