@@ -51,16 +51,12 @@ struct PNCT_VERTEX
 };
 struct IW_VERTEX
 {
-	float		i1[4];
-	float		w1[4];
-	float		i2[4];
-	float		w2[4];
+	float		i[4];
+	float		w[4];
 	IW_VERTEX()
 	{
-		i1[0] = i1[1] = i1[2] = i1[3] = 0.0f;
-		w1[0] = w1[1] = w1[2] = w1[3] = 0.0f;
-		i2[0] = i2[1] = i2[2] = i2[3] = 0.0f;
-		i2[0] = i2[1] = i2[2] = i2[3] = 0.0f;
+		i[0] = i[1] = i[2] = i[3] = 0.0f;
+		w[0] = w[1] = w[2] = w[3] = 0.0f;
 	}
 };
 struct S_SPHERE

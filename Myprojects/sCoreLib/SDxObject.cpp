@@ -716,7 +716,6 @@ namespace TBASIS_CORE_LIB
 		{
 			pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
 		}
-		
 		return true;
 	}
 	bool	SDxObject::Release()
