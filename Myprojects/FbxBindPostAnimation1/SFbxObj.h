@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include "SModelObj.h"
 
 
@@ -20,7 +21,7 @@ static Matrix ConvertMatrixA(const FbxMatrix& matrix)
 	Matrix matResult;
 	auto fData = reinterpret_cast<float*>(&matResult);
 	auto pSrcData = reinterpret_cast<const DOUBLE*>(&matrix);
-	for (DWORD i = 0; i < 16; i++)
+	for (DWORD i = 0; i < 16; ++i)
 	{
 		fData[i] = (float)pSrcData[i];
 	}
@@ -62,6 +63,7 @@ public:
 	void ParseNodeAnimation(FbxNode* Node);
 	////////
 	//bool ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata);
+	void ParseAnimation(FbxScene*	pFbxScene);
 	bool ParseMeshSkinningMap(const FbxMesh* pFbxMesh, vector< SWeight>& skindata);
 
 	bool	CreateInputLayout() override;

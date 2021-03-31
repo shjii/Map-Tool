@@ -55,13 +55,13 @@ bool TCore::GameInit()
 	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_Camera.Init();
 	m_pMainCamera = &m_Camera;
-	g_TextMgr.Init();
+
 	if (!m_LineShape.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg"))
 	{
 		return false;
 	}
-
+	g_TextMgr.Init();
 	Init();
 	PostInit();
 	ShowWindow(m_hWnd, SW_SHOWNORMAL);
@@ -126,7 +126,6 @@ bool	TCore::PreRender()
 }
 bool	TCore::PostRender()
 {
-
 	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_LineShape.Draw(g_pImmediateContext,

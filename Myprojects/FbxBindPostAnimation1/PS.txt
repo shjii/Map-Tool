@@ -32,7 +32,8 @@ PS_OUTPUT PS( VS_OUTPUT vIn)
 	float c = dot( vIn.n, -vLight );
 	float4 vLightColor = float4(c,c,c,1);
 	float4 vAmbint = float4(0.3f,0.3f,0.3f,1.0f);
-	vOut.c =  vFinalColor * (vAmbint+vLightColor);
+	vTexture.a = 1.0f;
+	vOut.c =  vTexture;//vFinalColor * (vAmbint+vLightColor);
 	return vOut;
 }
 PS_OUTPUT PSLine( VS_OUTPUT vIn)

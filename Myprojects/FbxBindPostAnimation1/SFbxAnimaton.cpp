@@ -2,36 +2,47 @@
 
 void SFbxObj::ParseAnimat(FbxScene * FBXScene)
 {
-	FbxArray<FbxString*> AnimStackNameArray;
-	m_pFBXScene->FillAnimStackNameArray(AnimStackNameArray);
+	FbxArray<FbxString*>  AnimStackNameArray;
+	FBXScene->FillAnimStackNameArray(AnimStackNameArray);
 	int iAnimStackCount = AnimStackNameArray.GetCount();
 	for (int i = 0; i < iAnimStackCount; i++)
 	{
-		ParseAnimStack(m_pFBXScene, AnimStackNameArray.GetAt(i));
+		ParseAnimStack(FBXScene, AnimStackNameArray.GetAt(i));
+	}
+}
+void SFbxObj::ParseAnimation(FbxScene*	pFbxScene)
+{
+	FbxArray<FbxString*>  AnimStackNameArray;
+	pFbxScene->FillAnimStackNameArray(AnimStackNameArray);
+	int iAnimStackCount = AnimStackNameArray.GetCount();
+	for (int i = 0; i < iAnimStackCount; i++)
+	{
+		ParseAnimStack(pFbxScene, AnimStackNameArray.GetAt(i));
 	}
 }
 void SFbxObj::ParseAnimStack(FbxScene * FBXScene, FbxString* AnimStackNameArray)
 {
 	FbxAnimStack* anim = FBXScene->FindMember<FbxAnimStack>(AnimStackNameArray->Buffer());
 	if (anim == nullptr) return;
-	FbxTakeInfo* Info = FBXScene->GetTakeInfo(*AnimStackNameArray);
+	FbxTakeInfo* info = FBXScene->GetTakeInfo(*AnimStackNameArray);
 
 	FbxTime FrameTime;
-	FrameTime.SetTime(0,0,0,1,0,FBXScene->GetGlobalSettings().GetTimeMode());
+	FrameTime.SetTime(0, 0, 0, 1, 0, FBXScene->GetGlobalSettings().GetTimeMode());
 	float fFrameTime = FrameTime.GetSecondDouble();
 	float fStartTime, fEndTime;
-	if (Info)
+	if (info)
 	{
-		fStartTime = Info->mLocalTimeSpan.GetStart().GetSecondDouble();
-		fEndTime = Info->mLocalTimeSpan.GetStop().GetSecondDouble();
+		// scene
+		fStartTime = info->mLocalTimeSpan.GetStart().GetSecondDouble();
+		fEndTime = info->mLocalTimeSpan.GetStop().GetSecondDouble();
 	}
 	else
 	{
-		FbxTimeSpan tITimeSpan;
-		m_pFBXScene->GetGlobalSettings().GetTimelineDefaultTimeSpan(tITimeSpan);
+		FbxTimeSpan tlTimeSpan;
+		FBXScene->GetGlobalSettings().GetTimelineDefaultTimeSpan(tlTimeSpan);
 
-		fStartTime = (float)tITimeSpan.GetStart().GetSecondDouble();
-		fEndTime = (float)tITimeSpan.GetStop().GetSecondDouble();
+		fStartTime = (float)tlTimeSpan.GetStart().GetSecondDouble();
+		fEndTime = (float)tlTimeSpan.GetStop().GetSecondDouble();
 	}
 
 	m_Scene.iFirstFrame = fStartTime * 30.0f;
