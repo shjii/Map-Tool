@@ -49,8 +49,8 @@ bool SFbxObj::Initialize(string fileName)
 
 	FbxAxisSystem::MayaZUp.ConvertScene(m_pFBXScene);
 	FbxAxisSystem SceneAxisSystem = m_pFBXScene->GetGlobalSettings().GetAxisSystem();
-	FbxGeometryConverter IGomConverter(g_pSDKManager);
-	IGomConverter.Triangulate(m_pFBXScene, true);
+	//FbxGeometryConverter IGomConverter(g_pSDKManager);
+	//IGomConverter.Triangulate(m_pFBXScene, true);
 	return true;
 }
 
@@ -61,11 +61,13 @@ void SFbxObj::PreProcess(FbxNode * Node)
 		return;
 	}
 	Matrix mat = mat.Identity;
-
-	m_dxMatrixMap[Node->GetName()] = mat;
-	m_pNodeMap[Node] = m_pMatrixList.size();
-	m_pMatrixList.push_back(mat);
-
+	auto iter = m_dxMatrixMap.find(Node->GetName());
+	if (iter == m_dxMatrixMap.end())
+	{
+		m_dxMatrixMap[Node->GetName()] = mat;
+		m_pNodeMap[Node] = m_pMatrixList.size();
+		m_pMatrixList.push_back(mat);
+	}
 	int dwChild = Node->GetChildCount();
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
 	{

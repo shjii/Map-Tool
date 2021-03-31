@@ -28,7 +28,7 @@ struct SWeight
 		{
 			if (fBoneWeight > Weight[i])
 			{
-				for (DWORD j = 0; j < (Index.size() - 1); j++)
+				for (DWORD j = (Index.size() - 1); j > i; --j)
 				{
 					Index[j] = Index[j - 1];
 					Weight[j] = Weight[j - 1];

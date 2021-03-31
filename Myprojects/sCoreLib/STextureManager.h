@@ -9,6 +9,8 @@ private:
 	std::map<wstring, STexture*>::iterator	m_iter;
 	std::wstring				m_szDefaultPath;
 public:
+	STexture*		m_pWhilteTexture;
+public:
 	STexture*		Load(ID3D11Device* pd3dDevice, const TCHAR* filename);
 	STexture*		GetPtr(wstring filename);
 	bool		Init();

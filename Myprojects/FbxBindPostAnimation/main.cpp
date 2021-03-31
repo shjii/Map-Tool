@@ -3,8 +3,8 @@ bool main::Init()
 {
 	m_Obj = make_shared<SFbxObj>();
 
-	//if (m_Obj->Load("../../data/3DS/man.fbx"))
-	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
+	if (m_Obj->Load("../../data/3DS/man.fbx"))
+	//if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
 	{
 		for (auto data : m_Obj->m_sNodeList)
 		{
@@ -64,7 +64,7 @@ bool main::Frame()
 {
 	m_Obj->m_fTick += g_fSecondPerFrame *
 		m_Obj->m_Scene.iFrameSpeed *
-		m_Obj->m_Scene.iTickPerFrame *0.1f;
+		m_Obj->m_Scene.iTickPerFrame *0.0f;
 
 	if (m_Obj->m_fTick >=
 		(m_Obj->m_Scene.iLastFrame *

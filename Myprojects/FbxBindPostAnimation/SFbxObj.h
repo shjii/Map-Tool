@@ -29,7 +29,7 @@ static Matrix ConvertMatrixA(const FbxMatrix& matrix)
 
 typedef std::unordered_map<FbxNode*, SModelObj*>	sNodeMap;
 typedef std::vector<SModelObj*>	sNodeList;
-class SFbxObj
+class SFbxObj : public TObject
 {
 public:
 	SScene							m_Scene;

@@ -55,7 +55,7 @@ bool TCore::GameInit()
 	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
 	m_Camera.Init();
 	m_pMainCamera = &m_Camera;
-
+	g_TextMgr.Init();
 	if (!m_LineShape.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
 		L"../../data/bitmap/tileA.jpg"))
 	{
