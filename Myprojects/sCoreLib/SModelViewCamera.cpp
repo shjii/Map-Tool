@@ -150,7 +150,7 @@ bool SModelViewCamera::FrameFrustum(ID3D11DeviceContext * pd3dContext)
 		Vector3& v = m_VertexList[iVertex].p;
 		m_FrustumObj.m_VertexList[iVertex].p = Vector3::Transform(v, matInViewProj);
 	}
-	pd3dContext->UpdateSubresource(m_FrustumObj.m_pVertexBuffer, 0 ,NULL, &m_FrustumObj.m_VertexList.at(0), 0 ,0);
+	pd3dContext->UpdateSubresource(m_FrustumObj.m_pVertexBuffer.Get(), 0 ,NULL, &m_FrustumObj.m_VertexList.at(0), 0 ,0);
 	Frame();
 	return true;
 }

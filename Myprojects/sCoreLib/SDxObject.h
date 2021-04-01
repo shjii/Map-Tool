@@ -148,12 +148,12 @@ namespace TBASIS_CORE_LIB
 		std::vector<STri>			m_TriangleList;
 		std::vector<PNCT_VERTEX>	m_VertexList;
 		std::vector<DWORD>		m_IndexList;
-		ID3D11Buffer*			m_pVertexBuffer;
-		ID3D11Buffer*			m_pIndexBuffer;
-		ID3D11Buffer*			m_pConstantBuffer;
-		ID3D11InputLayout*		m_pInputLayout;
-		ID3D11VertexShader*		m_pVertexShader;
-		ID3D11PixelShader*		m_pPixelShader;
+		ComPtr<ID3D11Buffer>			m_pVertexBuffer;
+		ComPtr<ID3D11Buffer>			m_pIndexBuffer;
+		ComPtr<ID3D11Buffer>			m_pConstantBuffer;
+		ComPtr<ID3D11InputLayout>		m_pInputLayout;
+		ComPtr<ID3D11VertexShader>		m_pVertexShader;
+		ComPtr<ID3D11PixelShader>		m_pPixelShader;
 		STexture*				m_pTexture;
 	public:
 		virtual bool	Init();

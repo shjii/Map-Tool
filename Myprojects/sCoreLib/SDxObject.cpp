@@ -660,7 +660,7 @@ namespace TBASIS_CORE_LIB
 	bool    SDxObject::Update(ID3D11DeviceContext*	pd3dContext)
 	{
 		D3D11_MAPPED_SUBRESOURCE mr;
-		HRESULT hr = pd3dContext->Map(m_pConstantBuffer, 0,
+		HRESULT hr = pd3dContext->Map(m_pConstantBuffer.Get(), 0,
 			D3D11_MAP_WRITE_DISCARD, 0, &mr);
 		if (SUCCEEDED(hr))
 		{
@@ -675,7 +675,7 @@ namespace TBASIS_CORE_LIB
 			pData->vColor[3] = 1;
 			pData->vTime[0] = cosf(g_fGameTimer)*0.5f + 0.5f;
 			pData->vTime[1] = g_fGameTimer;
-			pd3dContext->Unmap(m_pConstantBuffer, 0);
+			pd3dContext->Unmap(m_pConstantBuffer.Get(), 0);
 			return true;
 		}
 		return false;
@@ -685,13 +685,13 @@ namespace TBASIS_CORE_LIB
 		Update(pd3dContext);
 		UINT iStride = sizeof(PNCT_VERTEX);
 		UINT iOffset = 0;
-		pd3dContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &iStride, &iOffset);
-		pd3dContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-		pd3dContext->IASetInputLayout(m_pInputLayout);
-		pd3dContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-		pd3dContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-		pd3dContext->VSSetShader(m_pVertexShader, NULL, 0);
-		pd3dContext->PSSetShader(m_pPixelShader, NULL, 0);
+		pd3dContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &iStride, &iOffset);
+		pd3dContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		pd3dContext->IASetInputLayout(m_pInputLayout.Get());
+		pd3dContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+		pd3dContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+		pd3dContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
+		pd3dContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
 		pd3dContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iTopology);
 		if (m_pTexture != nullptr)
 		{
@@ -720,12 +720,6 @@ namespace TBASIS_CORE_LIB
 	}
 	bool	SDxObject::Release()
 	{
-		if (m_pConstantBuffer != nullptr)m_pConstantBuffer->Release();
-		if (m_pVertexBuffer != nullptr)m_pVertexBuffer->Release();
-		if (m_pIndexBuffer != nullptr)m_pIndexBuffer->Release();
-		if (m_pInputLayout != nullptr)m_pInputLayout->Release();
-		if (m_pVertexShader != nullptr)m_pVertexShader->Release();
-		if (m_pPixelShader != nullptr)m_pPixelShader->Release();
 		return true;
 	}
 
@@ -759,7 +753,7 @@ namespace TBASIS_CORE_LIB
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
 		sd.pSysMem = &m_cbData;
-		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &m_pConstantBuffer);
+		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, NULL, m_pConstantBuffer.GetAddressOf());
 		if (FAILED(hr))
 		{
 			return false;
@@ -778,7 +772,7 @@ namespace TBASIS_CORE_LIB
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
 		sd.pSysMem = &m_VertexList.at(0);
-		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, &sd, &m_pVertexBuffer);
+		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, &sd, m_pVertexBuffer.GetAddressOf());
 		if (FAILED(hr))
 		{
 			return false;
@@ -797,7 +791,7 @@ namespace TBASIS_CORE_LIB
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
 		sd.pSysMem = &m_IndexList.at(0);
-		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, &sd, &m_pIndexBuffer);
+		HRESULT hr = g_pd3dDevice->CreateBuffer(&bd, &sd, m_pIndexBuffer.GetAddressOf());
 		if (FAILED(hr))
 		{
 			return false;
@@ -852,7 +846,7 @@ namespace TBASIS_CORE_LIB
 			iNumElement,
 			m_pVSObj->GetBufferPointer(),
 			m_pVSObj->GetBufferSize(),
-			&m_pInputLayout
+			m_pInputLayout.GetAddressOf()
 		);
 		if (FAILED(hr)) return false;
 		return true;

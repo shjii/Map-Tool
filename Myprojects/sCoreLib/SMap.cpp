@@ -60,12 +60,12 @@ void SMap::UpdateIndexBuffer(ID3D11DeviceContext * pContext, DWORD * pdwIndexArr
 {
 	assert(pdwIndexArray);
 	m_iNumFaces = iFaceCount;
-	pContext->UpdateSubresource(m_pIndexBuffer, 0, NULL, pdwIndexArray, 0, 0);
+	pContext->UpdateSubresource(m_pIndexBuffer.Get(), 0, NULL, pdwIndexArray, 0, 0);
 }
 void SMap::UpdateVertexBuffer(ID3D11DeviceContext * pContext, PNCT_VERTEX* Vertex, int iFaceCount)
 {
 	assert(Vertex);
-	pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, Vertex, iFaceCount, 0);
+	pContext->UpdateSubresource(m_pVertexBuffer.Get(), 0, NULL, Vertex, iFaceCount, 0);
 }
 float SMap::GetHeight(UINT index)
 {

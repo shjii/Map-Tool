@@ -38,12 +38,12 @@ public:
 	static FbxManager*				g_pSDKManager;
 	FbxImporter*					m_pFbxImporter;
 	FbxScene*						m_pFBXScene;
-	unordered_map<string, Matrix>	m_dxMatrixMap;
-	unordered_map<FbxNode*, int>	m_pNodeMap;
+	unordered_map<string, Matrix>	m_dxMatrixBindPoseMap;
+	unordered_map<FbxNode*, int>	m_pFbxNodeMap;
 	vector<Matrix>					m_pMatrixList;
 	sNodeMap						m_sNodeMap;
 	sNodeList						m_sNodeList;
-	vector<FbxNode*>				m_FbxNodeList;
+	vector<FbxNode*>				m_pFbxNodeList;
 public:
 	ComPtr<ID3D11Buffer>			m_BoneBuffer;
 public:
@@ -53,7 +53,7 @@ public:
 	void PreProcess(FbxNode*	Node);
 	void ParseNode(FbxNode * Node, Matrix matParent);
 	void ParseAnimat(FbxScene* FBXScene);
-	Matrix ParesTransform(FbxNode* Node, Matrix& matParent);
+	Matrix ParseTransform(FbxNode* Node, Matrix& matParent);
 	void ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObj* obj);
 	string ParseMaterial(FbxSurfaceMaterial* pMtrl);
 	void ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int vertexIndex, int uvIndex, FbxVector2& uv);

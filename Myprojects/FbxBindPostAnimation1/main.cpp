@@ -8,9 +8,9 @@ bool main::Init()
 	m_Camera.CreateProjMatrix(1, 5000, TBASIS_PI / 4.0f, fAspect);
 
 	m_Obj = make_shared<SFbxObj>();
-	//if (m_Obj->Load("../../data/object/man.fbx"))
+	//if (m_Obj->Load("../../data/3DS/man.fbx"))
 	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
-	//if (m_Obj->Load("../../data/object/Scifi_Model_L2_all_in_one.fbx"))
+	//if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
 	{
 		for (auto data : m_Obj->m_sNodeList)
 		{
@@ -33,7 +33,6 @@ bool main::Init()
 						pSub->m_VertexListIW.size(),
 						sizeof(IW_VERTEX));
 				pSub->m_pVertexBufferIW.Attach(vbiw);
-
 
 				ID3D11Buffer* ib =
 					CreateIndexBuffer(g_pd3dDevice,
@@ -73,7 +72,7 @@ bool main::Frame()
 {
 	m_Obj->m_fTick += g_fSecondPerFrame *
 		m_Obj->m_Scene.iFrameSpeed *
-		m_Obj->m_Scene.iTickPerFrame;// *0.0f;
+		m_Obj->m_Scene.iTickPerFrame;// *0. 0f;
 
 	if (m_Obj->m_fTick >=
 		(m_Obj->m_Scene.iLastFrame *
@@ -85,12 +84,11 @@ bool main::Frame()
 	{
 		Matrix matWorld = Matrix::Identity;
 		SModelObj* pModelObject = m_Obj->m_sNodeList[iNode];
-		// 바이패드공간 * global 
 		std::string szName;
 		szName.assign(pModelObject->m_szName.begin(), pModelObject->m_szName.end());
 		Matrix matBiped = Matrix::Identity;
-		auto data = m_Obj->m_dxMatrixMap.find(szName);
-		if (data != m_Obj->m_dxMatrixMap.end())
+		auto data = m_Obj->m_dxMatrixBindPoseMap.find(szName);
+		if (data != m_Obj->m_dxMatrixBindPoseMap.end())
 		{
 			matBiped = data->second;
 		}
@@ -106,7 +104,6 @@ bool main::Frame()
 			}
 		}
 	}
-	// 상수버퍼 업데이트
 	Matrix* pMatrices;
 	HRESULT hr = S_OK;
 	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
@@ -132,14 +129,11 @@ bool main::Render()
 	m_Obj->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
 	m_Obj->m_cbData.vColor[2] = m_pMainCamera->m_vLook.z;
 	m_Obj->SDxObject::Update(g_pImmediateContext);
-	//m_Obj->PreRender(g_pImmediateContext);
-
-	//g_pImmediateContext->IASetIndexBuffer(pObject->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	g_pImmediateContext->IASetInputLayout(m_Obj->m_pInputLayout);
-	g_pImmediateContext->VSSetConstantBuffers(0, 1, &m_Obj->m_pConstantBuffer);
-	g_pImmediateContext->PSSetConstantBuffers(0, 1, &m_Obj->m_pConstantBuffer);
-	g_pImmediateContext->VSSetShader(m_Obj->m_pVertexShader, NULL, 0);
-	g_pImmediateContext->PSSetShader(m_Obj->m_pPixelShader, NULL, 0);
+	g_pImmediateContext->IASetInputLayout(m_Obj->m_pInputLayout.Get());
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, m_Obj->m_pConstantBuffer.GetAddressOf());
+	g_pImmediateContext->PSSetConstantBuffers(0, 1, m_Obj->m_pConstantBuffer.GetAddressOf());
+	g_pImmediateContext->VSSetShader(m_Obj->m_pVertexShader.Get(), NULL, 0);
+	g_pImmediateContext->PSSetShader(m_Obj->m_pPixelShader.Get(), NULL, 0);
 	g_pImmediateContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_Obj->m_iTopology);
 
 
