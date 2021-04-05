@@ -199,6 +199,12 @@ bool SFbxObj::LoadFBX(std::string szFileName)
 			track.iTick = fCurrentTime * 30 * 160;
 			track.mat = DxConvertMatrix(ConvertMatrixA(mat));
 			data->second->animlist.push_back(track);
+
+			// mat 1차 부모행렬 역행렬 곱한다.
+			FbxAMatrix  self;
+			// self 2차 행렬 분해( S, R, T )
+			// 3차 에니메이션 트랙 행렬
+			// S(벡터), R(쿼터니언), T(벡터)를 샘플링 시간 간격으로 저장
 		}
 		fCurrentTime += m_Scene.fDeltaTime * 1;
 	}

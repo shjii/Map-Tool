@@ -9,9 +9,9 @@ bool main::Init()
 		for (auto data : m_Obj->m_sNodeList)
 		{
 			SModelObj* pObject = data;
-			for (int i = 0; i < pObject->m_subMesh.size(); i++)
+			for (int i = 0; i < pObject->m_SSubMesh.size(); i++)
 			{
-				subMesh* pSub = &pObject->m_subMesh[i];
+				SSubMesh* pSub = &pObject->m_SSubMesh[i];
 				if (pSub->m_TriangleList.empty()) continue;
 
 				pSub->m_VertexList.resize(pSub->m_TriangleList.size() * 3);
@@ -124,21 +124,18 @@ bool main::Render()
 		pObject->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
 		pObject->m_cbData.vColor[2] = m_pMainCamera->m_vLook.z;
 		pObject->SDxObject::Update(g_pImmediateContext);
-		g_pImmediateContext->IASetIndexBuffer(pObject->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-		g_pImmediateContext->IASetInputLayout(pObject->m_pInputLayout);
-		g_pImmediateContext->VSSetConstantBuffers(0, 1, &pObject->m_pConstantBuffer);
-		g_pImmediateContext->PSSetConstantBuffers(0, 1, &pObject->m_pConstantBuffer);
-		g_pImmediateContext->VSSetShader(pObject->m_pVertexShader, NULL, 0);
-		g_pImmediateContext->PSSetShader(pObject->m_pPixelShader, NULL, 0);
+		g_pImmediateContext->IASetIndexBuffer(pObject->m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		g_pImmediateContext->IASetInputLayout(pObject->m_pInputLayout.Get());
+		g_pImmediateContext->VSSetConstantBuffers(0, 1, pObject->m_pConstantBuffer.GetAddressOf());
+		g_pImmediateContext->PSSetConstantBuffers(0, 1, pObject->m_pConstantBuffer.GetAddressOf());
+		g_pImmediateContext->VSSetShader(pObject->m_pVertexShader.Get(), NULL, 0);
+		g_pImmediateContext->PSSetShader(pObject->m_pPixelShader.Get(), NULL, 0);
 		g_pImmediateContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)pObject->m_iTopology);
 
-		for (int i = 0; i < pObject->m_subMesh.size(); i++)
+		for (int i = 0; i < pObject->m_SSubMesh.size(); i++)
 		{
-			subMesh* pMesh = &pObject->m_subMesh[i];
+			SSubMesh* pMesh = &pObject->m_SSubMesh[i];
 			if (pMesh->m_TriangleList.empty()) continue;
-
-
-
 			ID3D11Buffer* vb[2] = { pMesh->m_pVertexBuffer.Get(), pMesh->m_pVertexBufferIW.Get() };
 			UINT iStride[2] = { sizeof(PNCT_VERTEX) , sizeof(IW_VERTEX)};
 			UINT iOffset[2] = { 0 , 0};

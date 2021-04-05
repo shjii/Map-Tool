@@ -9,8 +9,8 @@ bool main::Init()
 
 	m_Obj = make_shared<SFbxObj>();
 	//if (m_Obj->Load("../../data/3DS/man.fbx"))
-	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
-	//if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
+	//if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
+	if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
 	{
 		for (auto data : m_Obj->m_sNodeList)
 		{

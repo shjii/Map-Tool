@@ -167,8 +167,8 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObj* obj)
 	}
 	
 	int iNumMtrl = Node->GetMaterialCount();
-	if(iNumMtrl > 1)obj->m_subMesh.resize(iNumMtrl);
-	else { obj->m_subMesh.resize(1); }
+	if(iNumMtrl > 1)obj->m_SSubMesh.resize(iNumMtrl);
+	else { obj->m_SSubMesh.resize(1); }
 	for (int iMtrl = 0; iMtrl < iNumMtrl; iMtrl++)
 	{
 		FbxSurfaceMaterial* pMtrl = Node->GetMaterial(iMtrl);
@@ -315,11 +315,11 @@ void SFbxObj::ParseMesh(FbxNode* Node, FbxMesh* pFbxMesh, SModelObj* obj)
 
 			if (iNumMtrl < 1)
 			{
-				obj->m_subMesh[0].m_TriangleList.push_back(tri);
+				obj->m_SSubMesh[0].m_TriangleList.push_back(tri);
 			}
 			else
 			{
-				obj->m_subMesh[iSubMtrl].m_TriangleList.push_back(tri);
+				obj->m_SSubMesh[iSubMtrl].m_TriangleList.push_back(tri);
 			}	
 		}
 		iBasePolyIndex += iPolySize;

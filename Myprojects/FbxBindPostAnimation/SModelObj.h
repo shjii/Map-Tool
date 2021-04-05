@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <TObject.h>
 
-struct subMesh
+struct SSubMesh
 {
 	std::vector<STri>			m_TriangleList;
 	std::vector<PNCT_VERTEX>	m_VertexList;
@@ -13,7 +13,7 @@ struct subMesh
 	ComPtr<ID3D11Buffer>		m_pVertexBufferIW;
 	STexture*					m_pTexture;
 	int							m_count;
-	~subMesh()
+	~SSubMesh()
 	{
 		m_count = 0;
 	}
@@ -88,7 +88,7 @@ class SModelObj : public TObject
 {
 public:
 	vector<wstring>		fbxMaterialList;
-	vector<subMesh>		m_subMesh;
+	vector<SSubMesh>		m_SSubMesh;
 	vector<SAnimTrack>	animlist;
 	vector<SWeight>		WeightList;
 	bool				m_bSkinnedMesh = false;
