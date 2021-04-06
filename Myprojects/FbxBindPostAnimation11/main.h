@@ -5,6 +5,7 @@
 class main : public TCore
 {
 	shared_ptr<SFbxObj> m_Obj;
+	Matrix ControlMatrix;
 	//SFbxObj m_fbxObj;
 public:
 	bool Init() override;

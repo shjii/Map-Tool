@@ -9,8 +9,8 @@ bool main::Init()
 
 	m_Obj = make_shared<SFbxObj>();
 	//if (m_Obj->Load("../../data/3DS/man.fbx"))
-	//if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
-	if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
+	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
+	//if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
 	{
 		for (auto data : m_Obj->m_sNodeList)
 		{
@@ -70,6 +70,11 @@ bool main::Init()
 }
 bool main::Frame()
 {
+	if (g_Input.GetKey('0') == KEY_PUSH)
+	{
+		ControlMatrix._41 += 1.0f;
+	}
+
 	m_Obj->m_fTick += g_fSecondPerFrame *
 		m_Obj->m_Scene.iFrameSpeed *
 		m_Obj->m_Scene.iTickPerFrame * 1.0f;
@@ -151,7 +156,7 @@ bool main::Render()
 {
 	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_Obj->m_BoneBuffer.GetAddressOf());
 
-	m_Obj->SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_Obj->SetMatrix(&ControlMatrix, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 
 	m_Obj->m_cbData.vColor[0] = m_pMainCamera->m_vLook.x;
 	m_Obj->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;

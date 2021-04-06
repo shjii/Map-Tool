@@ -1,186 +1,72 @@
-#include "main.h"
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
 
-string solution(string new_id) {
-	string answer = "";
+struct atruck
+{
+	int index;
+	int weight;
+	int length;
+	bool endtruck = true;
+};
 
-	int iVertexIndex = 0;
-	for (int dwRow = 0; dwRow <= 16; dwRow++)
+int solution(int bridge_length, int weight, vector<int> truck_weights)
+{
+	int answer = 0;
+
+	vector<atruck> truck;
+
+	for (int a = 0; a < truck_weights.size(); a++)
 	{
-		for (int dwCol = 48; dwCol <= 63; dwCol++)
-		{
-			iVertexIndex++;
-		}
+		atruck t;
+		t.index = a;
+		t.weight = truck_weights[a];
+		t.length = 0;
+		truck.push_back(t);
 	}
-	
+
+	int index = 0;
+	int end = 0;
+	int weig = 0;
+	while (end != truck_weights.size())
+	{
+		for (int a = 0; a < truck_weights.size(); a++)
+		{
+			if (truck[a].endtruck != true) continue;
+
+			if (truck[a].length == 0)
+			{
+				if (weig + truck[a].weight <= weight)
+				{
+					truck[a].length++;
+					weig += truck[a].weight;
+				}
+				break;
+			}
+			else
+			{
+				truck[a].length++;
+				if (truck[a].length == bridge_length)
+				{
+					weig -= truck[a].weight;
+					truck[a].endtruck = false;
+					end++;
+					if(end <= truck_weights.size()) break;
+					if (truck[a + 1].length == 0) break;
+				}
+			}
+		}
+		answer++;
+	}
+
 	return answer;
 }
 
 
-
-
 int main()
 {
-	string ain = ".....a";
-	solution(ain);
-	vector<Item*> Inve(10);
-	vector<Item*>::iterator inveIte;
-	// 인벤토리 공간
-	map<string, Item*> iTem;
-	map<string, Item*>::iterator iteITem;
-	reSetitem(&iTem);
-	//Inve[0] = iTem["무기 1"]->clone();
-	int a = 0;
-	while (a != 10)
-	{
-		cout << "번호 입력 " << endl;
-		cout << "1번 : 아이템 추가 , 2번 : 전체 출력 , 3번 삭제 , 4번 검색 , 10번 종료" << endl;
-		cin >> a;
-		switch (a)
-		{
-		case 1:
-		{
-			for (auto& pair : iTem)
-			{
-				cout << pair.first << endl;
-			}
-			cout << "추가하실 아이템을 입력하세요(이름).";
-
-			string str;
-
-			cin >> str;
-
-			bool tf = false;
-
-			if (iTem.find(str) == iTem.end())
-			{
-				cout << "잘못 입력 하셨습니다." << endl;
-				break;
-			}
-
-			bool fild = false;
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if ((*inveIte) != NULL)
-				{
-					fild = (*inveIte)->getQuantity(str);
-					if (fild)
-					{
-						cout << "아이템을 추가 " << endl;
-						tf = true;
-						break;
-					}
-				}
-			}
-			if (tf) break;
-
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if (*inveIte == NULL)
-				{
-					*inveIte = iTem[str]->clone();
-					tf = true;
-					break;
-				}
-			}
-
-			if (!tf)
-			{
-				cout << "남은 슬롯이 없습니다." << endl;
-			}
-
-		}break;
-
-		case 2:
-		{
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if (*inveIte == NULL)
-				{
-					cout << ".아무것도 없습니다." << endl;
-				}
-				else
-				{
-					(*inveIte)->getprint();
-				}
-			}
-		}break;
-
-		case 3:
-		{
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if (*inveIte == NULL)
-				{
-					cout << ".아무것도 없습니다." << endl;
-				}
-				else
-				{
-					(*inveIte)->getprint();
-				}
-			}
-
-			cout << "삭제할 아이템 이름." << endl;
-
-			string str;
-
-			cin >> str;
-
-			bool qf = false;
-
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if (*inveIte != NULL)
-				{
-					if ((*inveIte)->name == str)
-					{
-						qf = (*inveIte)->delQuantity();
-						if (!qf)
-						{
-							delete (*inveIte);
-							(*inveIte) = NULL;
-							qf = true;
-							break;
-						}
-						break;
-					}
-				}
-			}
-			if (qf)
-				break;
-
-			cout << "잘못 입력 하였습니다." << endl;
-
-		}break;
-
-		case 4:
-		{
-			cout << "검색 이름" << endl;
-			string b;
-			cin >> b;
-			for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-			{
-				if (*inveIte != NULL && (*inveIte)->name == b)
-				{
-					(*inveIte)->getprint();
-				}
-			}
-		}break;
-		default:
-		{
-			if (a != 10)
-				cout << " 잘못 입력 하였습니다." << endl;
-		}
-		break;
-		}
-	}
-
-	for (auto& pair : iTem)
-	{
-		delete pair.second;
-	}
-	for (inveIte = Inve.begin(); inveIte != Inve.end(); inveIte++)
-	{
-		delete *inveIte;
-	}
-	Inve.clear();
+	vector<int> a = { 7,4,5,6 };
+	solution(2, 10, a);
+	return true;
 }
