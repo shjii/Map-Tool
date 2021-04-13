@@ -331,7 +331,7 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 	FbxVector4* pVertexPosiions = pFbxMesh->GetControlPoints();
 
 
-	bool bSkinnedMesh = ParseMeshSkinningMap(pFbxMesh, pObj->WeightList);
+	bool bSkinnedMesh = ParseMeshSkinningMap(pFbxMesh, pObj->WeightList, pObj);
 	pObj->m_bSkinnedMesh = bSkinnedMesh;
 
 	int iBasePolyIndex = 0;

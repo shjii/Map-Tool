@@ -14,7 +14,7 @@ struct SSubMesh
 	ComPtr<ID3D11Buffer>		m_pIndexBuffer;
 	STexture*					m_pTexture;
 	int							m_iNumFace = 0;
-
+	
 	vector<DWORD>				m_IndexArray;
 
 	void						SetUniqueBuffer(STri& trl);
@@ -82,6 +82,7 @@ public:
 	vector<SSubMesh>	subMesh;
 	vector<SAnimTrack>	animlist;
 	vector<SWeight>		WeightList;
+	unordered_map<string, Matrix>	m_dxMatrixBindPoseMap;
 	bool				m_bSkinnedMesh = false;
 public:
 	bool				CreateInputLayout() override;

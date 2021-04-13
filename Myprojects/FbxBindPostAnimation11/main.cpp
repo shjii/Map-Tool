@@ -8,8 +8,8 @@ bool main::Init()
 	m_Camera.CreateProjMatrix(1, 5000, TBASIS_PI / 4.0f, fAspect);
 
 	m_Obj = make_shared<SFbxObj>();
-	//if (m_Obj->Load("../../data/3DS/man.fbx"))
-	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
+	if (m_Obj->Load("../../data/3DS/man.fbx"))
+	//if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
 	//if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
 	{
 		for (auto data : m_Obj->m_sNodeList)
@@ -77,7 +77,7 @@ bool main::Frame()
 
 	m_Obj->m_fTick += g_fSecondPerFrame *
 		m_Obj->m_Scene.iFrameSpeed *
-		m_Obj->m_Scene.iTickPerFrame * 1.0f;
+		m_Obj->m_Scene.iTickPerFrame * 0.0f;
 
 	if (m_Obj->m_fTick >=
 		(m_Obj->m_Scene.iLastFrame *
@@ -89,14 +89,6 @@ bool main::Frame()
 	{
 		Matrix matWorld = Matrix::Identity;
 		SModelObj* pModelObject = m_Obj->m_sNodeList[iNode];
-		std::string szName;
-		szName.assign(pModelObject->m_szName.begin(), pModelObject->m_szName.end());
-		Matrix matBiped = Matrix::Identity;
-		auto data = m_Obj->m_dxMatrixBindPoseMap.find(szName);
-		if (data != m_Obj->m_dxMatrixBindPoseMap.end())
-		{
-			matBiped = data->second;
-		}
 
 		Matrix matParent = Matrix::Identity;
 		if (pModelObject->m_pParentObject != nullptr)
@@ -132,23 +124,10 @@ bool main::Frame()
 				pModelObject->m_matAnim = matScale * matRotate* matTrans* matParent;
 				//pModelObject->m_matAnim = pModelObject->animlist[iTick].mat;
 
-				m_Obj->m_pMatrixList[iNode] = matBiped * pModelObject->m_matAnim;
+				m_Obj->m_pMatrixList[iNode] = /*matBiped **/ pModelObject->m_matAnim;
 				break;
 			}
 		}
-	}
-	Matrix* pMatrices;
-	HRESULT hr = S_OK;
-	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
-	if (SUCCEEDED(g_pImmediateContext->Map((ID3D11Resource*)m_Obj->m_BoneBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedFaceDest)))
-	{
-		pMatrices = (Matrix*)MappedFaceDest.pData;
-		for (int dwObject = 0; dwObject < m_Obj->m_sNodeList.size(); dwObject++)
-		{
-			Matrix matAnim = m_Obj->m_pMatrixList[dwObject].Transpose();
-			pMatrices[dwObject] = matAnim;
-		}
-		g_pImmediateContext->Unmap(m_Obj->m_BoneBuffer.Get(), 0);
 	}
 	return true;
 }
@@ -174,6 +153,33 @@ bool main::Render()
 	{
 		Matrix matWorld = Matrix::Identity;
 		SModelObj* pObject = m_Obj->m_sNodeList[iNode];
+		//if (pObject->m_dxMatrixBindPoseMap.size() <= 0)
+		//{
+		//	continue;
+		//}
+
+
+		Matrix* pMatrices;
+		D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
+		if (SUCCEEDED(g_pImmediateContext->Map((ID3D11Resource*)m_Obj->m_BoneBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedFaceDest)))
+		{
+			pMatrices = (Matrix*)MappedFaceDest.pData;
+			for (int dwObject = 0; dwObject < m_Obj->m_sNodeList.size(); dwObject++)
+			{
+				SModelObj* pObj = m_Obj->m_sNodeList[dwObject];
+				std::string szName;
+				szName.assign(pObj->m_szName.begin(), pObj->m_szName.end());
+				Matrix matBiped = Matrix::Identity;
+				auto data = pObject->m_dxMatrixBindPoseMap.find(szName);
+				if (data != pObject->m_dxMatrixBindPoseMap.end())
+				{
+					matBiped = data->second;
+				}
+				Matrix matAnim = matBiped * m_Obj->m_pMatrixList[dwObject];
+				pMatrices[dwObject] = matAnim.Transpose();
+			}
+			g_pImmediateContext->Unmap(m_Obj->m_BoneBuffer.Get(), 0);
+		}
 
 		for (int iSub = 0; iSub < pObject->subMesh.size(); iSub++)
 		{

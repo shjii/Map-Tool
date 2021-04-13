@@ -44,6 +44,7 @@ public:
 	sNodeMap						m_sNodeMap;
 	sNodeList						m_sNodeList;
 	vector<FbxNode*>				m_pFbxNodeList;
+	vector< SAnimTrack*>			asd;
 public:
 	ComPtr<ID3D11Buffer>			m_BoneBuffer;
 public:
@@ -64,7 +65,7 @@ public:
 	////////
 	//bool ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata);
 	void ParseAnimation(FbxScene*	pFbxScene);
-	bool ParseMeshSkinningMap(const FbxMesh* pFbxMesh, vector< SWeight>& skindata);
+	bool ParseMeshSkinningMap(const FbxMesh* pFbxMesh, vector< SWeight>& skindata, SModelObj* Obj);
 	void AddKey(FbxNode* Node, FbxAMatrix matGlobal, float fCurrentTime);
 	bool	CreateInputLayout() override;
 public:

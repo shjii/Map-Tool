@@ -7,6 +7,9 @@ class main : public TCore
 	shared_ptr<SFbxObj> m_Obj;
 	Matrix ControlMatrix;
 	//SFbxObj m_fbxObj;
+	int id;
+	int idt;
+
 public:
 	bool Init() override;
 	bool Frame() override;

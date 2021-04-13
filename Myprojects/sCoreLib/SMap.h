@@ -10,6 +10,14 @@ struct SMapDesc
 	T_STR szVS;
 	T_STR szPS;
 };
+struct SNormalLookupTable
+{
+	int index[6];
+	SNormalLookupTable()
+	{
+		index[0] = index[1] = index[2] = index[3] = index[4] = index[5] = -1;
+	}
+};
 class SMap : public TObject
 {
 public:
@@ -35,13 +43,15 @@ public:
 	virtual void	UpdateIndexBuffer(ID3D11DeviceContext*  pContext, DWORD* pdwIndexArray, int iFaceCount);
 	virtual	void	UpdateVertexBuffer(ID3D11DeviceContext* pContext, PNCT_VERTEX* Vertex, int iFaceCount);
 public:
-	////
-	Vector3*	m_NormalVector;
-	int*		m_pNormalLookupTable;
-	void		InitNormal();
-	Vector3		Calculation(int a, int b, int c);
-	void		FindingNormal();
-	void		GenNormalLookupTable();
+	vector<Vector3>				m_FaceNormals;
+	vector<SNormalLookupTable>	m_LookupTabel;
+public:
+	Vector3	ComputeFaceNormal(DWORD i0, DWORD i1, DWORD i2);
+	void	CalcFaceNormals();
+	void	GetVertexNormal();
+	void	InitFaceNormals();
+	void	GenNormalLookupTable();
+	void	CalcPerVertexNormalsFastLookup();
 public:
 	SMap();
 	virtual ~SMap();
