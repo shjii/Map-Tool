@@ -3,6 +3,7 @@
 class SDxState
 {
 public:
+	static ID3D11RasterizerState*		m_pRSSolidNone;
 	static ID3D11RasterizerState*		m_pRSSolidBack;
 	static ID3D11RasterizerState*		m_pRSWireBack;
 	static ID3D11RasterizerState*		m_pRS;

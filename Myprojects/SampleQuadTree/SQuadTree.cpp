@@ -25,8 +25,8 @@ SNode * SQuadTree::BuildNode(SMap * m_Map)
 
 	sNode->m_IndexList = m_Map->m_IndexList;
 	sNode->m_VertexList = m_Map->m_VertexList;
-	sNode->m_pIndexBuffer = m_Map->m_pIndexBuffer;
-	sNode->m_pVertexBuffer = m_Map->m_pVertexBuffer;
+	sNode->m_pIndexBuffer = m_Map->m_pIndexBuffer.Get();
+	sNode->m_pVertexBuffer = m_Map->m_pVertexBuffer.Get();
 	return sNode;
 }
 bool	SQuadTree::Division(SNode* Node)

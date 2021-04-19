@@ -5,9 +5,11 @@
 #include "TWrite.h"
 #include "TSoundManager.h"
 #include "SDebugCamera.h"
+#include "SSkyBox.h"
 class TCore : public TDevice
 {
 public:
+	SSkyBox				m_SSkyBox;
 	bool				m_bGameRun;
 	SDebugCamera	    m_Camera;
 	SCamera*		    m_pMainCamera;

@@ -1,4 +1,5 @@
 #include "SDxState.h"
+ID3D11RasterizerState*		SDxState::m_pRSSolidNone = nullptr;
 ID3D11RasterizerState*		SDxState::m_pRSSolidBack = nullptr;
 ID3D11RasterizerState*		SDxState::m_pRSWireBack = nullptr;
 ID3D11RasterizerState*		SDxState::m_pRS = nullptr;
@@ -51,6 +52,14 @@ bool SDxState::Set(ID3D11Device* pd3dDevice)
 		return false;
 	}
 
+	
+	rdesc.FillMode = D3D11_FILL_SOLID;
+	rdesc.CullMode = D3D11_CULL_NONE;
+	hr = pd3dDevice->CreateRasterizerState(&rdesc, &m_pRSSolidNone);
+	if (FAILED(hr))
+	{
+		return false;
+	}
 	ZeroMemory(&rdesc, sizeof(D3D11_RASTERIZER_DESC));
 	rdesc.FillMode = D3D11_FILL_WIREFRAME;
 	rdesc.CullMode = D3D11_CULL_BACK;
@@ -84,10 +93,11 @@ bool SDxState::SetRasterizerState(ID3D11Device* pd3dDevice)
 }
 bool SDxState::Release()
 {
+	m_pRSSolidNone->Release();
 	m_pDSS->Release();
 	m_pWrapLinear->Release();
 	m_pRS->Release();
-	m_pRSSolidBack->Release();
+	m_pRSSolidBack->Release(); 
 	m_pRSWireBack->Release();
 	return true;
 }

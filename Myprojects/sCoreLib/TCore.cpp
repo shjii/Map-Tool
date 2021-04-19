@@ -52,12 +52,13 @@ bool TCore::GameInit()
 
 	m_Camera.CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
-	m_Camera.CreateProjMatrix(1, 1000, TBASIS_PI / 4.0f, fAspect);
+	m_Camera.CreateProjMatrix(1, 10000, TBASIS_PI / 4.0f, fAspect);
 	m_Camera.Init();
 	m_pMainCamera = &m_Camera;
 
-	if (!m_LineShape.Create(g_pd3dDevice, L"../../data/shader/vsCore.txt", L"../../data/shader/psCore.txt",
-		L"../../data/bitmap/tileA.jpg"))
+	m_SSkyBox.Create(g_pd3dDevice, L"../../data/shader/skyVS.txt", L"../../data/shader/skyPS.txt", L"");
+
+	if (!m_LineShape.Create(g_pd3dDevice, L"../../data/shader/vsCore.txt", L"../../data/shader/psCore.txt", L"../../data/bitmap/tileA.jpg"))
 	{
 		return false;
 	}
@@ -69,6 +70,7 @@ bool TCore::GameInit()
 }
 bool TCore::GameRelease()
 {
+	m_SSkyBox.Release();
 	m_LineShape.Release();
 	Release();
 	g_Timer.Release();
@@ -118,6 +120,7 @@ void    TCore::CameraFrame()
 		m_pMainCamera->UpMovement(-1.0f);
 	}
 	m_pMainCamera->Frame();
+	m_SSkyBox.Frame();
 }
 bool	TCore::PreRender()
 {
@@ -126,6 +129,11 @@ bool	TCore::PreRender()
 }
 bool	TCore::PostRender()
 {
+
+	m_SSkyBox.SetMatrix(NULL, &m_pMainCamera->m_matView,
+		&m_pMainCamera->m_matProj);
+	m_SSkyBox.Render(g_pImmediateContext);
+
 	m_LineShape.SetMatrix(NULL, &m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_LineShape.Draw(g_pImmediateContext,

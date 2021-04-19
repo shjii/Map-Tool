@@ -37,9 +37,30 @@
     <Filter Include="Map">
       <UniqueIdentifier>{3ce86e01-84a7-4f81-a449-abc5aeb8d3ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shder">
+      <UniqueIdentifier>{dcca0642-7674-44aa-9bc7-08b584aaf4fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="doc.txt" />
+    <Text Include="..\..\data\shader\objecPS.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="..\..\data\shader\objecVS.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="..\..\data\shader\PSCore.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="..\..\data\shader\skyPS.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="..\..\data\shader\skyVS.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="..\..\data\shader\VSCore.txt">
+      <Filter>shder</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TCollision.cpp">
@@ -170,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="SModelViewCamera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SSkyBox.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="SModelViewCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SSkyBox.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

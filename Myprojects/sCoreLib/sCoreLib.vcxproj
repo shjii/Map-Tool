@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\..\data\shader\objecPS.txt" />
+    <Text Include="..\..\data\shader\objecVS.txt" />
+    <Text Include="..\..\data\shader\PSCore.txt" />
+    <Text Include="..\..\data\shader\skyPS.txt" />
+    <Text Include="..\..\data\shader\skyVS.txt" />
+    <Text Include="..\..\data\shader\VSCore.txt" />
     <Text Include="doc.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +42,7 @@
     <ClCompile Include="SMiniMap.cpp" />
     <ClCompile Include="SModelViewCamera.cpp" />
     <ClCompile Include="SShape.cpp" />
+    <ClCompile Include="SSkyBox.cpp" />
     <ClCompile Include="STexture.cpp" />
     <ClCompile Include="STextureManager.cpp" />
     <ClCompile Include="SVector.cpp" />
@@ -86,6 +93,7 @@
     <ClInclude Include="SMiniMap.h" />
     <ClInclude Include="SModelViewCamera.h" />
     <ClInclude Include="SShape.h" />
+    <ClInclude Include="SSkyBox.h" />
     <ClInclude Include="STexture.h" />
     <ClInclude Include="STextureManager.h" />
     <ClInclude Include="SVector.h" />
