@@ -1,6 +1,7 @@
 #pragma once
 #include "SShape.h"
 #define MAX_SKYBOX_TEXTURE 6
+
 class SSkyBox : public SShapeBox
 {
 public:

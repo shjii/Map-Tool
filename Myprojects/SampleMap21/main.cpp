@@ -54,7 +54,6 @@ LRESULT	 main::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 bool main::Init()
 {
 	HRESULT hr;
-	m_SSkyBox.Create(g_pd3dDevice, L"VS.txt", L"skyObject.txt",L"");
 	m_pConstantBufferLight[0].Attach(TBASIS_CORE_LIB::CreateConstantBuffer(g_pd3dDevice, &m_cbLight1, 1, sizeof(LIGHT_CONSTANT_BUFFER1)));
 	m_pConstantBufferLight[1].Attach(TBASIS_CORE_LIB::CreateConstantBuffer(g_pd3dDevice, &m_cbLight2, 1, sizeof(LIGHT_CONSTANT_BUFFER1)));
 	m_pConstantBufferLight[2].Attach(TBASIS_CORE_LIB::CreateConstantBuffer(g_pd3dDevice, &m_cbLight3, 1, sizeof(LIGHT_CONSTANT_BUFFER1)));
@@ -109,7 +108,6 @@ bool main::Init()
 }
 bool main::Frame()
 {
-	m_SSkyBox.Frame();
 	m_cbLight1.g_cAmbientMaterial[0] = Vector4(0.1f, 0.1f, 0.1f, 1);
 	m_cbLight1.g_cDiffuseMaterial[0] = Vector4(1, 1, 1, 1);
 	m_cbLight1.g_cSpecularMaterial[0] = Vector4(1, 1, 1, 1);
@@ -229,9 +227,6 @@ bool main::Frame()
 bool main::Render()
 {
 	g_pImmediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_SSkyBox.SetMatrix(NULL, &m_pMainCamera->m_matView,
-		&m_pMainCamera->m_matProj);
-	m_SSkyBox.Render(g_pImmediateContext);
 	g_pImmediateContext->RSSetState(SDxState::m_pRS);
 	g_pImmediateContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
@@ -337,7 +332,6 @@ bool main::PostRender()
 }
 bool main::Release()
 {
-	m_SSkyBox.Release();
 	m_MinMap.Release();
 	m_Map.Release();
 	m_BoxShape.Release();

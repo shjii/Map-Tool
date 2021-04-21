@@ -151,6 +151,7 @@
     <ClCompile Include="SCollision.cpp" />
     <ClCompile Include="SHeightMap.cpp" />
     <ClCompile Include="SLod.cpp" />
+    <ClCompile Include="SModel.cpp" />
     <ClCompile Include="SMousePicking.cpp" />
     <ClCompile Include="SNode.cpp" />
     <ClCompile Include="SQuadTree.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="SCollision.h" />
     <ClInclude Include="SHeightMap.h" />
     <ClInclude Include="SLod.h" />
+    <ClInclude Include="SModel.h" />
     <ClInclude Include="SMousePicking.h" />
     <ClInclude Include="SNode.h" />
     <ClInclude Include="SQuadTree.h" />

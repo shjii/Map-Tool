@@ -96,8 +96,7 @@ bool main::Init()
 	m_pMainCamera->Create(g_pd3dDevice);
 
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
-	m_Map.InitNormal();
-	m_Map.FindingNormal();
+  
 
 	m_QuadTree.m_mainCamera = m_pMainCamera;
 	m_QuadTree.m_MaxDepth = 3;

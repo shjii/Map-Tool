@@ -5,7 +5,8 @@
 #include "SModelViewCamera.h"
 #include "SHeightMap.h"
 #include "SMiniMap.h"
-#include "SSkyBox.h"
+//#include "SSkyBox.h"
+
 const int g_iNumLight = 3;
 struct LIGHT_CONSTANT_BUFFER1
 {
@@ -36,8 +37,6 @@ struct LIGHT_CONSTANT_BUFFER3
 };
 class main : public TCore
 {
-public:
-	SSkyBox			m_SSkyBox;
 public:
 	Vector3			m_vLightVector;
 	LIGHT_CONSTANT_BUFFER1	m_cbLight1;
