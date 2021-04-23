@@ -5,7 +5,7 @@ bool main::Init()
 		{ 0,20,-50 },
 		{ 0,0, 0 });
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
-	m_Camera.CreateProjMatrix(1, 5000, TBASIS_PI / 4.0f, fAspect);
+	m_Camera.CreateProjMatrix(1, 50000, TBASIS_PI / 4.0f, fAspect);
 
 	m_Obj = make_shared<SFbxObj>();
 	//if (m_Obj->Load("../../data/3DS/man.fbx"))

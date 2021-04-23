@@ -159,7 +159,7 @@ PS_OUTPUT PS( VS_OUTPUT vIn)
 	PS_OUTPUT vOut;
 	float4 vTexture = g_txDiffuse.Sample( g_Sample, vIn.t);
 	float4 lightColor = ComputeSpotLight(vIn.wp, vIn.n, 3);	
-	vOut.c = Diffuse(vIn.n, g_vLightDir[0])*Geom(vIn)*lightColor;
+	vOut.c = vTexture * Diffuse(vIn.n, g_vLightDir[0])*Geom(vIn)*lightColor;
 	return vOut;
 }
 PS_OUTPUT PS_Default( VS_OUTPUT vIn)

@@ -19,27 +19,12 @@ bool main::Init()
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";
-
-	//m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
-	//	L"../../data/bitmap/tileA.jpg");
-
-	m_pMainCamera->Create(g_pd3dDevice);
-	m_pMainCamera->CreateViewMatrix({ 0,100,-10 }, { 0,0,0 });
-	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
-	m_pMainCamera->CreateProjMatrix(1, 50000, TBASIS_PI / 4.0f, fAspect);
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
-
-	//m_Map.InitNormal();
-	//m_Map.FindingNormal();
 
 	m_QuadTree.GetUpdata(m_pMainCamera);
 	m_QuadTree.m_MaxDepth = 5;
 	m_QuadTree.Build(&m_Map);
-	///
-	//m_TopCamera.CreateViewMatrix({ 0,1000,-0.1f }, { 0,0,0 });
-	//m_TopCamera.CreateOrthographic(
-	//	desc.iNumCols, desc.iNumRows, 1.0f, 1000);
-	//m_TopCamera.Init();
+
 	return true;
 }
 bool main::Frame()
@@ -131,39 +116,12 @@ bool main::Frame()
 		BoolColl = true;
 	}
 
-	/*
-	if (g_Input.GetKey('W') == KEY_HOLD)
-	{
-		m_UserShape.FrontMovement(1.0f);
-	}
-	if (g_Input.GetKey('S') == KEY_HOLD)
-	{
-		m_UserShape.FrontMovement(-1.0f);
-	}
-	if (g_Input.GetKey('A') == KEY_HOLD)
-	{
-		m_UserShape.RightMovement(-1.0f);
-	}
-	if (g_Input.GetKey('D') == KEY_HOLD)
-	{
-		m_UserShape.RightMovement(1.0f);
-	}
-	if (g_Input.GetKey('Q') == KEY_HOLD)
-	{
-		m_UserShape.UpMovement(1.0f);
-	}
-	if (g_Input.GetKey('E') == KEY_HOLD)
-	{
-		m_UserShape.UpMovement(-1.0f);
-	}*/ 
 	
 	m_QuadTree.Frame();
 
-	//m_Map.UpdateIndexBuffer(g_pImmediateContext, &m_QuadTree.m_IndexList.at(0), m_QuadTree.Face);
-	//m_Map.m_IndexList = m_QuadTree.m_IndexList;
 	m_pObj.Frame();
 	m_Map.Frame();
-	m_pMainCamera->Frame();
+
 	m_SelectNode.clear();
 	return true;
 }
@@ -179,8 +137,6 @@ bool main::Render()
 	g_pImmediateContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
 	g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
 
-
-
 	m_Map.SetMatrix(NULL,
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
@@ -193,12 +149,6 @@ bool main::Render()
 		Vector3 Pick;
 		for (int i = 0; i < m_QuadTree.m_LODDrawLIst.size(); i++)
 		{
-			//if (Collision.AABBToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir))
-			//{
-			//	BoolColl = true;
-			//	m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
-			//}
-
 			if (Collision.SphereToRay(&m_QuadTree.m_LODDrawLIst[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
 			{
 				m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);

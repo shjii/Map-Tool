@@ -37,7 +37,7 @@ PS_OUTPUT PS( VS_OUTPUT vIn)
 	
 	float4 cube = g_txCube.Sample( g_Sample, vIn.v);
 	float4 a = vFinalColor * (vAmbint+vLightColor);
-	vOut.c =  lerp(cube,a, max(0, c*c));
+	vOut.c =  vTexture * lerp(cube,a, max(0, c*c));
 	return vOut;
 }
 PS_OUTPUT PSLine( VS_OUTPUT vIn)

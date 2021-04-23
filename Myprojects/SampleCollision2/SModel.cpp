@@ -38,12 +38,12 @@ bool	SModel::Init()
 
 				wstring loadTex = L"../../data/3DS/";
 				loadTex += pObject->fbxMaterialList[iSub].c_str();
-				pSub->m_pTexture = g_TextMgr.Load(g_pd3dDevice, loadTex.c_str());
+				pSub->m_pTexture = g_TextMgr.Load(TBASIS_CORE_LIB::g_pd3dDevice, loadTex.c_str());
 			}
 		}
 		if (!m_Obj->Create(TBASIS_CORE_LIB::g_pd3dDevice,
-			L"objectVS.txt",
-			L"objectPS.txt",
+			L"../../data/shader/objecVS.txt",
+			L"../../data/shader/objecPS.txt",
 			L""))
 		{
 			return false;
@@ -118,7 +118,7 @@ bool	SModel::Render(ID3D11DeviceContext* pd3dContext)
 {
 	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_Obj->m_BoneBuffer.GetAddressOf());
 
-	m_Obj->SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	//m_Obj->SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 
 	m_Obj->m_cbData.vColor[0] = m_pMainCamera->m_vLook.x;
 	m_Obj->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
