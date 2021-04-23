@@ -91,12 +91,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/;../../include/NetCore;../../fmod/inc;../../include/dxtk</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/;../../include/NetCore;../../fmod/inc;../../include/dxtk;../../FBX/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../lib;../../fmod/lib/x64;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../lib;../../fmod/lib/x64;../../FBX/lib/vs2017/x64/debug/;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -167,8 +167,15 @@
     <ClInclude Include="SQuadTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="objectPS.txt" />
+    <Text Include="objectVS.txt" />
     <Text Include="PS.txt" />
     <Text Include="VS.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sCoreLib\sCoreLib.vcxproj">
+      <Project>{daf8f1cb-6ec7-4d29-83d8-1841cc2cb8ab}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

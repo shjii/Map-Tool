@@ -8,6 +8,7 @@
 #include "SQuadTree.h"
 #include "SMousePicking.h"
 #include "SCollision.h"
+#include "SModel.h"
 const int g_iNumLight = 3;
 struct LIGHT_CONSTANT_BUFFER1
 {
@@ -40,6 +41,8 @@ struct LIGHT_CONSTANT_BUFFER3
 class main : public TCore
 {
 public:
+	SModel			m_pObj;
+	vector<Matrix>	m_MatrixList;
 	Vector3			m_vLightVector;
 	LIGHT_CONSTANT_BUFFER1	m_cbLight1;
 	LIGHT_CONSTANT_BUFFER2	m_cbLight2;
