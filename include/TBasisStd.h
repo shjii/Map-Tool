@@ -22,6 +22,7 @@
 #pragma comment( lib, "Winmm.lib")
 #pragma comment (lib, "ws2_32.lib")
 #pragma comment( lib, "fmod_vc.lib")
+
 #pragma warning (disable:4244)       // 경고 무시  warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다
 
 

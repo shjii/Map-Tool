@@ -2,6 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "SModelObj.h"
 
+
+
 static Matrix DxConvertMatrix(Matrix m)
 {
 	Matrix mat;
