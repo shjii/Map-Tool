@@ -15,6 +15,7 @@
 #include <memory>
 #include <process.h> //_beginthreadex
 #include <d3dcompiler.h>
+#include "SimpleMath.h"
 #include "TMath.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -24,7 +25,8 @@
 #pragma comment( lib, "fmod_vc.lib")
 
 #pragma warning (disable:4244)       // 경고 무시  warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다
-
+using namespace DirectX;
+using namespace SimpleMath;
 
 namespace TBASIS_CORE_LIB
 {

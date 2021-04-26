@@ -2,11 +2,8 @@
 #include "TStd.h"
 #include "dxtk/WICTextureLoader.h"//../../include/DirectXTK
 #include "dxtk/DDSTextureLoader.h"
-#include "SimpleMath.h"
 #include "SDxState.h"
 #include "STextureManager.h"
-using namespace DirectX;
-using namespace SimpleMath;
 
 struct P_VERTEX
 {

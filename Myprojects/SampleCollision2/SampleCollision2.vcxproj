@@ -154,6 +154,8 @@
     <ClCompile Include="SModel.cpp" />
     <ClCompile Include="SMousePicking.cpp" />
     <ClCompile Include="SNode.cpp" />
+    <ClCompile Include="SObject2D.cpp" />
+    <ClCompile Include="SParticle.cpp" />
     <ClCompile Include="SQuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +166,8 @@
     <ClInclude Include="SModel.h" />
     <ClInclude Include="SMousePicking.h" />
     <ClInclude Include="SNode.h" />
+    <ClInclude Include="SObject2D.h" />
+    <ClInclude Include="SParticle.h" />
     <ClInclude Include="SQuadTree.h" />
   </ItemGroup>
   <ItemGroup>
