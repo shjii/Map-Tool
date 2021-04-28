@@ -1,5 +1,7 @@
 #pragma once
 #include "TStd.h"
+#define MAX_PARTICLE 1000
+
 class SParticle
 {
 public:
