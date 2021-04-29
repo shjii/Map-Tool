@@ -10,6 +10,29 @@ bool	SObject2D::Create(ID3D11Device* pDevice, T_STR szVS, T_STR szPS, T_STR	szTe
 }
 bool	SObject2D::CreateInputLayout()
 {
+	const D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXTURE",  0, DXGI_FORMAT_R32G32_FLOAT, 0, 40,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32_FLOAT, 1, 48,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT iNumElement = sizeof(layout) / sizeof(layout[0]);
+	HRESULT hr = g_pd3dDevice->CreateInputLayout(
+		layout,
+		iNumElement,
+		m_pVSObj->GetBufferPointer(),
+		m_pVSObj->GetBufferSize(),
+		m_pInputLayout.GetAddressOf()
+	);
+	if (FAILED(hr)) return false;
+	return true;
 	return true;
 }
 bool	SObject2D::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
@@ -41,7 +64,21 @@ bool	SObject2D::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
 }
 bool	SObject2D::Frame(ID3D11DeviceContext* pContext, float fGlobalTime, float fElapsdTime)
 {
+	if (!SShape::Frame()) return false;
 
+
+
+	if (m_BufferInstance)
+	{
+		SInstance* pInstances = NULL;
+		D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
+		if (SUCCEEDED(pContext->Map((ID3D11Resource*)m_BufferInstance.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0 , &MappedFaceDest)))
+		{
+			pInstances = (SInstance*)MappedFaceDest.pData;
+			memcpy(pInstances, m_pInstatnceList, sizeof(SInstance) * m_ParticleList.size());
+			pContext->Unmap(m_BufferInstance.Get(), 0);
+		}
+	}
 	return true;
 }
 HRESULT	SObject2D::InitBufferData(ID3D11Device* pd3dDevice)
@@ -64,6 +101,19 @@ HRESULT	SObject2D::InitBufferData(ID3D11Device* pd3dDevice)
 	}
 	m_BufferInstance.Attach(TBASIS_CORE_LIB::CreateVertexBuffer(pd3dDevice, m_pInstatnceList, (UINT)m_ParticleList.size(), sizeof(SInstance), true));
 	return S_OK;
+}
+bool	SObject2D::Render(ID3D11DeviceContext* pContext)
+{
+	ID3D11Buffer* Buffer[2] = { m_pVertexBuffer.Get(), m_BufferInstance.Get() };
+	UINT stride[2] = { sizeof(PNCT_VERTEX), sizeof(SInstance) };
+	UINT offset[2] = { 0,0 };
+
+	PreRender(pContext);
+	pContext->IASetVertexBuffers(0,2,Buffer,stride, offset);
+	pContext->UpdateSubresource(m_pConstantBuffer.Get(), 0, NULL, &m_cbData,0 ,0);
+	pContext->DrawIndexedInstanced(m_iIndex, m_ParticleList.size(), 0, 0, 0);
+	// ¼öÁ¤
+	return true;
 }
 SObject2D::SObject2D()
 {

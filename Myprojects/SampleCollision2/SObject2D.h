@@ -22,9 +22,10 @@ public:
 	void	SetCounter(int iCnt) { m_iCounter = iCnt; };
 public:
 	bool	Create(ID3D11Device* pDevice, T_STR szVS, T_STR szPS, T_STR	szTex) override;
-	bool	CreateInputLayout() override;
+	bool	CreateInputLayout()override;
 	bool	SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)override;
 	bool	Frame(ID3D11DeviceContext* pContext, float fGlobalTime, float fElapsdTime);
+	bool	Render(ID3D11DeviceContext* pContext)override;
 	HRESULT	InitBufferData(ID3D11Device* pd3dDevice);
 public:
 	SObject2D();
