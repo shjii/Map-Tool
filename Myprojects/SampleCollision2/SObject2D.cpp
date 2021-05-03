@@ -17,11 +17,11 @@ bool	SObject2D::CreateInputLayout()
 		{ "COLOR",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXTURE",  0, DXGI_FORMAT_R32G32_FLOAT, 0, 40,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "mTransform",  0, DXGI_FORMAT_R32G32_FLOAT, 1, 48,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0,  D3D11_INPUT_PER_VERTEX_DATA, 1 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16,  D3D11_INPUT_PER_VERTEX_DATA, 1 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,  D3D11_INPUT_PER_VERTEX_DATA, 1 },
+		{ "mTransform",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,  D3D11_INPUT_PER_VERTEX_DATA, 1 },
+		{ "POSCOLOR",	 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64,  D3D11_INPUT_PER_VERTEX_DATA, 1 },
 	};
 	UINT iNumElement = sizeof(layout) / sizeof(layout[0]);
 	HRESULT hr = g_pd3dDevice->CreateInputLayout(
@@ -32,7 +32,6 @@ bool	SObject2D::CreateInputLayout()
 		m_pInputLayout.GetAddressOf()
 	);
 	if (FAILED(hr)) return false;
-	return true;
 	return true;
 }
 bool	SObject2D::SetMatrix(Matrix* pWorld, Matrix* pView, Matrix* pProj)
