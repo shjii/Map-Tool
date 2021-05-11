@@ -45,9 +45,6 @@
     <ClInclude Include="Sample.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="SMapDlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCApplication1.cpp">
@@ -67,9 +64,6 @@
     </ClCompile>
     <ClCompile Include="Sample.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="SMapDlg.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
