@@ -16,6 +16,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{59f0ace4-9c43-4485-8d93-1fc0b08119ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shder">
+      <UniqueIdentifier>{6bdbbf64-a0a3-4731-8920-5a33c6967588}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MFCApplication1.h">
@@ -106,5 +109,10 @@
     <Text Include="VS.txt">
       <Filter>Core</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="map.hlsl">
+      <Filter>shder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

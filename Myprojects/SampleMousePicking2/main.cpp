@@ -98,8 +98,6 @@ bool main::Init()
 	float fAspect = g_rtClient.right / (float)g_rtClient.bottom;
 	m_pMainCamera->CreateProjMatrix(1, 500, TBASIS_PI / 4.0f, fAspect);
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
-	m_Map.InitNormal();
-	m_Map.FindingNormal();
 
 	m_QuadTree.GetUpdata(m_pMainCamera);
 	m_QuadTree.m_MaxDepth = 5;

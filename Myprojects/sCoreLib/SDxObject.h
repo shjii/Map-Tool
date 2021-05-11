@@ -46,6 +46,15 @@ struct PNCT_VERTEX
 		p = vp, n = vn, c = vc, t = vt;
 	}
 };
+struct RC
+{
+	Vector4	r;
+	RC() {}
+	RC(Vector4 R)
+	{
+		this->r = R;
+	}
+};
 struct IW_VERTEX
 {
 	float		i[4];
@@ -90,6 +99,10 @@ struct SDataCB
 	Matrix  matProject;
 	float vColor[4];
 	float vTime[4];
+};
+struct SRCData
+{
+	float vRc[4];
 };
 
 namespace TBASIS_CORE_LIB
@@ -141,10 +154,12 @@ namespace TBASIS_CORE_LIB
 		Vector3		m_vPos = { 0,0,0 };
 		Vector3		m_vTarget = { 0,0,0 };
 	public:
-		SDataCB					m_cbData;
+		SDataCB						m_cbData;
 		std::vector<STri>			m_TriangleList;
 		std::vector<PNCT_VERTEX>	m_VertexList;
-		std::vector<DWORD>		m_IndexList;
+		std::vector<DWORD>			m_IndexList;
+		std::vector<RC>				m_RC;
+		ComPtr<ID3D11Buffer>			m_pRC;
 		ComPtr<ID3D11Buffer>			m_pVertexBuffer;
 		ComPtr<ID3D11Buffer>			m_pIndexBuffer;
 		ComPtr<ID3D11Buffer>			m_pConstantBuffer;

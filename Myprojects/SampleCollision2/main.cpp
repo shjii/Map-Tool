@@ -12,8 +12,8 @@ bool main::Init()
 	m_pObj.m_pMainCamera = m_pMainCamera;
 
 	SMapDesc desc;
-	desc.iNumCols = 513;// m_Map.m_iNumCols;
-	desc.iNumRows = 513;// m_Map.m_iNumRows;
+	desc.iNumCols = 17;// m_Map.m_iNumCols;
+	desc.iNumRows = 17;// m_Map.m_iNumRows;
 	desc.fCellDistance = 1;
 	desc.fScaleHeight = 1.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
@@ -22,7 +22,7 @@ bool main::Init()
 	m_Map.CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
 
 	m_QuadTree.GetUpdata(m_pMainCamera);
-	m_QuadTree.m_MaxDepth = 5;
+	m_QuadTree.m_MaxDepth = 1;
 	m_QuadTree.Build(&m_Map);
 
 	return true;

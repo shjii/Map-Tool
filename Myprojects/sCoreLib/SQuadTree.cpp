@@ -47,8 +47,7 @@ bool	SQuadTree::Division(SNode* Node)
 	{
 		CreatorIndexBuffer(Node, m_Map->m_iNumCols, m_Map->m_iNumRows);
 		Node->m_LeafNode = true;
-		//
-		m_LeafNodeLIst.push_back(Node);
+		m_LeafNodeList.push_back(Node);
 		return false;
 	}
 

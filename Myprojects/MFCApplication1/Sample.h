@@ -2,11 +2,20 @@
 #include "TCore.h"
 #include "SHeightMap.h"
 #include "SQuadTree.h"
+#include "SModel.h"
+#include "sCollision.h"
+#include "SMousePicking.h"
 class Sample : public TCore
 {
 public:
+	ComPtr<ID3D11Buffer>			m_ConstantBuffer;
+	SModel			m_pObj;
+	vector<Matrix>	m_MatrixList;
 	SMap*			m_Map;
 	SQuadTree		m_QuadTree;
+	bool			BoolColl;
+	SCollision		Collision;
+	SMousePicking	m_Mouse;
 public:
 	bool Init() override;
 	bool Frame() override;

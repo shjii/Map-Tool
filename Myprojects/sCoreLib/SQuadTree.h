@@ -11,8 +11,8 @@ enum CornerPosition
 class SQuadTree : public SLod
 {
 public:
-	vector<SNode*>	m_LeafNodeLIst;
-	int		m_MaxDepth;
+	vector<SNode*>  m_LeafNodeList;
+	int				m_MaxDepth;
 public:
 	bool	Build(SMap* m_Map);
 	SNode*	BuildNode(SMap* m_Map);
