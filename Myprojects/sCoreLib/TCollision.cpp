@@ -8,7 +8,6 @@ bool TCollision::RectInPt(RECT rt, POINT pt)
 }
 bool TCollision::Rect2Rect(RECT rtDesk, RECT rtSrc)
 {
-	// °¡·Î
 	POINT  cDesk, cSrc, Radius, DeskRadius, SrcRadius;
 	cDesk.x = (rtDesk.left + rtDesk.right) / 2;
 	cDesk.y = (rtDesk.top + rtDesk.bottom) / 2;
