@@ -57,10 +57,10 @@ bool main::Init()
 	m_Map.CreateHeightMap(g_pd3dDevice, g_pImmediateContext, L"../../data/map/HEIGHT_CASTLE.bmp");
 
 	SMapDesc desc;
-	desc.iNumCols = 41;
-	desc.iNumRows = 41;
-	desc.fCellDistance = 10;
-	desc.fScaleHeight = 1.0f;
+	desc.iNumCols = m_Map.m_iNumCols;
+	desc.iNumRows = m_Map.m_iNumRows;
+	desc.fCellDistance = 1;
+	desc.fScaleHeight = 10.0f;
 	desc.szTexFile = L"../../data/map/castle.jpg";
 	desc.szPS = L"ps.txt";
 	desc.szVS = L"vs.txt";

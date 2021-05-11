@@ -84,7 +84,7 @@ bool main::Init()
 	SMapDesc desc;
 	desc.iNumCols = m_Map.m_iNumCols;
 	desc.iNumRows = m_Map.m_iNumRows;
-	desc.fCellDistance = 100;
+	desc.fCellDistance = 1;
 	desc.fScaleHeight = 1.0f;
 	desc.szTexFile = L"../../data/map/grasshill.jpg";
 	desc.szPS = L"ps.txt";
