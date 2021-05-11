@@ -138,9 +138,13 @@ bool Sample::Release()
 
 bool Sample::Build(int tel, int cel, int ces, wstring tex)
 {
+	if (m_Map != nullptr) m_Map->Release();
+	m_Map = nullptr;
 	SMapDesc desc;
-	desc.iNumCols = sqrt(tel * cel) * sqrt(tel) + 1;// m_Map.m_iNumCols;
-	desc.iNumRows = sqrt(tel * cel) *sqrt(tel) + 1;// m_Map.m_iNumRows;
+	//desc.iNumCols = sqrt(tel * cel) * sqrt(tel) + 1;// m_Map.m_iNumCols;
+	//desc.iNumRows = sqrt(tel * cel) *sqrt(tel) + 1;// m_Map.m_iNumRows;
+	desc.iNumCols = tel * cel + 1;// m_Map.m_iNumCols;
+	desc.iNumRows = tel * cel + 1;// m_Map.m_iNumRows;
 	desc.fCellDistance = ces;
 	desc.fScaleHeight = 1.0f;
 	desc.szTexFile = tex;
@@ -200,7 +204,7 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 		pData->vRc[0] = tel;
 		pData->vRc[1] = cel;
 		pData->vRc[2] = ces;
-		pData->vRc[3] = sqrt(tel * cel);
+		pData->vRc[3] = tel * cel;
 
 		g_pImmediateContext->Unmap(m_ConstantBuffer.Get(), 0);
 	}

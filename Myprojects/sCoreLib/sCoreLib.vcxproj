@@ -254,14 +254,15 @@ copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\Debug"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../fmod/inc;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../fmod/inc;../../FBX/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>../../fmod/lib/x64;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../fmod/lib/x64;../../FBX/lib/vs2017/x64/debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;</AdditionalDependencies>
     </Lib>
     <PreBuildEvent>
       <Command>copy "..\\..\\fmod\\lib\\x64\\*.dll" "..\\..\\output\\"</Command>

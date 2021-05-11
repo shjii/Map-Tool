@@ -58,8 +58,8 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	//vOut.t.x = ((vOut.wp.x / 10.0f) + 8.0f) / 16.0f * 4;
 	//vOut.t.y = 1.0f - ((vOut.wp.z / 10.0f) + 8.0f) / 16.0f * 4;
 
-	vOut.t.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2 )) / vRc.w * sqrt(vRc.w);
-	vOut.t.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w * sqrt(vRc.w);
+	vOut.t.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; //pow(vRc.x, 2);
+	vOut.t.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; //pow(vRc.x, 2);
 	return vOut;
 }
 // HLSL
