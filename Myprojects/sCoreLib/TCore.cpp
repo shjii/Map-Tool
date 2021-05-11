@@ -192,31 +192,6 @@ bool TCore::Run()
 	CoUninitialize();
 	return true;
 }
-bool	TCore::InitTool(HWND hwnd, HINSTANCE hlnstance)
-{
-	HRESULT hr = S_OK;
-	g_hWnd = m_hWnd = hwnd;
-	g_hInstance = m_hInstance = hlnstance;
-
-	GetClientRect(m_hWnd, &m_rtClient);
-	g_rtClient = m_rtClient;
-	GetWindowRect(m_hWnd, &m_rtWindow);
-	hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	GameInit();
-	return true;
-}
-bool	TCore::ReleaseTool()
-{
-	GameRelease();
-	CoUninitialize();
-	return true;
-}
-bool	TCore::ToolRun()
-{
-	if (GameFrame() == false) return false;
-	if (GameRender() == false) return false;
-	return true;
-}
 TCore::TCore()
 {
 	m_pMainCamera = nullptr;

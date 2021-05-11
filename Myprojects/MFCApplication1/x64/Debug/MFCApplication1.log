@@ -1,2 +1,7 @@
-﻿  MFCApplication1.cpp
+﻿  pch.cpp
+  MainFrm.cpp
+  MFCApplication1.cpp
+  MFCApplication1Doc.cpp
+  MFCApplication1View.cpp
+  코드를 생성하고 있습니다...
   MFCApplication1.vcxproj -> D:\SJH\shjii\sjh2\Myprojects\x64\Debug\MFCApplication1.exe

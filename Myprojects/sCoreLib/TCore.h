@@ -40,9 +40,6 @@ public:
 	};
 	virtual HRESULT DeleteDXResource();
 	virtual HRESULT CreateDXResource(UINT w, UINT h);
-	bool	InitTool(HWND hwnd, HINSTANCE hlnstance);
-	bool	ReleaseTool();
-	bool	ToolRun();
 private:
 	bool	GameInit();
 	bool	GameFrame();
