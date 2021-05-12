@@ -3,7 +3,7 @@ bool	SMiniMap::Create(ID3D11Device* pDevice,
 	T_STR szVS, T_STR szPS,
 	T_STR	szTex)
 {
-	m_DxRT.Set(pDevice);
+	m_DxRT.Set(pDevice, Width, Height);
 	g_pd3dDevice = pDevice;
 	m_DxRT.SetRenderTargetView();
 	m_DxRT.SetDepthStencilView();

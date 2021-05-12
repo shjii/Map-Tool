@@ -71,3 +71,15 @@ void MapDlg::OnBnClickedButton1()
 	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
+
+BOOL MapDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	
+	i_Tile = 8;
+	i_Cell = 8;
+	i_Cellsize = 1;
+	a = L"Apopup_normal.bmp";
+	UpdateData(FALSE);
+	return TRUE;
+}

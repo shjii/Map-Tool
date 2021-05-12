@@ -702,7 +702,7 @@ namespace TBASIS_CORE_LIB
 	}
 	bool	SDxObject::Render(ID3D11DeviceContext*	pd3dContext)
 	{
-		PreRender(pd3dContext);
+ 		PreRender(pd3dContext);
 		PostRender(pd3dContext);
 		return true;
 	}

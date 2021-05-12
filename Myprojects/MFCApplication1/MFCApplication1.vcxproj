@@ -204,6 +204,8 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sample.h" />
+    <ClInclude Include="SMapToolForm.h" />
+    <ClInclude Include="SText.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +221,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="SMapToolForm.cpp" />
+    <ClCompile Include="SText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCApplication1.rc" />

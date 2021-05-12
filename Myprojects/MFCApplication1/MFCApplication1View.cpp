@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CMFCApplication1View, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMFCApplication1View::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // CMFCApplication1View 생성/소멸
@@ -124,5 +125,10 @@ CMFCApplication1Doc* CMFCApplication1View::GetDocument() const // 디버그되�
 }
 #endif //_DEBUG
 
-
-// CMFCApplication1View 메시지 처리기
+void CMFCApplication1View::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+	CMFCApplication1App* pApp = (CMFCApplication1App*)AfxGetApp();
+	pApp->m_Sample.ResizeDevice(cx, cy);
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}

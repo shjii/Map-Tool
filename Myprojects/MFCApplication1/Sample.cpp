@@ -5,10 +5,19 @@ bool Sample::Init()
 {
 	m_pObj.Init();
 	m_pObj.m_pMainCamera = m_pMainCamera;
+	m_MinMap.Width = 512;
+	m_MinMap.Height = 512;
+
+	m_MinMap.Create(g_pd3dDevice, L"vs.txt", L"ps.txt",
+		L"../../data/bitmap/tileA.jpg");
+
+	m_Textrue.Create(g_pd3dDevice, L"vs.txt", L"ps.txt", L"");
+
 	return true;
 }
 bool Sample::Frame()
 {
+
 	if (g_Input.GetKey('0') == KEY_PUSH)
 	{
 		SDxState::m_FillMode = D3D11_FILL_WIREFRAME;
@@ -21,10 +30,10 @@ bool Sample::Frame()
 	}
 	if (m_Map != nullptr)
 	{
-		m_QuadTree.Frame();
+		//m_QuadTree.Frame();
 		m_Map->Frame();
 	}	
-	if (g_Input.GetKey(VK_RBUTTON) == KEY_HOLD)
+	if (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD)
 	{
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
 		BoolColl = true;
@@ -34,18 +43,22 @@ bool Sample::Frame()
 }
 bool Sample::Render()
 {
-
 	for (auto data : m_MatrixList)
 	{
 		m_pObj.m_Obj->SetMatrix(&data, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_pObj.Render(g_pImmediateContext);
 	}
 
-	if (m_Map != nullptr) {
-		g_pImmediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		g_pImmediateContext->RSSetState(SDxState::m_pRS);
-		g_pImmediateContext->PSSetSamplers(0, 1, &SDxState::m_pWrapLinear);
-		g_pImmediateContext->OMSetDepthStencilState(SDxState::m_pDSS, 0);
+	if (m_Map != nullptr) 
+	{
+		if (m_MinMap.Begin(g_pImmediateContext))
+		{
+			m_Map->SetMatrix(NULL,
+				&m_TopCamera.m_matView,
+				&m_TopCamera.m_matProj);
+			m_Map->Render(g_pImmediateContext);
+			m_MinMap.End(g_pImmediateContext);
+		}
 
 		m_Map->SetMatrix(NULL,
 			&m_pMainCamera->m_matView,
@@ -81,14 +94,26 @@ bool Sample::Render()
 				g_pImmediateContext->DrawIndexed(m_Map->m_IndexList.size(), 0, 0);
 			}
 
+			// юс╫ц 
+			Matrix a;
+			a._41 = 1.5f;
 
 
+			m_MinMap.SetMatrix(NULL,
+				NULL, 
+				NULL);
+			m_MinMap.Render(g_pImmediateContext);
+			
+			m_Textrue.SetMatrix(NULL,
+				NULL,
+				&a);
+			m_Textrue.Render(g_pImmediateContext);
 
 		if (BoolColl == true)
 		{
 			BoolColl = false;
 			float Max = 99999;
-			float f = 10.0f;
+			float f = 5.0f;
 			Vector3 Pick;
 			for (int i = 0; i < m_QuadTree.m_LeafNodeList.size(); i++)
 			{
@@ -110,21 +135,21 @@ bool Sample::Render()
 				mat._41 = Pick.x;
 				mat._42 = Pick.y;
 				mat._43 = Pick.z;
-				m_MatrixList.push_back(mat);
-				/*for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+				//m_MatrixList.push_back(mat);
+				for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 				{
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
 					if (fDist < f)
 					{
 						m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + 5.0f - sinf((fDist / f));
+						m_Map->m_VertexList[i].p.y = 100.0f;
 					}
-				}*/
+				}
 			}
-			//m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
+			m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
+			m_Textrue.m_pSRV = m_Textrue.StagingCopyTextureFromSV(g_pd3dDevice,g_pImmediateContext, m_Map);
 			BoolColl = false;
 		}
-
-
 	}
 	return true;
 }
@@ -152,19 +177,10 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 	desc.szVS = L"map.hlsl";
 	m_Map = new SMap;
  	m_Map->CreateMap(g_pd3dDevice, g_pImmediateContext, desc);
-	/*RC R;
-	R.r.x = tel;
-	R.r.y = cel;
-	R.r.z = ces;
-	R.r.w = sqrt(tel * cel);
-	m_Map->m_RC.resize(1);
-	m_Map->m_RC.push_back(R);
-	ID3D11Buffer* vbrc =
-		TBASIS_CORE_LIB::CreateVertexBuffer(TBASIS_CORE_LIB::g_pd3dDevice,
-			&m_Map->m_RC.at(0),
-			m_Map->m_RC.size(),
-			sizeof(RC));
-	m_Map->m_pRC.Attach(vbrc);*/
+	m_TopCamera.CreateViewMatrix({ 0,100.0f,-1.0f }, { 0,0,0 });
+	m_TopCamera.CreateOrthographic(
+		desc.iNumCols * ces, desc.iNumRows * ces, 1.0f, 10000);
+	m_TopCamera.Init();
 	m_QuadTree.GetUpdata(m_pMainCamera);
 
 	int a = sqrt(tel);
@@ -178,7 +194,7 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 	m_QuadTree.GetUpdata(m_pMainCamera);
 	m_QuadTree.m_MaxDepth = b;
 	m_QuadTree.Build(m_Map);
-
+	
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));

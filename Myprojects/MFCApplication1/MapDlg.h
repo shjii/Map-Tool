@@ -25,6 +25,7 @@ public:
 	int i_Cell;
 	int i_Cellsize;
 	wstring a;
+	BOOL OnInitDialog();
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedButton1();
 };

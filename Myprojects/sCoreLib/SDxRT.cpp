@@ -1,7 +1,9 @@
 #include "SDxRT.h"
-void		SDxRT::Set(ID3D11Device*	pd3dDevice)
+void		SDxRT::Set(ID3D11Device*	pd3dDevice, int Width, int Height)
 {
 	g_pd3dDevice = pd3dDevice;
+	this->Width = Width;
+	this->Height = Height;
 }
 HRESULT		SDxRT::SetRenderTargetView()
 {
@@ -9,8 +11,8 @@ HRESULT		SDxRT::SetRenderTargetView()
 	ID3D11Texture2D* pTexture = nullptr;
 	D3D11_TEXTURE2D_DESC texDesc;
 	ZeroMemory(&texDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	texDesc.Width = 512;
-	texDesc.Height = 512;
+	texDesc.Width = Width;
+	texDesc.Height = Height;
 	texDesc.MipLevels = 1;
 	texDesc.ArraySize = 1;
 	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -49,8 +51,8 @@ HRESULT SDxRT::SetDepthStencilView()
 	ID3D11Texture2D* pTexture = nullptr;
 	D3D11_TEXTURE2D_DESC texDesc;
 	ZeroMemory(&texDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	texDesc.Width = 512;
-	texDesc.Height = 512;
+	texDesc.Width = Width;
+	texDesc.Height = Height;
 	texDesc.MipLevels = 1;
 	texDesc.ArraySize = 1;
 	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;

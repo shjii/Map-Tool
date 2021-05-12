@@ -30,6 +30,7 @@
 #define ID_VIEW_APPLOOK_WINDOWS_7       219
 #define IDS_EDIT_MENU                   306
 #define IDD_MapDlg                      311
+#define IDD_SMapToolForm                312
 #define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1002
 #define IDC_EDIT4                       1003
@@ -45,6 +46,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32774
 #define _APS_NEXT_CONTROL_VALUE         1006
-#define _APS_NEXT_SYMED_VALUE           312
+#define _APS_NEXT_SYMED_VALUE           313
 #endif
 #endif

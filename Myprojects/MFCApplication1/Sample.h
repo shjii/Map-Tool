@@ -1,10 +1,11 @@
 #pragma once
 #include "TCore.h"
-#include "SHeightMap.h"
 #include "SQuadTree.h"
 #include "SModel.h"
 #include "sCollision.h"
 #include "SMousePicking.h"
+#include "SMiniMap.h"
+#include "SText.h"
 class Sample : public TCore
 {
 public:
@@ -16,6 +17,9 @@ public:
 	bool			BoolColl;
 	SCollision		Collision;
 	SMousePicking	m_Mouse;
+	SMiniMap		m_MinMap;
+	SText			m_Textrue;
+	SCamera			m_TopCamera;
 public:
 	bool Init() override;
 	bool Frame() override;

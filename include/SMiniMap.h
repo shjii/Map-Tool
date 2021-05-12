@@ -6,6 +6,8 @@ class SMiniMap : public SShapePlane
 public:
 	SShapePlane m_Plane;
 	SDxRT		m_DxRT;
+	int Width;
+	int Height;
 public:
 	virtual bool    CreateVertexData()override;
 	virtual bool    CreateIndexData()override;
