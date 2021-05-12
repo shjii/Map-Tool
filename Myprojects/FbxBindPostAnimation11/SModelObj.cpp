@@ -1,5 +1,13 @@
 #include "SModelObj.h"
-
+struct IsTriangleSame
+{
+	STri			m_Tri;
+	IsTriangleSame(STri data) : m_Tri(data) {}
+	bool operator()(STri& value)
+	{
+		return value.iSubIndex == m_Tri.iSubIndex;
+	}
+};
 void SSubMesh::SetUniqueBuffer(STri& tri)
 {
 	for (int iVertex = 0; iVertex < 3; iVertex++)
@@ -35,8 +43,9 @@ bool SModelObj::CreateInputLayout()
 		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXTURE", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-		{ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,    1, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT,    1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,    1, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT iNumElement = sizeof(layout) / sizeof(layout[0]);
 	hr = g_pd3dDevice->CreateInputLayout(

@@ -1,45 +1,48 @@
 #include "SFbxObj.h"
-
-void SFbxObj::AddKey(FbxNode* Node, FbxAMatrix matGlobal, float fCurrentTime)
+void SFbxObj::AddKey(FbxNode* pNode, FbxAMatrix matGlobal,
+	float fCurrentTime)
 {
 	auto anim = m_pFBXScene->GetAnimationEvaluator();
-	auto data = m_sNodeMap.find(Node);
-	// 자신의 글로벌 + 부모 
-	Matrix pChildGlobal = DxConvertMatrix(ConvertMatrixA(matGlobal));
-	FbxNode* pParentNode = Node->GetParent();
+	auto data = m_sNodeMap.find(pNode);
+	// matGlobal = 자식 * 부모
+	Matrix pChildGlobal = DxConvertMatrix(
+		ConvertMatrixA(matGlobal));
+	FbxNode* pParentNode = pNode->GetParent();
+
 	Matrix matInvParentGlobal = Matrix::Identity;
 	if (pParentNode)
 	{
 		FbxTime t;
 		t.SetSecondDouble(fCurrentTime);
-		FbxAMatrix matFbxParent = anim->GetNodeGlobalTransform(pParentNode, t);
-		matInvParentGlobal = DxConvertMatrix(ConvertMatrixA(matFbxParent));
+		FbxAMatrix matFbxParent =
+			anim->GetNodeGlobalTransform(pParentNode, t);
+		matInvParentGlobal = DxConvertMatrix(
+			ConvertMatrixA(matFbxParent));
 		matInvParentGlobal = matInvParentGlobal.Invert();
 	}
-	// 글로벌 - 부모 = 자기 자신 
 	Matrix m = pChildGlobal * matInvParentGlobal;
 
-	Vector3 S;
-	Quaternion R;
-	Vector3 T;
-	if (m.Decompose(S, R, T))
+	// 분해
+	Vector3 scale;
+	Quaternion qRot;
+	Vector3 pos;
+	if (m.Decompose(scale, qRot, pos))
 	{
 		SAnimTrack track;
 		track.iTick = fCurrentTime * 30 * 160;
-		track.s = S;
-		track.q = R;
-		track.p = T;
+		track.s = scale;
+		track.q = qRot;
+		track.p = pos;
 		track.mat = pChildGlobal;
 		data->second->animlist.push_back(track);
 	}
 	else
 	{
-		//들어오면 안됨
+		int k = 0;
 	}
 }
-
 bool SFbxObj::ParseMeshSkinningMap(const FbxMesh* pFbxMesh,
-	std::vector<SWeight>& skindata, SModelObj* Obj)
+	std::vector<SWeight>& skindata, SModelObj* pObj)
 {
 	int iDeformerCount = pFbxMesh->GetDeformerCount(FbxDeformer::eSkin);
 	if (iDeformerCount == 0)
@@ -64,9 +67,9 @@ bool SFbxObj::ParseMeshSkinningMap(const FbxMesh* pFbxMesh,
 
 			Matrix matInvBindPos = DxConvertMatrix(ConvertMatrixA(matBindPose));
 			matInvBindPos = matInvBindPos.Invert();
-
-			m_dxMatrixBindPoseMap.insert(make_pair(pCluster->GetLink()->GetName(), matInvBindPos));
-			Obj->m_dxMatrixBindPoseMap.insert(make_pair(pCluster->GetLink()->GetName(), matInvBindPos));
+			std::string name = pCluster->GetLink()->GetName();
+			m_dxMatrixBindPoseMap.insert(make_pair(name, matInvBindPos));
+			pObj->m_dxMatrixBindPoseMap.insert(make_pair(name, matInvBindPos));
 
 			int  dwClusterSize = pCluster->GetControlPointIndicesCount();
 			auto data = m_pFbxNodeMap.find(pCluster->GetLink());
@@ -115,14 +118,14 @@ void SFbxObj::ParseNodeAnimation(FbxNode* pNode)
 		FbxTime t;
 		t.SetSecondDouble(fCurrentTime);
 		FbxAMatrix mat = anim->GetNodeGlobalTransform(pNode, t);
-		SAnimTrack track;
-		track.iTick = fCurrentTime * 30 * 160;
-		track.mat = DxConvertMatrix(ConvertMatrixA(mat));
-		data->second->animlist.push_back(track);
+		AddKey(pNode, mat, fCurrentTime);
+		//TAnimTrack track;
+		//track.iTick = fCurrentTime * 30* 160;
+		//track.mat = DxConvertMatrix(ConvertMatrixA(mat));		
+		//data->second->animlist.push_back(track);
 		fCurrentTime += m_Scene.fDeltaTime;
-
 		// mat 1차 부모행렬 역행렬 곱한다.
-		FbxAMatrix  self;
+		FbxAMatrix self;
 		// self 2차 행렬 분해( S, R, T )
 		// 3차 에니메이션 트랙 행렬
 		// S(벡터), R(쿼터니언), T(벡터)를 샘플링 시간 간격으로 저장
