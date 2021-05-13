@@ -87,6 +87,9 @@ public:
 public:
 	bool				CreateInputLayout() override;
 public:
+	SModelObj()
+	{
+	}
 	virtual ~SModelObj()
 	{
 

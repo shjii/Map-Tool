@@ -33,18 +33,18 @@ typedef std::vector<SModelObj*>	sNodeList;
 class SFbxObj : public TObject
 {
 public:
-	SScene							m_Scene;
-	float							m_fTick = 0;
-	static FbxManager*				g_pSDKManager;
-	FbxImporter*					m_pFbxImporter;
-	FbxScene*						m_pFBXScene;
-	unordered_map<string, Matrix>	m_dxMatrixBindPoseMap;
-	unordered_map<FbxNode*, int>	m_pFbxNodeMap;
-	vector<Matrix>					m_pMatrixList;
-	sNodeMap						m_sNodeMap;
-	sNodeList						m_sNodeList;
-	vector<FbxNode*>				m_pFbxNodeList;
-	vector< SAnimTrack*>			asd;
+	int		  m_iMax = 0;
+	SScene    m_Scene;
+	float	  m_fTick = 0.0f;
+	static FbxManager*  g_pSDKManager;
+	FbxImporter*		m_pFbxImporter;
+	FbxScene*			m_pFBXScene;
+	std::unordered_map<std::string, Matrix> m_dxMatrixBindPoseMap;
+	std::unordered_map<FbxNode*, int> m_pFbxNodeMap;
+	std::vector<FbxNode*> m_pFbxNodeList;
+	std::vector<Matrix> m_pMatrixList;
+	sNodeList m_sNodeList;
+	sNodeMap  m_sNodeMap;
 public:
 	ComPtr<ID3D11Buffer>			m_BoneBuffer;
 public:
@@ -62,6 +62,12 @@ public:
 	FbxVector4 ReadNormal(const FbxMesh* mesh, int controlPointIndex, int vertexCounter);
 	void ParseAnimStack(FbxScene * FBXScene, FbxString* AnimStackNameArray);
 	void ParseNodeAnimation(FbxNode* Node);
+	FbxVector4 ReadTangent(const FbxMesh* mesh,
+		DWORD dwVertexTangentCount, FbxGeometryElementTangent* VertexTangentSets,
+		DWORD dwDCCIndex, DWORD dwVertexIndex);
+	void ParseNode(
+		FbxNode* pNode,
+		Matrix  matParent, SModelObj* pParentObj);
 	////////
 	//bool ParseMeshSkinning(const FbxMesh* pFbxMesh, SkinData* skindata);
 	void ParseAnimation(FbxScene*	pFbxScene);

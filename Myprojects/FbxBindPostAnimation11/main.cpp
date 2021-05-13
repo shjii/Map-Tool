@@ -1,6 +1,7 @@
 #include "main.h"
 bool main::Init()
 {
+	NormalMap = g_TextMgr.Load(g_pd3dDevice, L"../../data/3DS/T_Pack_01_N.dds");
 	m_Camera.CreateViewMatrix(
 		{ 0,20,-50 },
 		{ 0,0, 0 });
@@ -133,6 +134,7 @@ bool main::Frame()
 }
 bool main::Render()
 {
+	if (NormalMap != nullptr) g_pImmediateContext->PSSetShaderResources(3, 1, &NormalMap->m_pTextureSRV);
 	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_Obj->m_BoneBuffer.GetAddressOf());
 
 	m_Obj->SetMatrix(&ControlMatrix, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);

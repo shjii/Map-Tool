@@ -42,6 +42,7 @@ struct VS_INPUT
 	float3 n : NORMAL;
 	float4 c : COLOR;
 	float2 t : TEXTURE;
+	float3 tan : TANGENT;
 	float4 i : INDEX;
 	float4 w : WEIGHT;
 };
@@ -51,10 +52,10 @@ struct VS_OUTPUT
 	float3 n : NORMAL;
 	float4 c : COLOR0;
 	float2 t : TEXCOORD0;
+	float3 l : TEXCOORD1;
 };
 VS_OUTPUT VS( VS_INPUT vIn)
 {
-	// 초기화 오류시 사용 : (VS_OUTPUT)0;
 	VS_OUTPUT vOut = (VS_OUTPUT)0;
 	float4 p = float4(vIn.p,1.0f);
 	float3 Norm = vIn.n;
@@ -87,6 +88,16 @@ VS_OUTPUT VS( VS_INPUT vIn)
 	vOut.p = mul(vOut.p, g_matView);
 	vOut.p = mul(vOut.p, g_matProj);
 	vOut.n = normalize(mul(vOut.n, (float3x3)g_matWorld));// g_matWorldInvTrans));
+
+	float3 T			= normalize( mul( vIn.tan, (float3x3)g_matWorld ));	
+	float3 B			= normalize( cross( vOut.n, T) );                   
+
+	float3x3 tanMat		= { T.x, B.x, vOut.n.x,
+							T.y, B.y, vOut.n.y,
+							T.z, B.z, vOut.n.z };
+	vOut.l = normalize( mul(vColor.xyz, tanMat) );
+
+
 	vOut.c = vIn.c;
 	vOut.t = vIn.t;	
 	return vOut;

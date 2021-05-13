@@ -162,6 +162,7 @@ bool SFbxObj::LoadFBX(std::string szFileName)
 	{
 		return false;
 	}
+
 	FbxNode* pFbxRootNode = m_pFBXScene->GetRootNode();
 	PreProcess(pFbxRootNode);
 	for (int iNode = 0; iNode < m_pFbxNodeList.size(); iNode++)
@@ -195,11 +196,11 @@ bool SFbxObj::LoadFBX(std::string szFileName)
 			FbxNode* pNode = m_pFbxNodeList[iNode];
 			auto data = m_sNodeMap.find(pNode);
 			FbxAMatrix mat = anim->GetNodeGlobalTransform(pNode, t);
-			AddKey(pNode,mat,fCurrentTime);
-			//SAnimTrack track;
-			//track.iTick = fCurrentTime * 30 * 160;
-			//track.mat = DxConvertMatrix(ConvertMatrixA(mat));
-			//data->second->animlist.push_back(track);
+			AddKey(pNode, mat, fCurrentTime);
+			/*TAnimTrack track;
+			track.iTick = fCurrentTime * 30 * 160;
+			track.mat = DxConvertMatrix(ConvertMatrixA(mat));*/
+			//data->second->animlist.push_back(track);				
 		}
 		fCurrentTime += m_Scene.fDeltaTime * 1;
 	}
@@ -216,6 +217,16 @@ void SFbxObj::PreProcess(FbxNode* pNode)
 	m_pMatrixList.push_back(mat);
 	m_pFbxNodeList.push_back(pNode);
 
+	//shared_ptr<TObject> obj = make_shared<TObject>();	
+	//TModelObj* obj = new TModelObj;
+	//obj->m_szName = to_mw(pNode->GetName());
+	//obj->m_pParentObject = pParentObj;
+	//m_tNodeMap[pNode] = obj;
+	//m_tNodeList.push_back(obj);
+	//if (pNode->GetMesh() != nullptr)
+	//{
+	//	ParseMesh(pNode, pNode->GetMesh(), obj);
+	//}
 	int dwChild = pNode->GetChildCount();
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
 	{
@@ -242,6 +253,7 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 	std::vector<FbxLayerElementUV*> VertexUVSets;
 	std::vector<FbxLayerElementMaterial*> pMaterialSetList;
 	std::vector<FbxLayerElementVertexColor*> VertexColorSet;
+	std::vector<FbxLayerElementTangent*> VertexTangentSet;
 
 	int iLayerCount = pFbxMesh->GetLayerCount();
 	if (iLayerCount == 0 || pFbxMesh->GetLayer(0)->GetNormals() == nullptr)
@@ -266,6 +278,10 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 		if (pLayer->GetUVs() != NULL)
 		{
 			VertexUVSets.push_back(pLayer->GetUVs());
+		}
+		if (pLayer->GetTangents() != NULL)
+		{
+			VertexTangentSet.push_back(pLayer->GetTangents());
 		}
 		if (pFbxMesh->GetLayer(iLayer)->GetMaterials() != nullptr)
 		{
@@ -322,10 +338,38 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 	normalMatrix = normalMatrix.Inverse();
 	normalMatrix = normalMatrix.Transpose();
 
-	pObj->m_matWorld = DxConvertMatrix(ConvertMatrixA(pNode->EvaluateGlobalTransform(1.0f)));
-	//FbxAMatrix globalMatrix = pNode->EvaluateLocalTransform();
-	//geom = globalMatrix * geom;
-	//pObj->m_matWorld = DxConvertMatrix(ConvertMatrixA(matrix));
+
+	Matrix matWorld;
+	Matrix matLocal;
+	Matrix matGeom;
+	FbxAMatrix globalMatrix = pNode->EvaluateGlobalTransform();
+	FbxAMatrix localMatrix = pNode->EvaluateLocalTransform();
+	FbxVector4 Translation;
+	if (pNode->LclTranslation.IsValid())
+		Translation = pNode->LclTranslation.Get();
+
+	FbxVector4 Rotation;
+	if (pNode->LclRotation.IsValid())
+		Rotation = pNode->LclRotation.Get();
+
+	FbxVector4 Scale;
+	if (pNode->LclScaling.IsValid())
+		Scale = pNode->LclScaling.Get();
+
+	FbxMatrix matTransform(Translation, Rotation, Scale);
+	matGeom = DxConvertMatrix(ConvertMatrixA(geom));
+	matLocal = DxConvertMatrix(ConvertMatrixA(matTransform));
+
+	FbxNode* pFbxRootNode = m_pFBXScene->GetRootNode();
+	if (pFbxRootNode->LclTranslation.IsValid())
+		Translation = pFbxRootNode->LclTranslation.Get();
+	if (pFbxRootNode->LclRotation.IsValid())
+		Rotation = pFbxRootNode->LclRotation.Get();
+	if (pFbxRootNode->LclScaling.IsValid())
+		Scale = pFbxRootNode->LclScaling.Get();
+	FbxMatrix matParentTransform(Translation, Rotation, Scale);
+	Matrix matParent = DxConvertMatrix(ConvertMatrixA(matParentTransform.Inverse()));
+	matWorld = matLocal * matParent;
 
 
 	FbxVector4* pVertexPosiions = pFbxMesh->GetControlPoints();
@@ -437,6 +481,24 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 				}
 
 				IW_VERTEX iw;
+				if (VertexTangentSet.size())
+				{
+					FbxGeometryElementTangent* tangentElement =
+						pFbxMesh->GetElementTangent(0);
+					if (tangentElement != nullptr)
+					{
+						FbxVector4 tangent =
+							ReadTangent(pFbxMesh, VertexTangentSet.size(),
+								tangentElement,
+								iCornerIndices[iIndex],
+								iBasePolyIndex + iVertIndex[iIndex]);
+						iw.t[0] = (FLOAT)tangent.mData[0];
+						iw.t[1] = (FLOAT)tangent.mData[2];
+						iw.t[2] = (FLOAT)tangent.mData[1];
+					}
+
+				}
+
 				if (pObj->m_bSkinnedMesh)
 				{
 					SWeight* pW = &pObj->WeightList[iCornerIndices[iIndex]];
@@ -451,6 +513,9 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 					auto data = m_pFbxNodeMap.find(pNode);
 					iw.i[0] = data->second; // 자기 자신
 					iw.w[0] = 1.0f;
+					iw.w[1] = 0.0f;
+					iw.w[2] = 0.0f;
+					iw.w[3] = 0.0f;
 				}
 				tri.vVertex[iIndex] = v;
 				tri.vVertexIW[iIndex] = iw;
@@ -476,7 +541,7 @@ Matrix SFbxObj::ParseTransform(FbxNode* pNode, Matrix& matParentWorld)
 }
 void SFbxObj::ParseNode(
 	FbxNode* pNode,
-	Matrix  matParent)
+	Matrix  matParent, SModelObj* pParentObj)
 {
 	if (pNode == nullptr) return;
 	if (pNode && (pNode->GetCamera() || pNode->GetLight()))
@@ -486,6 +551,7 @@ void SFbxObj::ParseNode(
 	//shared_ptr<TObject> obj = make_shared<TObject>();	
 	SModelObj* obj = new SModelObj;
 	obj->m_szName = to_mw(pNode->GetName());
+	obj->m_pParentObject = pParentObj;
 	m_sNodeMap[pNode] = obj;
 	m_sNodeList.push_back(obj);
 	Matrix matWorld = ParseTransform(pNode, matParent);
@@ -501,7 +567,7 @@ void SFbxObj::ParseNode(
 	for (int dwObj = 0; dwObj < dwChild; dwObj++)
 	{
 		FbxNode* pChildNode = pNode->GetChild(dwObj);
-		ParseNode(pChildNode, matWorld);
+		ParseNode(pChildNode, matWorld, obj);
 	}
 }
 
@@ -608,7 +674,73 @@ FbxColor SFbxObj::ReadColor(const FbxMesh* mesh,
 	}
 	return Value;
 }
+FbxVector4 SFbxObj::ReadTangent(const FbxMesh* mesh,
+	DWORD dwVertexTangentCount, FbxGeometryElementTangent* VertexTangentSets,
+	DWORD dwDCCIndex, DWORD dwVertexIndex)
+{
+	FbxVector4 ret(0, 0, 0);
+	if (dwVertexTangentCount < 1)
+	{
+		return ret;
+	}
+	int dwVertexTangentCountLayer = mesh->GetElementTangentCount();
+	const FbxGeometryElementTangent* vertexTangent = mesh->GetElementTangent(0);
+	if (vertexTangent != nullptr)
+	{
+		switch (vertexTangent->GetMappingMode())
+		{
+		case FbxGeometryElement::eByControlPoint:
+		{
+			switch (vertexTangent->GetReferenceMode())
+			{
+			case FbxGeometryElement::eDirect:
+			{
+				ret[0] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(dwDCCIndex).mData[0]);
+				ret[1] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(dwDCCIndex).mData[1]);
+				ret[2] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(dwDCCIndex).mData[2]);
+			}break;
+			case FbxGeometryElement::eIndexToDirect:
+			{
+				int index = vertexTangent->GetIndexArray().GetAt(dwDCCIndex);
+				ret[0] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(index).mData[0]);
+				ret[1] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(index).mData[1]);
+				ret[2] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(index).mData[2]);
+			}break;
+			default:
+			{
+				assert(0);
+			}break;
+			}break;
+		}
 
+		case FbxGeometryElement::eByPolygonVertex:
+		{
+			switch (vertexTangent->GetReferenceMode())
+			{
+			case FbxGeometryElement::eDirect:
+			{
+				int iTangentIndex = dwVertexIndex;
+				ret[0] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[0]);
+				ret[1] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[1]);
+				ret[2] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[2]);
+			} break;
+			case FbxGeometryElement::eIndexToDirect:
+			{
+				int iTangentIndex = vertexTangent->GetIndexArray().GetAt(dwVertexIndex);
+				ret[0] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[0]);
+				ret[1] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[1]);
+				ret[2] = static_cast<float>(vertexTangent->GetDirectArray().GetAt(iTangentIndex).mData[2]);
+			} break;
+			default:
+			{
+				assert(0);
+			}
+			} break;
+		}
+		}
+	}
+	return ret;
+}
 
 bool SFbxObj::CreateInputLayout()
 {
@@ -620,8 +752,9 @@ bool SFbxObj::CreateInputLayout()
 		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXTURE", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-		{ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,    1, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,    1, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT iNumElement = sizeof(layout) / sizeof(layout[0]);
 	hr = g_pd3dDevice->CreateInputLayout(

@@ -57,6 +57,7 @@ struct RC
 };
 struct IW_VERTEX
 {
+	float		t[3];
 	float		i[4];
 	float		w[4];
 	IW_VERTEX()
