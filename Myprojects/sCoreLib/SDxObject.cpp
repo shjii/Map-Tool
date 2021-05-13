@@ -858,7 +858,6 @@ namespace TBASIS_CORE_LIB
 		T_STR	szTex)
 	{
 		g_pd3dDevice = pDevice;
-
 		CreateVertexData();
 		CreateIndexData();
 		CreateConstantBuffer();

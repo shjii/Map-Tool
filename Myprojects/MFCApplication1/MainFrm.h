@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "MapEditor.h"
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -13,7 +13,7 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
-
+	MapEditor m_MapEditor;
 // 작업입니다.
 public:
 
@@ -47,6 +47,7 @@ protected:
 
 public:
 	afx_msg void OnToolMaptool();
+	afx_msg void OnToolMapeditor();
 };
 
 

@@ -3,6 +3,9 @@
 
 bool Sample::Init()
 {
+	m_EditorData.Radius = 10.0f;
+	m_EditorData.Speed = 10.0f;
+	m_EditorData.mapEditorB = UP;
 	m_pObj.Init();
 	m_pObj.m_pMainCamera = m_pMainCamera;
 	m_MinMap.Width = 512;
@@ -12,7 +15,8 @@ bool Sample::Init()
 		L"../../data/bitmap/tileA.jpg");
 
 	m_Textrue.Create(g_pd3dDevice, L"vs.txt", L"ps.txt", L"");
-
+	m_BlendingTextrue.Create(g_pd3dDevice, L"vs.txt", L"ps.txt", L"");
+	m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, m_Map);
 	return true;
 }
 bool Sample::Frame()
@@ -30,7 +34,7 @@ bool Sample::Frame()
 	}
 	if (m_Map != nullptr)
 	{
-		//m_QuadTree.Frame();
+		m_QuadTree.Frame();
 		m_Map->Frame();
 	}	
 	if (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD)
@@ -38,6 +42,11 @@ bool Sample::Frame()
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
 		BoolColl = true;
 	}
+	if (g_Input.GetKey(VK_MBUTTON) == KEY_UP)
+	{
+		m_Textrue.m_pSRV = m_Textrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, m_Map);
+	}
+	
 	m_pObj.Frame();
 	return true;
 }
@@ -56,6 +65,7 @@ bool Sample::Render()
 			m_Map->SetMatrix(NULL,
 				&m_TopCamera.m_matView,
 				&m_TopCamera.m_matProj);
+			g_pImmediateContext->PSSetShaderResources(2, 1, m_BlendingTextrue.m_pSRV.GetAddressOf());
 			m_Map->Render(g_pImmediateContext);
 			m_MinMap.End(g_pImmediateContext);
 		}
@@ -71,6 +81,7 @@ bool Sample::Render()
 			UINT stride[2] = { sizeof(PNCT_VERTEX), sizeof(RC) };
 			UINT offset[2] = { 0, 0 };
 			g_pImmediateContext->IASetVertexBuffers(0, 2, vb, stride, offset);
+			g_pImmediateContext->PSSetShaderResources(2, 1, m_BlendingTextrue.m_pSRV.GetAddressOf());
 			g_pImmediateContext->IASetIndexBuffer(m_Map->m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			g_pImmediateContext->IASetInputLayout(m_Map->m_pInputLayout.Get());
 			g_pImmediateContext->VSSetConstantBuffers(0, 1, m_Map->m_pConstantBuffer.GetAddressOf());
@@ -103,7 +114,6 @@ bool Sample::Render()
 				NULL, 
 				NULL);
 			m_MinMap.Render(g_pImmediateContext);
-			
 			m_Textrue.SetMatrix(NULL,
 				NULL,
 				&a);
@@ -117,37 +127,46 @@ bool Sample::Render()
 			Vector3 Pick;
 			for (int i = 0; i < m_QuadTree.m_LeafNodeList.size(); i++)
 			{
-				if (Collision.SphereToRay(&m_QuadTree.m_LeafNodeList[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
+				if(m_Mouse.OBBtoRay(&m_QuadTree.m_LeafNodeList[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir));
+				//if (m_Mouse.SphereToRay(&m_QuadTree.m_LeafNodeList[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
 				{
-					//m_SelectNode.push_back(m_QuadTree.m_LODDrawLIst[i]);
-					float fDistance = (m_Mouse.Orig - Collision.m_vIntersection).Length();
-					if (fDistance < Max)
+					if (GetIntersection(m_QuadTree.m_LeafNodeList[i]))
 					{
-						Pick = Collision.m_vIntersection;
-						Max = fDistance;
-						BoolColl = true;
+						float fDistance = (m_Mouse.Orig - m_Mouse.m_vIntersection).Length();
+						if (fDistance < Max)
+						{
+							Pick = m_Mouse.m_vIntersection;
+							Max = fDistance;
+							BoolColl = true;
+						}
 					}
 				}
 			}
 			if (BoolColl)
 			{
-				Matrix mat;
-				mat._41 = Pick.x;
-				mat._42 = Pick.y;
-				mat._43 = Pick.z;
-				//m_MatrixList.push_back(mat);
 				for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 				{
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
-					if (fDist < f)
+					if (fDist < m_EditorData.Radius)
 					{
-						m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + 5.0f - sinf((fDist / f));
-						m_Map->m_VertexList[i].p.y = 100.0f;
+						switch (m_EditorData.mapEditorB)
+						{
+						case UP:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed; break;
+						case DOWN:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed; break;
+						case NORMAL:
+						{
+							float a = m_Map->m_VertexList[i].p.y;
+							for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+							{
+								m_Map->m_VertexList[i].p.y = a;
+							}
+							break;
+						}break;
+						}
 					}
 				}
 			}
 			m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
-			m_Textrue.m_pSRV = m_Textrue.StagingCopyTextureFromSV(g_pd3dDevice,g_pImmediateContext, m_Map);
 			BoolColl = false;
 		}
 	}
@@ -228,3 +247,38 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 	return true;
 }
 
+bool Sample::GetIntersection(SNode* pNode)
+{
+	// face list
+	for (int face = 0; face < pNode->m_IndexList.size() / 3; face++)
+	{
+		Vector3 v0 = m_Map->m_VertexList[pNode->m_IndexList[face * 3 + 0]].p;
+		Vector3 v1 = m_Map->m_VertexList[pNode->m_IndexList[face * 3 + 1]].p;
+		Vector3 v2 = m_Map->m_VertexList[pNode->m_IndexList[face * 3 + 2]].p;
+
+		Vector3 vEnd = m_Mouse.Orig + m_Mouse.Dir * 10000.0f;
+		Vector3 vNormal = (v1 - v0).Cross(v2 - v0);
+		vNormal.Normalize();
+
+		// 방법 1) 외적을 사용하는 방법
+		if (m_Mouse.GetIntersection(m_Mouse.Orig, vEnd, vNormal, v0, v1, v2))
+		{
+			if (m_Mouse.PointInPolygon(m_Mouse.m_vIntersection, vNormal, v0, v1, v2))
+			{
+				return true;
+			}
+		}
+
+		// 방법 2) UV 매개변수를 사용한 교점과 교점 포함 테스트를
+		//         동시에 처리 하는 방법(평면 노말 필요X).
+		//if (m_Picking.IntersectTriangle(vPickRayOrigin, vPickRayDir, v0, v1, v2, t, u, v))
+		//{
+		//   list[0] = v0;
+		//   list[1] = v1;
+		//   list[2] = v2;
+		//   return true;
+		//}
+	}
+
+	return false;
+}

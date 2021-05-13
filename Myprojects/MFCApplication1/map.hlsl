@@ -66,6 +66,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 static const int g_iNumTexture = 6;
 Texture2D g_txDiffuse;// : register(t0);
 Texture2D g_txDiffuseArray[g_iNumTexture] : register(t1);
+Texture2D g_BlendingTextrue : register(t2);
 SamplerState		g_Sample : register(s0);
 SamplerState        g_samPointClamp : register(s1);
 SamplerState        g_samLinearWrap : register(s2);
@@ -186,7 +187,9 @@ PS_OUTPUT PS(PS_INPUT vIn)
 	PS_OUTPUT vOut;
 	float4 vTexture = g_txDiffuse.Sample(g_Sample, vIn.t);
 	float4 lightColor = ComputeSpotLight(vIn.wp.xyz, vIn.n, 3);
-	vOut.c = vTexture * vIn.c;// *Diffuse(vIn.n, g_vLightDir[0])*lightColor;
+	float4 vRTexture = g_BlendingTextrue.Sample(g_Sample, vIn.t);
+	vOut.c = vTexture * vRTexture.w;
+	vOut.c = vOut.c * vIn.c;// *Diffuse(vIn.n, g_vLightDir[0])*lightColor;
 	return vOut;
 }
 PS_OUTPUT PS_Default(VS_OUTPUT vIn)

@@ -15,7 +15,7 @@ bool	SText::Create(ID3D11Device* pDevice, T_STR szVS, T_STR szPS, T_STR	szTex)
 	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	texDesc.SampleDesc.Count = 1;
 	texDesc.SampleDesc.Quality = 0;
-	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.Usage = D3D11_USAGE_STAGING;
 	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET |
 		D3D11_BIND_SHADER_RESOURCE;
 	hr = g_pd3dDevice->CreateTexture2D(&texDesc, NULL, &pTexture);
@@ -52,6 +52,41 @@ bool  SText::Release()
 bool SText::Render(ID3D11DeviceContext*	pd3dContext)
 {
 	SShapePlane::Render(pd3dContext);
+
+	//D3D11_MAPPED_SUBRESOURCE mr;
+	//HRESULT hr = pd3dContext->Map(m_pConstantBuffer.Get(), 0,
+	//D3D11_MAP_WRITE_DISCARD, 0, &mr);
+	//SDataCB* pData = (SDataCB*)mr.pData;
+	//pData->matWorld = m_matWorld.Transpose();
+	//pData->matView = m_matView.Transpose();
+	//pData->matProject = m_matProj.Transpose();
+	//pData->vColor[0] = m_cbData.vColor[0];
+	//pData->vColor[1] = m_cbData.vColor[1];
+	//pData->vColor[2] = m_cbData.vColor[2];
+	//pData->vColor[3] = 1;
+	//pData->vTime[0] = cosf(g_fGameTimer)*0.5f + 0.5f;
+	//pData->vTime[1] = g_fGameTimer;
+	//pd3dContext->Unmap(m_pConstantBuffer.Get(), 0);
+	//UINT iStride = sizeof(PNCT_VERTEX);
+	//UINT iOffset = 0;
+
+	//pd3dContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &iStride, &iOffset);
+	//pd3dContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//pd3dContext->IASetInputLayout(m_pInputLayout.Get());
+	//pd3dContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	//pd3dContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	//pd3dContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
+	//pd3dContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+	//pd3dContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iTopology);
+	//if (m_pIndexBuffer == nullptr)
+	//{
+	//	pd3dContext->Draw(m_VertexList.size(), 0);
+	//}
+	//else
+	//{
+	//	pd3dContext->DrawIndexed(m_IndexList.size(), 0, 0);
+	//}
+	 
 	return true;
 }
 
@@ -96,7 +131,15 @@ ID3D11ShaderResourceView*	SText::StagingCopyTextureFromSV(ID3D11Device* pDevice,
 		H(hr);
 		return nullptr;
 	}
-	WriteDotPixel(pImmediateContext, pStaging2D.Get(), map);
+	if (map != nullptr)
+	{
+		WriteDotPixel(pImmediateContext, pStaging2D.Get(), map);
+	}
+	else
+	{
+		WriteDotPixel(pImmediateContext, pStaging2D.Get());
+	}
+	
 	pImmediateContext->CopyResource(pTex2D.Get(), pStaging2D.Get());
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
@@ -136,11 +179,34 @@ void SText::WriteDotPixel(ID3D11DeviceContext*   pImmediateContext, ID3D11Textur
 				int iRow = i * fRow;
 				int iCow = j * fCol;
 				float a = map->m_VertexList[iRow *map->m_iNumRows + iCow].p.y;
-				a = (a + 100.0f) * 255.0f / 200.0f;
 				*pDestBytes++ = a;
 				*pDestBytes++ = a;
 				*pDestBytes++ = a;
 				*pDestBytes++ = 255;
+			}
+		}
+		pImmediateContext->Unmap(pTexDest, 0);
+	}
+}
+void	SText::WriteDotPixel(ID3D11DeviceContext*   pImmediateContext, ID3D11Texture2D* pTexDest)
+{
+	HRESULT hr;
+	D3D11_TEXTURE2D_DESC desc;
+	pTexDest->GetDesc(&desc);
+
+	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
+	if (SUCCEEDED(pImmediateContext->Map((ID3D11Resource*)pTexDest, 0, D3D11_MAP_READ_WRITE, 0, &MappedFaceDest)))
+	{
+		BYTE* pDestBytes = (BYTE*)MappedFaceDest.pData;
+
+		for (UINT i = 1; i < desc.Height + 1; i++)
+		{
+			for (UINT j = 1; j < desc.Width + 1; j++)
+			{
+				*pDestBytes++ = 255;
+				*pDestBytes++ = 255;
+				*pDestBytes++ = 255;
+				*pDestBytes++ = 125;
 			}
 		}
 		pImmediateContext->Unmap(pTexDest, 0);

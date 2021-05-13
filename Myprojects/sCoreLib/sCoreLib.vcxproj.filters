@@ -63,9 +63,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TCollision.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TCore.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -228,12 +225,12 @@
     <ClCompile Include="SParticle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TCollision.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TBasisStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TCollision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TCore.h">
@@ -414,6 +411,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SParticle.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TCollision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -41,7 +41,6 @@ bool  STexture::Release()
 }
 bool  STexture::Render()
 {
-
 	return true;
 }
 

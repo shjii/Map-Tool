@@ -58,4 +58,31 @@ bool SCollision::SphereToRay(S_SPHERE * Sphere, Vector3 Origin, Vector3 Dir)
 	}
 	return false;
 }
+bool SCollision::OBBtoRay(S_BOX* pBox, Vector3 org, Vector3 Dir)
+{
+	float t_min = -999999.0f;
+	float t_max = 999999.0f;
 
+	Vector3 diff = pBox->vCenter - org;
+
+	for (int v = 0; v < 3; v++)
+	{
+		float f = pBox->vAxis[v].Dot(Dir);
+		float s = pBox->vAxis[v].Dot(diff); 
+
+		
+		float t1 = (s - pBox->fExtent[v]) / f;
+		float t2 = (s + pBox->fExtent[v]) / f;
+		if (t1 > t2)
+		{
+			swap(t1, t2);
+		}
+		t_min = max(t_min, t1);
+		t_max = min(t_max, t2);
+		if (t_min > t_max)
+			return false;
+
+	}
+	m_vIntersection = org + Dir * t_min;
+	return true;
+}

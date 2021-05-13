@@ -19,6 +19,9 @@
     <Filter Include="shder">
       <UniqueIdentifier>{6bdbbf64-a0a3-4731-8920-5a33c6967588}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dlg">
+      <UniqueIdentifier>{1754f945-3f83-4157-a5c0-bd9531b9b1af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MFCApplication1.h">
@@ -48,14 +51,17 @@
     <ClInclude Include="Sample.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="MapDlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SText.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="SMapToolForm.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MapDlg.h">
+      <Filter>Dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditor.h">
+      <Filter>Dlg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,14 +83,17 @@
     <ClCompile Include="Sample.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="MapDlg.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SText.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="SMapToolForm.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MapDlg.cpp">
+      <Filter>Dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditor.cpp">
+      <Filter>Dlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,11 +124,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="PS.txt">
-      <Filter>Core</Filter>
-    </Text>
     <Text Include="VS.txt">
-      <Filter>Core</Filter>
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="PS.txt">
+      <Filter>shder</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

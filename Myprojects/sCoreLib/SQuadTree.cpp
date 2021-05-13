@@ -284,18 +284,23 @@ void	SQuadTree::DrawCheck(SNode* Node)
 
 bool	SQuadTree::Frame()
 {
-	m_DrawLIst.clear();
-	DrawCheck(m_RootNode);
-	GetDrowList();
-	Face = 0;
-	m_IndexList.clear();
-	m_IndexList.resize(m_Map->m_iNumCellCols * m_Map->m_iNumCellRows * 2 * 2 * 3);
-	for (int i = 0; i < m_LODDrawLIst.size(); i++)
+
+	for (int i = 0; i < m_LeafNodeList.size(); i++)
 	{
-		GetLodType(m_LODDrawLIst[i]);
-		Face += UpdateIndexList(m_LODDrawLIst[i],
-			Face * 3,
-			m_LODDrawLIst[i]->m_LODLevel);
+		BoungigBox(m_LeafNodeList[i]);
 	}
+	//m_DrawLIst.clear();
+	//DrawCheck(m_RootNode);
+	//GetDrowList();
+	//Face = 0;
+	//m_IndexList.clear();
+	//m_IndexList.resize(m_Map->m_iNumCellCols * m_Map->m_iNumCellRows * 2 * 2 * 3);
+	//for (int i = 0; i < m_LODDrawLIst.size(); i++)
+	//{
+	//	GetLodType(m_LODDrawLIst[i]);
+	//	Face += UpdateIndexList(m_LODDrawLIst[i],
+	//		Face * 3,
+	//		m_LODDrawLIst[i]->m_LODLevel);
+	//}
 	return true;
 }
