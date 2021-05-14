@@ -17,6 +17,13 @@ bool Sample::Init()
 	m_Textrue.Create(g_pd3dDevice, L"vs.txt", L"ps.txt", L"");
 	m_BlendingTextrue.Create(g_pd3dDevice, L"vs.txt", L"ps.txt", L"");
 	m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, m_Map);
+
+	m_MultiTextureSRV.resize(4);
+
+	m_MultiTextureSRV[0].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/Terrain1_Mask.dds"));
+	m_MultiTextureSRV[1].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/firem512.dds"));
+	m_MultiTextureSRV[2].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/bul.dds"));
+	m_MultiTextureSRV[3].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/lighting.dds"));
 	return true;
 }
 bool Sample::Frame()
@@ -37,7 +44,7 @@ bool Sample::Frame()
 		m_QuadTree.Frame();
 		m_Map->Frame();
 	}	
-	if (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD)
+	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH)
 	{
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
 		BoolColl = true;
@@ -66,6 +73,7 @@ bool Sample::Render()
 				&m_TopCamera.m_matView,
 				&m_TopCamera.m_matProj);
 			g_pImmediateContext->PSSetShaderResources(2, 1, m_BlendingTextrue.m_pSRV.GetAddressOf());
+			g_pImmediateContext->PSSetShaderResources(3, 4, m_MultiTextureSRV[0].GetAddressOf());
 			m_Map->Render(g_pImmediateContext);
 			m_MinMap.End(g_pImmediateContext);
 		}
@@ -76,12 +84,12 @@ bool Sample::Render()
 
 
 			m_Map->SDxObject::Update(g_pImmediateContext);
-
 			ID3D11Buffer* vb[2] = { m_Map->m_pVertexBuffer.Get(),	m_Map->m_pRC.Get() };
 			UINT stride[2] = { sizeof(PNCT_VERTEX), sizeof(RC) };
 			UINT offset[2] = { 0, 0 };
 			g_pImmediateContext->IASetVertexBuffers(0, 2, vb, stride, offset);
 			g_pImmediateContext->PSSetShaderResources(2, 1, m_BlendingTextrue.m_pSRV.GetAddressOf());
+			g_pImmediateContext->PSSetShaderResources(3, 4, m_MultiTextureSRV[0].GetAddressOf());
 			g_pImmediateContext->IASetIndexBuffer(m_Map->m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			g_pImmediateContext->IASetInputLayout(m_Map->m_pInputLayout.Get());
 			g_pImmediateContext->VSSetConstantBuffers(0, 1, m_Map->m_pConstantBuffer.GetAddressOf());
@@ -109,7 +117,6 @@ bool Sample::Render()
 			Matrix a;
 			a._41 = 1.5f;
 
-
 			m_MinMap.SetMatrix(NULL,
 				NULL, 
 				NULL);
@@ -127,8 +134,8 @@ bool Sample::Render()
 			Vector3 Pick;
 			for (int i = 0; i < m_QuadTree.m_LeafNodeList.size(); i++)
 			{
-				if(m_Mouse.OBBtoRay(&m_QuadTree.m_LeafNodeList[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir));
-				//if (m_Mouse.SphereToRay(&m_QuadTree.m_LeafNodeList[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
+				//if(m_Mouse.OBBtoRay(&m_QuadTree.m_LeafNodeList[i]->m_Box, m_Mouse.Orig, m_Mouse.Dir));
+				if (m_Mouse.SphereToRay(&m_QuadTree.m_LeafNodeList[i]->m_Sphere, m_Mouse.Orig, m_Mouse.Dir))
 				{
 					if (GetIntersection(m_QuadTree.m_LeafNodeList[i]))
 					{
@@ -144,27 +151,31 @@ bool Sample::Render()
 			}
 			if (BoolColl)
 			{
+				m_PinkList.clear();
 				for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 				{
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
 					if (fDist < m_EditorData.Radius)
 					{
-						switch (m_EditorData.mapEditorB)
-						{
-						case UP:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed; break;
-						case DOWN:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed; break;
-						case NORMAL:
-						{
-							float a = m_Map->m_VertexList[i].p.y;
-							for (int i = 0; i < m_Map->m_VertexList.size(); i++)
-							{
-								m_Map->m_VertexList[i].p.y = a;
-							}
-							break;
-						}break;
-						}
+						m_Map->m_VertexList[i].t.w = i;
+						m_PinkList.push_back(m_Map->m_VertexList[i]);
+						//switch (m_EditorData.mapEditorB)
+						//{
+						//case UP:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed; break;
+						//case DOWN:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed; break;
+						//case NORMAL:
+						//{
+						//	float a = m_Map->m_VertexList[i].p.y;
+						//	for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+						//	{
+						//		m_Map->m_VertexList[i].p.y = a;
+						//	}
+						//	break;
+						//}break;
+						//}
 					}
 				}
+				m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 1, m_PinkList,m_Map);
 			}
 			m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
 			BoolColl = false;

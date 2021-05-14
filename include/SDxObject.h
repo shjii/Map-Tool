@@ -28,7 +28,7 @@ struct PNCT_VERTEX
 	Vector3		p;
 	Vector3		n;
 	Vector4		c;
-	Vector2     t;
+	Vector4     t;
 	bool operator == (const PNCT_VERTEX & Vertex)
 	{
 		if (p == Vertex.p  && n == Vertex.n && 	c == Vertex.c  &&	t == Vertex.t)
@@ -41,7 +41,7 @@ struct PNCT_VERTEX
 	PNCT_VERTEX(Vector3		vp,
 		Vector3		vn,
 		Vector4		vc,
-		Vector2     vt)
+		Vector4     vt)
 	{
 		p = vp, n = vn, c = vc, t = vt;
 	}

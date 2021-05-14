@@ -32,6 +32,8 @@ public:
 	SText			m_BlendingTextrue;
 	SCamera			m_TopCamera;
 	MapEditorData	m_EditorData;
+	vector<PNCT_VERTEX> m_PinkList;
+	vector<ComPtr<ID3D11ShaderResourceView>> m_MultiTextureSRV;
 public:
 	bool Init() override;
 	bool Frame() override;

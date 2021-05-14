@@ -19,7 +19,7 @@ struct VS_INPUT
 	float3 p : POSITION;
 	float3 n : NORMAL;
 	float4 c : COLOR;
-	float2 t : TEXTURE;
+	float4 t : TEXTURE;
 	float4 r : RC;
 };
 struct VS_OUTPUT
@@ -27,16 +27,18 @@ struct VS_OUTPUT
 	float4 p : SV_POSITION;
 	float3 n : NORMAL;
 	float4 c : COLOR0;
-	float2 t : TEXCOORD0;
+	float4 t : TEXCOORD0;
 	float4 wp : TEXCOORD1;
+	float2 b : TEXCOORD2;
 };
 struct PS_INPUT
 {
 	float4 p : SV_POSITION;
 	float3 n : NORMAL;
 	float4 c : COLOR0;
-	float2 t : TEXCOORD0;
+	float4 t : TEXCOORD0;
 	float4 wp : TEXCOORD1;
+	float2 b : TEXCOORD2;
 	uint PrimitiveID : SV_PrimitiveID;
 };
 VS_OUTPUT VS(VS_INPUT vIn)
@@ -52,14 +54,11 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	float fdot = dot(-vColor.xyz, vIn.n);
 	vOut.c = float4(fdot, fdot, fdot, 1.0f);
 	vOut.c = vIn.c;
-	//vOut.t = vIn.t;
-	//vOut.t.x = vOut.p.x / vOut.p.w * 0.5f+0.5f;// ((vOut.wp.x / 10.0f) + 128.0f) / 256.0f * 4;
-	//vOut.t.y = vOut.p.y / vOut.p.w* 0.5f + 0.5f;// 1.0f - ((vOut.wp.z / 10.0f) + 128.0f) / 256.0f * 4;
-	//vOut.t.x = ((vOut.wp.x / 10.0f) + 8.0f) / 16.0f * 4;
-	//vOut.t.y = 1.0f - ((vOut.wp.z / 10.0f) + 8.0f) / 16.0f * 4;
 
-	vOut.t.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; //pow(vRc.x, 2);
-	vOut.t.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; //pow(vRc.x, 2);
+	vOut.b.x  = vIn.t.z + (vRc.w / 2) / vRc.w; 
+	vOut.b.y  = 1.0f - vIn.t.w + (vRc.w / 2) / vRc.w;
+	vOut.t.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; 
+	vOut.t.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x;
 	return vOut;
 }
 // HLSL
@@ -67,6 +66,7 @@ static const int g_iNumTexture = 6;
 Texture2D g_txDiffuse;// : register(t0);
 Texture2D g_txDiffuseArray[g_iNumTexture] : register(t1);
 Texture2D g_BlendingTextrue : register(t2);
+Texture2D g_MultiTextrue[4] : register(t3);
 SamplerState		g_Sample : register(s0);
 SamplerState        g_samPointClamp : register(s1);
 SamplerState        g_samLinearWrap : register(s2);
@@ -187,8 +187,21 @@ PS_OUTPUT PS(PS_INPUT vIn)
 	PS_OUTPUT vOut;
 	float4 vTexture = g_txDiffuse.Sample(g_Sample, vIn.t);
 	float4 lightColor = ComputeSpotLight(vIn.wp.xyz, vIn.n, 3);
-	float4 vRTexture = g_BlendingTextrue.Sample(g_Sample, vIn.t);
-	vOut.c = vTexture * vRTexture.w;
+	float4 vRTexture = g_BlendingTextrue.Sample(g_Sample, vIn.b);
+
+	//vRTexture.x /= 255;
+	//vRTexture.y /= 255;
+	//vRTexture.z /= 255;
+	//vRTexture.w /= 255;
+	//
+
+	//
+
+	float4 Multi = lerp(vTexture,g_MultiTextrue[0].Sample(g_Sample, vIn.t), vRTexture.x);
+	Multi = lerp(Multi, g_MultiTextrue[1].Sample(g_Sample, vIn.t), vRTexture.y);
+	Multi = lerp(Multi, g_MultiTextrue[2].Sample(g_Sample, vIn.t), vRTexture.z);
+	Multi = lerp(Multi, g_MultiTextrue[3].Sample(g_Sample, vIn.t), vRTexture.w);
+	vOut.c = Multi;
 	vOut.c = vOut.c * vIn.c;// *Diffuse(vIn.n, g_vLightDir[0])*lightColor;
 	return vOut;
 }

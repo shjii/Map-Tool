@@ -11,17 +11,6 @@ void SLod::SetNeighvor(SNode* Node)
 {
 	Node->m_NeghborList.resize(4);
 
-	//m_LevelLIst[Node->m_Depth][];
-	//// 크기
-	//float a = m_RootNode->m_iCorner[1] / (Node->m_Depth * 2);
-	//float b = m_RootNode->m_iCorner[3] / (Node->m_Depth * 2);
-	//// 상 하 좌 우
-	//if (Node->m_iCorner[0] > m_RootNode->m_iCorner[1])
-	//{
-	//	Node->m_NeghborList[0] = 
-	//}
-
-
 	DWORD dwNumPatchCount = (DWORD)pow(2.0f, (float)Node->m_Depth);
 
 	WORD dwNeighborCol, dwNeighborRow;

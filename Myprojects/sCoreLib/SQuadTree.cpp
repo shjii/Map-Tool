@@ -51,8 +51,8 @@ bool	SQuadTree::Division(SNode* Node)
 		return false;
 	}
 
-	float centerCol = (Node->m_iCorner[TR] - Node->m_iCorner[TL]) / 2;
-	float centerRow = (Node->m_iCorner[BL] - Node->m_iCorner[TL]) / 2;
+	//float centerCol = (Node->m_iCorner[TR] - Node->m_iCorner[TL]) / 2;
+	//float centerRow = (Node->m_iCorner[BL] - Node->m_iCorner[TL]) / 2 / (centerCol * 2);
 
 	// ¹ØÀ¸·Î row ¿·À¸·Î col
 	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL], Node->m_iCorner[TL] + centerCol, Node->m_iCorner[TL] + centerRow, Node->m_iCorner[TL] + centerRow + centerCol));
@@ -61,21 +61,21 @@ bool	SQuadTree::Division(SNode* Node)
 	//Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[TL] + centerRow + centerCol, Node->m_iCorner[TR] + centerRow, Node->m_iCorner[BL] + centerCol, Node->m_iCorner[BR]));
 
 	float fWidthSplit = (Node->m_iCorner[1] - Node->m_iCorner[0]) / 2;
-	float fHeightSplit = (Node->m_iCorner[3] - Node->m_iCorner[2]) / 2;
+	float fHeightSplit = (Node->m_iCorner[3] - Node->m_iCorner[0]) / 2 / (fWidthSplit * 2) - 1;
 	UINT e0 = Node->m_iCorner[0] + fWidthSplit;
 	UINT e1 = Node->m_iCorner[0] + (m_Map->m_iNumCols * fHeightSplit);
 	UINT e2 = e0 + (m_Map->m_iNumCols * fHeightSplit);
 	UINT e3 = Node->m_iCorner[1] + (m_Map->m_iNumCols * fHeightSplit);;
 	UINT e4 = Node->m_iCorner[3] - fHeightSplit;
-	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[0], e0, e1, e2));
 
+	Node->m_ChildNode.push_back(CreatorNode(Node, Node->m_iCorner[0], e0, e1, e2));
 	DWORD dwIndex =
-		Node->m_ChildNode[0]->m_dwPositionIndex[1] * pow(2.0f, (float)Node->m_ChildNode[0]->m_Depth) + Node->m_ChildNode[0]->m_dwPositionIndex[0];
+		Node->m_ChildNode[0]->m_dwPositionIndex[1] *  pow(2.0f, (float)Node->m_ChildNode[0]->m_Depth) + Node->m_ChildNode[0]->m_dwPositionIndex[0];
 	DWORD dwValue = Node->m_ChildNode[0]->m_Depth;
 	m_LevelLIst[dwValue][dwIndex] =
 		Node->m_ChildNode[0];
-	Node->m_ChildNode.push_back(CreatorNode(Node, e0, Node->m_iCorner[1], e2, e3));
 
+	Node->m_ChildNode.push_back(CreatorNode(Node, e0, Node->m_iCorner[1], e2, e3));
 	 dwIndex =
 		Node->m_ChildNode[1]->m_dwPositionIndex[1] * pow(2.0f, (float)Node->m_ChildNode[1]->m_Depth) + Node->m_ChildNode[1]->m_dwPositionIndex[0];
 	 dwValue = Node->m_ChildNode[1]->m_Depth;

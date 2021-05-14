@@ -12,6 +12,7 @@ public:
 	STexture*		m_pWhilteTexture;
 public:
 	STexture*		Load(ID3D11Device* pd3dDevice, const TCHAR* filename);
+	ID3D11ShaderResourceView*    SRVLoad(ID3D11Device* pd3dDevice, const TCHAR* filename);
 	STexture*		GetPtr(wstring filename);
 	bool		Init();
 	bool		Frame();
