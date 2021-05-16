@@ -1,15 +1,17 @@
 #pragma once
 #include "TCore.h"
-#include "SQuadTree.h"
-#include "SModel.h"
 #include "SMousePicking.h"
-#include "SMiniMap.h"
-#include "SText.h"
+#include "FileIO.h"
 enum MapEditorBuffer
 {
 	UP = 0,
 	DOWN ,
 	NORMAL ,
+
+	ELayer0,
+	ELayer1,
+	ELayer2,
+	ELayer3,
 };
 struct MapEditorData
 {
@@ -20,6 +22,7 @@ struct MapEditorData
 class Sample : public TCore
 {
 public:
+	FileIO			FileIO;
 	ComPtr<ID3D11Buffer>			m_ConstantBuffer;
 	SModel			m_pObj;
 	vector<Matrix>	m_MatrixList;
@@ -32,8 +35,9 @@ public:
 	SText			m_BlendingTextrue;
 	SCamera			m_TopCamera;
 	MapEditorData	m_EditorData;
-	vector<PNCT_VERTEX> m_PinkList;
+	vector<Vector3> m_PinkList;
 	vector<ComPtr<ID3D11ShaderResourceView>> m_MultiTextureSRV;
+	MapFileData		m_MapData;
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -41,5 +45,10 @@ public:
 	bool Release() override;
 	bool Build(int tel, int cel, int ces, wstring tex);
 	bool GetIntersection(SNode* pNode);
+	bool SetEditor();
+	bool SetLayer();
+public:
+	Sample();
+	~Sample();
 };
 

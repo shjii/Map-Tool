@@ -26,4 +26,11 @@ public:
 	float Speed;
 	afx_msg void OnBnClickedOk();
 	int m_Radio;
+	BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonL0();
+	afx_msg void OnBnClickedButtonL1();
+	afx_msg void OnBnClickedButtonL2();
+	afx_msg void OnBnClickedButtonL3();
+	afx_msg void OnBnClickedSave();
+	afx_msg void OnBnClickedLoad();
 };

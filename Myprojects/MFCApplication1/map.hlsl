@@ -55,8 +55,11 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	vOut.c = float4(fdot, fdot, fdot, 1.0f);
 	vOut.c = vIn.c;
 
-	vOut.b.x  = vIn.t.z + (vRc.w / 2) / vRc.w; 
-	vOut.b.y  = 1.0f - vIn.t.w + (vRc.w / 2) / vRc.w;
+	//vOut.b = vIn.t.xy; 
+
+	vOut.b.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w ;
+	vOut.b.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w ;
+
 	vOut.t.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x; 
 	vOut.t.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w * vRc.x;
 	return vOut;

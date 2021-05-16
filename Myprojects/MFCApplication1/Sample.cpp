@@ -20,10 +20,7 @@ bool Sample::Init()
 
 	m_MultiTextureSRV.resize(4);
 
-	m_MultiTextureSRV[0].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/Terrain1_Mask.dds"));
-	m_MultiTextureSRV[1].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/firem512.dds"));
-	m_MultiTextureSRV[2].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/bul.dds"));
-	m_MultiTextureSRV[3].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, L"../../data/map/lighting.dds"));
+	SetLayer();
 	return true;
 }
 bool Sample::Frame()
@@ -157,25 +154,73 @@ bool Sample::Render()
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
 					if (fDist < m_EditorData.Radius)
 					{
-						m_Map->m_VertexList[i].t.w = i;
-						m_PinkList.push_back(m_Map->m_VertexList[i]);
-						//switch (m_EditorData.mapEditorB)
-						//{
-						//case UP:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed; break;
-						//case DOWN:	m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed; break;
-						//case NORMAL:
-						//{
-						//	float a = m_Map->m_VertexList[i].p.y;
-						//	for (int i = 0; i < m_Map->m_VertexList.size(); i++)
-						//	{
-						//		m_Map->m_VertexList[i].p.y = a;
-						//	}
-						//	break;
-						//}break;
-						//}
+						switch (m_EditorData.mapEditorB)
+						{
+						case UP:	
+						{
+							m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed;
+							m_MapData.fyList[i] = m_Map->m_VertexList[i].p.y;
+
+						}break;
+						case DOWN:	
+						{
+							m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed;
+							m_MapData.fyList[i] = m_Map->m_VertexList[i].p.y;
+						}break;
+						case NORMAL:
+						{
+							float a = m_Map->m_VertexList[i].p.y;
+							for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+							{
+								m_Map->m_VertexList[i].p.y = a;
+								m_MapData.fyList[i] = m_Map->m_VertexList[i].p.y;
+							}
+							break;
+						}break;
+						case ELayer0:
+						{
+							if (m_PinkList.size() == 0)
+							{
+								m_PinkList.push_back(Pick);
+								Vector3 a = { m_EditorData.Radius, 0.0f, 0.0f };
+								m_PinkList.push_back(a);
+								m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 0, m_PinkList, m_Map);
+							}
+						}break;
+						case ELayer1:
+						{
+							if (m_PinkList.size() == 0)
+							{
+								m_PinkList.push_back(Pick);
+								Vector3 a = { m_EditorData.Radius, 0.0f, 0.0f };
+								m_PinkList.push_back(a);
+								m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 1, m_PinkList, m_Map);
+							}
+						}break;
+						case ELayer2:
+						{
+							if (m_PinkList.size() == 0)
+							{
+								m_PinkList.push_back(Pick);
+								Vector3 a = { m_EditorData.Radius, 0.0f, 0.0f };
+								m_PinkList.push_back(a);
+								m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 2, m_PinkList, m_Map);
+							}
+						}break;
+						case ELayer3:
+						{
+							if (m_PinkList.size() == 0)
+							{
+								m_PinkList.push_back(Pick);
+								Vector3 a = { m_EditorData.Radius, 0.0f, 0.0f };
+								m_PinkList.push_back(a);
+								m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 3, m_PinkList, m_Map);
+							}
+						}break;
+						}
 					}
 				}
-				m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, 1, m_PinkList,m_Map);
+				
 			}
 			m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
 			BoolColl = false;
@@ -196,10 +241,8 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 	if (m_Map != nullptr) m_Map->Release();
 	m_Map = nullptr;
 	SMapDesc desc;
-	//desc.iNumCols = sqrt(tel * cel) * sqrt(tel) + 1;// m_Map.m_iNumCols;
-	//desc.iNumRows = sqrt(tel * cel) *sqrt(tel) + 1;// m_Map.m_iNumRows;
-	desc.iNumCols = tel * cel + 1;// m_Map.m_iNumCols;
-	desc.iNumRows = tel * cel + 1;// m_Map.m_iNumRows;
+	desc.iNumCols = tel * cel + 1;
+	desc.iNumRows = tel * cel + 1;
 	desc.fCellDistance = ces;
 	desc.fScaleHeight = 1.0f;
 	desc.szTexFile = tex;
@@ -213,6 +256,11 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 	m_TopCamera.Init();
 	m_QuadTree.GetUpdata(m_pMainCamera);
 
+	m_MapData.fTile = tel;
+	m_MapData.fCell = cel;
+	m_MapData.fCellSize = ces;
+	m_MapData.fTexture = tex;
+	m_MapData.fyList.resize(desc.iNumCols * desc.iNumRows);
 	int a = sqrt(tel);
 	int b = 1;
 	while (2 < a)
@@ -271,7 +319,6 @@ bool Sample::GetIntersection(SNode* pNode)
 		Vector3 vNormal = (v1 - v0).Cross(v2 - v0);
 		vNormal.Normalize();
 
-		// 방법 1) 외적을 사용하는 방법
 		if (m_Mouse.GetIntersection(m_Mouse.Orig, vEnd, vNormal, v0, v1, v2))
 		{
 			if (m_Mouse.PointInPolygon(m_Mouse.m_vIntersection, vNormal, v0, v1, v2))
@@ -279,17 +326,39 @@ bool Sample::GetIntersection(SNode* pNode)
 				return true;
 			}
 		}
-
-		// 방법 2) UV 매개변수를 사용한 교점과 교점 포함 테스트를
-		//         동시에 처리 하는 방법(평면 노말 필요X).
-		//if (m_Picking.IntersectTriangle(vPickRayOrigin, vPickRayDir, v0, v1, v2, t, u, v))
-		//{
-		//   list[0] = v0;
-		//   list[1] = v1;
-		//   list[2] = v2;
-		//   return true;
-		//}
 	}
 
 	return false;
+}
+bool Sample::SetEditor()
+{
+	m_MapData = FileIO.Load();
+	Build(m_MapData.fTile, m_MapData.fCell, m_MapData.fCellSize, m_MapData.fTexture);
+	SetLayer();
+	for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+	{
+		m_Map->m_VertexList[i].p.y = m_MapData.fyList[i];
+	}
+	m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
+
+	return true;
+}
+bool Sample::SetLayer()
+{
+	m_MultiTextureSRV[0].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, m_MapData.m_LayerList[0].c_str()));
+	m_MultiTextureSRV[1].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, m_MapData.m_LayerList[1].c_str()));
+	m_MultiTextureSRV[2].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, m_MapData.m_LayerList[2].c_str()));
+	m_MultiTextureSRV[3].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, m_MapData.m_LayerList[3].c_str()));
+	return true;
+}
+Sample::Sample()
+{
+	m_MapData.m_LayerList.push_back(L"../../data/map/Terrain1_Mask.dds");
+	m_MapData.m_LayerList.push_back(L"../../data/map/firem512.dds");
+	m_MapData.m_LayerList.push_back(L"../../data/map/bul.dds");
+	m_MapData.m_LayerList.push_back(L"../../data/map/lighting.dds");
+}
+Sample::~Sample()
+{
+
 }
