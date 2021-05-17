@@ -43,8 +43,6 @@ bool main::Render()
 		&m_pMainCamera->m_matView,
 		&m_pMainCamera->m_matProj);
 	m_Map.Render(g_pImmediateContext);
-
-	
 	return true;
 }
 bool main::PostRender()
@@ -55,6 +53,5 @@ bool main::PostRender()
 bool main::Release()
 {
 	m_Map.Release();
-	m_QuadTree.Release();
 	return true;
 }

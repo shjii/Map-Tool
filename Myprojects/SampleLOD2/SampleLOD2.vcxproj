@@ -149,12 +149,18 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SHeightMap.cpp" />
+    <ClCompile Include="SMapLOD.cpp" />
     <ClCompile Include="SNode.cpp" />
+    <ClCompile Include="SQuadTree.cpp" />
+    <ClCompile Include="SQuadTreeIndex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
     <ClInclude Include="SHeightMap.h" />
+    <ClInclude Include="SMapLOD.h" />
     <ClInclude Include="SNode.h" />
+    <ClInclude Include="SQuadTree.h" />
+    <ClInclude Include="SQuadTreeIndex.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="PS.txt" />

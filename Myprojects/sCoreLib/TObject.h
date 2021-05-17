@@ -101,6 +101,8 @@ public:
 	float		m_fAttackTimer;
 	float		m_fAlphaBlend;
 	bool		m_bDrawDebugRect;
+	S_BOX						m_Box;
+	S_SPHERE					m_Sphere;
 public:
 	/// object Index, overlap State
 	std::map<int, DWORD>	m_OverlapState;
