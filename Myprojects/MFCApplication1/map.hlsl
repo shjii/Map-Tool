@@ -55,8 +55,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	vOut.c = float4(fdot, fdot, fdot, 1.0f);
 	vOut.c = vIn.c;
 
-	//vOut.b = vIn.t.xy; 
-
+	
 	vOut.b.x = ((vOut.wp.x / vRc.z) + (vRc.w / 2)) / vRc.w ;
 	vOut.b.y = 1.0f - ((vOut.wp.z / vRc.z) + (vRc.w / 2)) / vRc.w ;
 
@@ -200,10 +199,10 @@ PS_OUTPUT PS(PS_INPUT vIn)
 
 	//
 
-	float4 Multi = lerp(vTexture,g_MultiTextrue[0].Sample(g_Sample, vIn.t), vRTexture.x);
-	Multi = lerp(Multi, g_MultiTextrue[1].Sample(g_Sample, vIn.t), vRTexture.y);
-	Multi = lerp(Multi, g_MultiTextrue[2].Sample(g_Sample, vIn.t), vRTexture.z);
-	Multi = lerp(Multi, g_MultiTextrue[3].Sample(g_Sample, vIn.t), vRTexture.w);
+	float4 Multi = lerp(vTexture,g_MultiTextrue[0].Sample(g_Sample, vIn.b), vRTexture.x);
+	Multi = lerp(Multi, g_MultiTextrue[1].Sample(g_Sample, vIn.b), vRTexture.y);
+	Multi = lerp(Multi, g_MultiTextrue[2].Sample(g_Sample, vIn.b), vRTexture.z);
+	Multi = lerp(Multi, g_MultiTextrue[3].Sample(g_Sample, vIn.b), vRTexture.w);
 	vOut.c = Multi;
 	vOut.c = vOut.c * vIn.c;// *Diffuse(vIn.n, g_vLightDir[0])*lightColor;
 	return vOut;

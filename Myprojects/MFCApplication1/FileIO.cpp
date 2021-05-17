@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "FileIO.h"
 
-bool FileIO::Save(MapFileData data, ID3D11DeviceContext*   pImmediateContext)
+bool FileIO::Save(MapFileData data, ID3D11Device* pDevice, ID3D11DeviceContext*   pImmediateContext)
 {
 	ofstream fout("TEST.txt");
 
@@ -18,64 +18,67 @@ bool FileIO::Save(MapFileData data, ID3D11DeviceContext*   pImmediateContext)
 	{
 		fout << to_wm(data.m_LayerList[i]) << endl;
 	}
-
-	fout << data.btext;
-	//D3D11_TEXTURE2D_DESC desc;
-	//data.btext->GetDesc(&desc);
-
-	//D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
-	//if (SUCCEEDED(pImmediateContext->Map((ID3D11Resource*)data.btext,
-	//	0, D3D11_MAP_READ_WRITE, 0, &MappedFaceDest)))
-	//{
-	//	BYTE* pDestBytes = (BYTE*)MappedFaceDest.pData;
-
-	//	for (UINT y = 0; y < desc.Height; y++)
-	//	{
-	//		for (UINT x = 0; x < desc.Width; x++)
-	//		{
-	//			fout << *pDestBytes++ << endl;
-	//			fout << *pDestBytes++ << endl;
-	//			fout << *pDestBytes++ << endl;
-	//			fout << *pDestBytes++ << endl;
-	//		}
-	//	}
-	//}
-	//pImmediateContext->Unmap(data.btext, 0);
+	HRESULT hr;
+	ScratchImage Simage;
+	if (FAILED(hr = DirectX::CaptureTexture(pDevice, pImmediateContext, data.btext, Simage)))
+	{
+		H(hr);
+		return nullptr;
+	}
+	if (FAILED(hr = DirectX::SaveToDDSFile(Simage.GetImages(), Simage.GetImageCount(), Simage.GetMetadata(), DirectX::DDS_FLAGS_NONE, L"abc.dds")))
+	{
+		H(hr);
+		return nullptr;
+	}
 	fout.close();
 	return true;
 }
-MapFileData FileIO::Load()
+bool FileIO::Load(MapFileData* data, ID3D11Device* pDevice, ID3D11DeviceContext*   pImmediateContext)
 {
-	MapFileData data;
-
 	ifstream fin("TEST.txt");
 	char line[1000];
 	float  iB;
 		fin >> iB;
-		data.fTile = iB;
+		data->fTile = iB;
 		fin >> iB;
-		data.fCell = iB;
+		data->fCell = iB;
 		fin >> iB;
-		data.fCellSize = iB;
+		data->fCellSize = iB;
 		fin >> line;
-		data.fTexture = to_mw(line);
+		data->fTexture = to_mw(line);
 		fin >> iB;
 		int a = iB;
 		for (int i = 0; i < a; i++)
 		{
 			fin >> iB;
-			data.fyList.push_back(iB);
+			data->fyList.push_back(iB);
 		}
-		data.m_LayerList.resize(4);
+		data->m_LayerList.resize(4);
 		for (int j = 0; j < 4; j++)
 		{
 			fin >> line;
-			data.m_LayerList[j] = to_mw(line);
+			data->m_LayerList[j] = to_mw(line);
 		}
 	fin.close();
 
+	//TexMetadata* metadata;
+	//ScratchImage image;
 
+	//LoadFromDDSFile(L"abc.dds",
+	//	DDS_FLAGS_NONE, metadata, image);
+	//ID3D11ShaderResourceView *resourceView;
+	//CreateShaderResourceView(pDevice, pImmediateContext,"abc.dds");
+	ID3D11ShaderResourceView **resourceView = nullptr;
+	HRESULT result = E_FAIL;
 
+	DirectX::TexMetadata	md;
+	DirectX::ScratchImage	img;
+	result = LoadFromDDSFile(L"abc.dds", DDS_FLAGS_NONE, &md, img);
+	result = CreateShaderResourceView(pDevice, img.GetImages(), img.GetImageCount(), md, &data->ResourceView);
 
-	return data;
+	ID3D11Resource *res;
+	data->ResourceView->GetResource(&res);
+	res->QueryInterface<ID3D11Texture2D>(&data->btext);
+
+	return true;
 }

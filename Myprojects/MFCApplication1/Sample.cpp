@@ -238,7 +238,11 @@ bool Sample::Release()
 
 bool Sample::Build(int tel, int cel, int ces, wstring tex)
 {
-	if (m_Map != nullptr) m_Map->Release();
+	if (m_Map != nullptr)
+	{
+		m_Map->Release();
+		m_BlendingTextrue.m_pSRV = m_BlendingTextrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, nullptr);
+	}
 	m_Map = nullptr;
 	SMapDesc desc;
 	desc.iNumCols = tel * cel + 1;
@@ -302,7 +306,7 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 
 		g_pImmediateContext->Unmap(m_ConstantBuffer.Get(), 0);
 	}
-
+	//
 	return true;
 }
 
@@ -332,8 +336,11 @@ bool Sample::GetIntersection(SNode* pNode)
 }
 bool Sample::SetEditor()
 {
-	m_MapData = FileIO.Load();
+	FileIO.Load(&m_MapData,g_pd3dDevice, g_pImmediateContext);
+	if (m_Map != nullptr)m_Map->Release();
 	Build(m_MapData.fTile, m_MapData.fCell, m_MapData.fCellSize, m_MapData.fTexture);
+	m_BlendingTextrue.m_pSRV = m_MapData.ResourceView;
+	m_BlendingTextrue.pTex2D = m_MapData.btext;
 	SetLayer();
 	for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 	{

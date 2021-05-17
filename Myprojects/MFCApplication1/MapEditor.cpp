@@ -176,8 +176,10 @@ void MapEditor::OnBnClickedSave()
 	//	OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
 	//	L"bmp files(*.bmp)|*.bmp| All Files(*.*)|*.*|",
 	//	this);
-	theApp.m_Sample.m_MapData.btext = theApp.m_Sample.m_BlendingTextrue.pStaging2D.Get();
-	theApp.m_Sample.FileIO.Save(theApp.m_Sample.m_MapData,theApp.m_Sample.m_pImmediateContext.Get());
+	//theApp.m_Sample.m_MapData.btext = theApp.m_Sample.m_BlendingTextrue.pStaging2D.Get();
+	theApp.m_Sample.m_MapData.btext = theApp.m_Sample.m_BlendingTextrue.pTex2D.Get();
+	theApp.m_Sample.m_MapData.ResourceView = theApp.m_Sample.m_BlendingTextrue.m_pSRV.Get();
+	theApp.m_Sample.FileIO.Save(theApp.m_Sample.m_MapData, theApp.m_Sample.m_pd3dDevice.Get(),theApp.m_Sample.m_pImmediateContext.Get());
 
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

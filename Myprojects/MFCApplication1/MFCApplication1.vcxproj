@@ -103,6 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>../../lib;../../fmod/lib/x64;../../FBX/lib/vs2017/x64/debug/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTex.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
