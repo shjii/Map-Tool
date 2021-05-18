@@ -42,6 +42,9 @@ public:
 	sNodeMap						m_sNodeMap;
 	sNodeList						m_sNodeList;
 	vector<FbxNode*>				m_pFbxNodeList;
+	Vector3	Max = {-9999.0f, -9999.0f, -9999.0f };
+	Vector3	Min = { 9999.0f, 9999.0f, 9999.0f };
+	Vector2 Boxy = { -9999.0f, 9999.0f };
 public:
 	ComPtr<ID3D11Buffer>			m_BoneBuffer;
 public:

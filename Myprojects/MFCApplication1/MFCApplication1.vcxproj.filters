@@ -66,6 +66,9 @@
     <ClInclude Include="FileIO.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="ObjDlg.h">
+      <Filter>Dlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCApplication1.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="FileIO.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjDlg.cpp">
+      <Filter>Dlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

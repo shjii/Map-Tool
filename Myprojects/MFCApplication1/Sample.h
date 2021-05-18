@@ -22,6 +22,9 @@ struct MapEditorData
 class Sample : public TCore
 {
 public:
+	bool			objp = false;
+	int				objEd;
+public:
 	FileIO			FileIO;
 	ComPtr<ID3D11Buffer>			m_ConstantBuffer;
 	SModel			m_pObj;
@@ -38,6 +41,7 @@ public:
 	vector<Vector3> m_PinkList;
 	vector<ComPtr<ID3D11ShaderResourceView>> m_MultiTextureSRV;
 	MapFileData		m_MapData;
+	Matrix*			ObjPinck;
 public:
 	bool Init() override;
 	bool Frame() override;

@@ -99,6 +99,44 @@ SShapePlane::~SShapePlane()
 {
 }
 
+bool SShapeBox::DrawBox(ID3D11DeviceContext* pd3dContext, Vector3 Max, Vector3 min, Vector4 c)
+{
+
+	m_VertexList[0].p = Vector3{Max.x , min.y, Max.z };
+	m_VertexList[1].p = Vector3{Max.x , min.y, min.z};
+	m_VertexList[2].p = Vector3{min.x , min.y, Max.z};
+	m_VertexList[3].p = min;
+						
+	m_VertexList[4].p = Vector3{Max.x , Max.y, Max.z};
+	m_VertexList[5].p = Vector3{ min.x , Max.y, Max.z};
+	m_VertexList[6].p = Vector3{Max.x , min.y, Max.z};
+	m_VertexList[7].p = Vector3{ min.x , min.y, Max.z};
+						
+	m_VertexList[8].p = Vector3{ Max.x , Max.y, min.z };
+	m_VertexList[9].p = Vector3{ min.x , Max.y, min.z };
+	m_VertexList[10].p = Vector3{ Max.x , min.y, min.z };
+	m_VertexList[11].p = Vector3{ min.x , min.y, min.z };
+
+	m_VertexList[12].p = Vector3{ Max.x , Max.y, Max.z };
+	m_VertexList[13].p = Vector3{ Max.x , Max.y, min.z };
+	m_VertexList[14].p = Vector3{ Max.x , min.y, Max.z };
+	m_VertexList[15].p = Vector3{ Max.x , min.y, min.z };
+
+	m_VertexList[16].p = Vector3{ min.x , Max.y, Max.z };
+	m_VertexList[17].p = Vector3{ min.x , Max.y, min.z };
+	m_VertexList[18].p = Vector3{ min.x , min.y, Max.z };
+	m_VertexList[19].p = Vector3{ min.x , min.y, min.z };
+
+	m_VertexList[20].p = Vector3{ Max.x , Max.y, Max.z };
+	m_VertexList[21].p = Vector3{ Max.x , Max.y, min.z };
+	m_VertexList[22].p = Vector3{ min.x , Max.y, Max.z };
+	m_VertexList[23].p = Vector3{ min.x , Max.y, min.z };
+
+	pd3dContext->UpdateSubresource(
+		m_pVertexBuffer.Get(), 0, NULL, &m_VertexList.at(0), 0, 0);
+	return true;
+}
+
 bool SShapeLine::Draw(ID3D11DeviceContext* pd3dContext,
 	Vector3 p, Vector3 e, Vector4 c)
 {

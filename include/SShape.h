@@ -10,6 +10,8 @@ public:
 class SShapeBox : public SShape
 {
 public:
+	bool DrawBox(ID3D11DeviceContext* pd3dContext,Vector3 Max, Vector3 min, Vector4 c = Vector4(1, 0, 0, 1));
+public:
 	virtual bool    CreateVertexData()override;
 	virtual bool    CreateIndexData()override;
 public:

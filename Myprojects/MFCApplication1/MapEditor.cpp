@@ -50,6 +50,7 @@ END_MESSAGE_MAP()
 void MapEditor::OnBnClickedOk()
 {
 	UpdateData(TRUE);
+	theApp.m_Sample.objp = false;
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	theApp.m_Sample.m_EditorData.Speed = Speed;
 	theApp.m_Sample.m_EditorData.Radius = radius;
@@ -71,6 +72,9 @@ void MapEditor::OnBnClickedOk()
 BOOL MapEditor::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+
+	Speed = 5.0f;
+	radius = 10.0f;
 
 	UpdateData(FALSE);
 	return TRUE;

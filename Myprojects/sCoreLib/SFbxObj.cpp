@@ -440,6 +440,12 @@ void SFbxObj::ParseMesh(FbxNode* pNode,
 						v.t.y = 1.0f - uv.mData[1];
 					}
 				}
+				if (v.p.x > Max.x)Max.x = v.p.x;
+				if (v.p.y > Boxy.y)Boxy.x = v.p.y;
+				if (v.p.z > Max.z)Max.z = v.p.z;
+				if (v.p.x < Min.x)Min.x = v.p.x;
+				if (v.p.y < Boxy.y)Boxy.y = v.p.y;
+				if (v.p.z < Min.z)Min.z = v.p.z;
 
 				IW_VERTEX iw;
 				if (pObj->m_bSkinnedMesh)

@@ -2,12 +2,13 @@
 
 bool	SModel::Init()
 {
-	m_Obj = make_shared<SFbxObj>();
-	//if (m_Obj->Load("../../data/3DS/man.fbx"))
-	if (m_Obj->Load("../../data/3DS/Turret_Deploy1.fbx"))
-	//if (m_Obj->Load("../../data/3DS/Scifi_Model_L2_all_in_one.fbx"))
+	/*if (!m_BoxRender.Create(TBASIS_CORE_LIB::g_pd3dDevice, L"../../data/shader/vsCore.txt", L"../../data/shader/psCore.txt", L"../../data/bitmap/tileA.jpg"))
 	{
-		for (auto data : m_Obj->m_sNodeList)
+		return false;
+	}*/
+	if (Load("../../data/3DS/Turret_Deploy1.fbx"))
+	{
+		for (auto data : m_sNodeList)
 		{
 			SModelObj* pObject = data;
 			for (int iSub = 0; iSub < pObject->subMesh.size(); iSub++)
@@ -41,14 +42,28 @@ bool	SModel::Init()
 				pSub->m_pTexture = g_TextMgr.Load(TBASIS_CORE_LIB::g_pd3dDevice, loadTex.c_str());
 			}
 		}
-		if (!m_Obj->Create(TBASIS_CORE_LIB::g_pd3dDevice,
+		if (!Create(TBASIS_CORE_LIB::g_pd3dDevice,
 			L"../../data/shader/objecVS.txt",
 			L"../../data/shader/objecPS.txt",
 			L""))
 		{
 			return false;
 		}
-	}
+		m_Box.vMax = Max;
+		m_Box.vMin = Min;
+		m_Box.vMax.y = Boxy.x;
+		m_Box.vMin.y = Boxy.y;
+		m_Box.vAxis[0] = { 1.0f, 0.0f ,0.0f };
+		m_Box.vAxis[1] = { 0.0f, 1.0f ,0.0f };
+		m_Box.vAxis[2] = { 0.0f, 0.0f ,1.0f };
+		m_Box.vCenter = (m_Box.vMax + m_Box.vMin) / 2.0f;
+		m_Box.fExtent[0] = m_Box.vMax.x -m_Box.vCenter.x;
+		m_Box.fExtent[1] = m_Box.vMax.y -m_Box.vCenter.y;
+		m_Box.fExtent[2] = m_Box.vMax.z -m_Box.vCenter.z;
+
+		m_Sphere.vCenter = m_Box.vCenter;
+		m_Sphere.fRadius = (m_Box.vMax - m_Box.vCenter).Length();
+			}
 
 
 	D3D11_BUFFER_DESC vbdesc =
@@ -59,31 +74,31 @@ bool	SModel::Init()
 		D3D11_CPU_ACCESS_WRITE,
 		0
 	};
-	TBASIS_CORE_LIB::g_pd3dDevice->CreateBuffer(&vbdesc, NULL, m_Obj->m_BoneBuffer.GetAddressOf());
+	TBASIS_CORE_LIB::g_pd3dDevice->CreateBuffer(&vbdesc, NULL, m_BoneBuffer.GetAddressOf());
 
 	return true;
 }
 bool	SModel::Frame()
 {
-	m_Obj->m_fTick += g_fSecondPerFrame *
-		m_Obj->m_Scene.iFrameSpeed *
-		m_Obj->m_Scene.iTickPerFrame;// *0. 0f;
+	m_fTick += g_fSecondPerFrame *
+		m_Scene.iFrameSpeed *
+		m_Scene.iTickPerFrame;// *0. 0f;
 
-	if (m_Obj->m_fTick >=
-		(m_Obj->m_Scene.iLastFrame *
-			m_Obj->m_Scene.iTickPerFrame))
+	if (m_fTick >=
+		(m_Scene.iLastFrame *
+			m_Scene.iTickPerFrame))
 	{
-		m_Obj->m_fTick = 0;
+		m_fTick = 0;
 	}
-	for (int iNode = 0; iNode < m_Obj->m_sNodeList.size(); iNode++)
+	for (int iNode = 0; iNode < m_sNodeList.size(); iNode++)
 	{
 		Matrix matWorld = Matrix::Identity;
-		SModelObj* pModelObject = m_Obj->m_sNodeList[iNode];
+		SModelObj* pModelObject = m_sNodeList[iNode];
 		std::string szName;
 		szName.assign(pModelObject->m_szName.begin(), pModelObject->m_szName.end());
 		Matrix matBiped = Matrix::Identity;
-		auto data = m_Obj->m_dxMatrixBindPoseMap.find(szName);
-		if (data != m_Obj->m_dxMatrixBindPoseMap.end())
+		auto data = m_dxMatrixBindPoseMap.find(szName);
+		if (data != m_dxMatrixBindPoseMap.end())
 		{
 			matBiped = data->second;
 		}
@@ -91,10 +106,10 @@ bool	SModel::Frame()
 		for (int iTick = 0; iTick < pModelObject->animlist.size(); iTick++)
 		{
 			if (pModelObject->animlist[iTick].iTick >=
-				m_Obj->m_fTick)
+				m_fTick)
 			{
 				matWorld = pModelObject->animlist[iTick].mat;
-				m_Obj->m_pMatrixList[iNode] = matBiped * matWorld;
+				m_pMatrixList[iNode] = matBiped * matWorld;
 				break;
 			}
 		}
@@ -102,40 +117,44 @@ bool	SModel::Frame()
 	Matrix* pMatrices;
 	HRESULT hr = S_OK;
 	D3D11_MAPPED_SUBRESOURCE MappedFaceDest;
-	if (SUCCEEDED(g_pImmediateContext->Map((ID3D11Resource*)m_Obj->m_BoneBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedFaceDest)))
+	if (SUCCEEDED(g_pImmediateContext->Map((ID3D11Resource*)m_BoneBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedFaceDest)))
 	{
 		pMatrices = (Matrix*)MappedFaceDest.pData;
-		for (int dwObject = 0; dwObject < m_Obj->m_sNodeList.size(); dwObject++)
+		for (int dwObject = 0; dwObject < m_sNodeList.size(); dwObject++)
 		{
-			Matrix matAnim = m_Obj->m_pMatrixList[dwObject].Transpose();
+			Matrix matAnim = m_pMatrixList[dwObject].Transpose();
 			pMatrices[dwObject] = matAnim;
 		}
-		g_pImmediateContext->Unmap(m_Obj->m_BoneBuffer.Get(), 0);
+		g_pImmediateContext->Unmap(m_BoneBuffer.Get(), 0);
 	}
 	return true;
 }
 bool	SModel::Render(ID3D11DeviceContext* pd3dContext)
 {
-	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_Obj->m_BoneBuffer.GetAddressOf());
+
+	//m_BoxRender.DrawBox(pd3dContext, m_Box.vMax, m_Box.vMin);
+
+	//m_BoxRender.Render(pd3dContext);
+	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_BoneBuffer.GetAddressOf());
 
 	//m_Obj->SetMatrix(NULL, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 
-	m_Obj->m_cbData.vColor[0] = m_pMainCamera->m_vLook.x;
-	m_Obj->m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
-	m_Obj->m_cbData.vColor[2] = m_pMainCamera->m_vLook.z;
-	m_Obj->SDxObject::Update(g_pImmediateContext);
-	g_pImmediateContext->IASetInputLayout(m_Obj->m_pInputLayout.Get());
-	g_pImmediateContext->VSSetConstantBuffers(0, 1, m_Obj->m_pConstantBuffer.GetAddressOf());
-	g_pImmediateContext->PSSetConstantBuffers(0, 1, m_Obj->m_pConstantBuffer.GetAddressOf());
-	g_pImmediateContext->VSSetShader(m_Obj->m_pVertexShader.Get(), NULL, 0);
-	g_pImmediateContext->PSSetShader(m_Obj->m_pPixelShader.Get(), NULL, 0);
-	g_pImmediateContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_Obj->m_iTopology);
+	m_cbData.vColor[0] = m_pMainCamera->m_vLook.x;
+	m_cbData.vColor[1] = m_pMainCamera->m_vLook.y;
+	m_cbData.vColor[2] = m_pMainCamera->m_vLook.z;
+	SDxObject::Update(g_pImmediateContext);
+	g_pImmediateContext->IASetInputLayout(m_pInputLayout.Get());
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	g_pImmediateContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	g_pImmediateContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
+	g_pImmediateContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+	g_pImmediateContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iTopology);
 
 
-	for (int iNode = 0; iNode < m_Obj->m_sNodeList.size(); iNode++)
+	for (int iNode = 0; iNode < m_sNodeList.size(); iNode++)
 	{
 		Matrix matWorld = Matrix::Identity;
-		SModelObj* pObject = m_Obj->m_sNodeList[iNode];
+		SModelObj* pObject = m_sNodeList[iNode];
 
 		for (int iSub = 0; iSub < pObject->subMesh.size(); iSub++)
 		{
@@ -170,7 +189,7 @@ bool	SModel::Render(ID3D11DeviceContext* pd3dContext)
 }
 bool	SModel::Release()
 {
-	for (auto data : m_Obj->m_sNodeList)
+	for (auto data : m_sNodeList)
 	{
 		SModelObj* pObject = data;
 		pObject->Release();

@@ -39,9 +39,9 @@ bool Sample::Frame()
 	if (m_Map != nullptr)
 	{
 		m_QuadTree.Frame();
-		m_Map->Frame();
+		//m_Map->Frame();
 	}	
-	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH)
+	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH || (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD && ObjPinck))
 	{
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
 		BoolColl = true;
@@ -50,17 +50,13 @@ bool Sample::Frame()
 	{
 		m_Textrue.m_pSRV = m_Textrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, m_Map);
 	}
-	
+
 	m_pObj.Frame();
 	return true;
 }
 bool Sample::Render()
 {
-	for (auto data : m_MatrixList)
-	{
-		m_pObj.m_Obj->SetMatrix(&data, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		m_pObj.Render(g_pImmediateContext);
-	}
+
 
 	if (m_Map != nullptr) 
 	{
@@ -73,6 +69,12 @@ bool Sample::Render()
 			g_pImmediateContext->PSSetShaderResources(3, 4, m_MultiTextureSRV[0].GetAddressOf());
 			m_Map->Render(g_pImmediateContext);
 			m_MinMap.End(g_pImmediateContext);
+		}
+
+		for (auto data : m_MatrixList)
+		{
+			m_pObj.SetMatrix(&data, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+			m_pObj.Render(g_pImmediateContext);
 		}
 
 		m_Map->SetMatrix(NULL,
@@ -125,6 +127,7 @@ bool Sample::Render()
 
 		if (BoolColl == true)
 		{
+			ObjPinck = false;
 			BoolColl = false;
 			float Max = 99999;
 			float f = 5.0f;
@@ -149,20 +152,91 @@ bool Sample::Render()
 			if (BoolColl)
 			{
 				m_PinkList.clear();
-				for (int i = 0; i < m_Map->m_VertexList.size(); i++)
+				if (objp)
+				{
+					switch (objEd)
+					{
+					case 0 :
+					{
+						Matrix mat;
+						mat._41 = Pick.x;
+						mat._42 = Pick.y;
+						mat._43 = Pick.z;
+						m_MatrixList.push_back(mat);
+					}break;
+					case 1 :
+					{
+						S_BOX Box;
+						for (int i = 0; i < m_MatrixList.size(); i++)
+						{
+							Box = m_pObj.m_Box;
+
+							Matrix a = m_MatrixList[i];
+
+							Box.vMax = Vector3::Transform(m_pObj.m_Box.vMax, a);
+							Box.vMin = Vector3::Transform(m_pObj.m_Box.vMin, a);
+							Box.vCenter = Vector3::Transform(m_pObj.m_Box.vCenter, a);
+							
+							Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
+							Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
+							Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
+
+							if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+							{
+								m_MatrixList.erase(m_MatrixList.begin() + i);
+								break;
+							}
+						}
+					}break;
+					case 2:
+					{
+						Matrix mat;
+						mat._41 = Pick.x;
+						mat._42 = Pick.y;
+						mat._43 = Pick.z;
+						S_BOX Box;
+						for (int i = 0; i < m_MatrixList.size(); i++)
+						{
+							Box = m_pObj.m_Box;
+
+							Matrix a = m_MatrixList[i];
+
+							Box.vMax = Vector3::Transform(m_pObj.m_Box.vMax, a);
+							Box.vMin = Vector3::Transform(m_pObj.m_Box.vMin, a);
+							Box.vCenter = Vector3::Transform(m_pObj.m_Box.vCenter, a);
+
+							Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
+							Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
+							Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
+
+							if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+							{
+								ObjPinck = &m_MatrixList[i];
+								m_MatrixList[i] = mat;
+								break;
+							}
+						}
+					}break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 				{
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
 					if (fDist < m_EditorData.Radius)
 					{
 						switch (m_EditorData.mapEditorB)
 						{
-						case UP:	
+						case UP:
 						{
 							m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y + m_EditorData.Speed;
 							m_MapData.fyList[i] = m_Map->m_VertexList[i].p.y;
 
 						}break;
-						case DOWN:	
+						case DOWN:
 						{
 							m_Map->m_VertexList[i].p.y = m_Map->m_VertexList[i].p.y - m_EditorData.Speed;
 							m_MapData.fyList[i] = m_Map->m_VertexList[i].p.y;
@@ -220,7 +294,7 @@ bool Sample::Render()
 						}
 					}
 				}
-				
+				}
 			}
 			m_Map->UpdateVertexBuffer(g_pImmediateContext, &m_Map->m_VertexList.at(0), 0);
 			BoolColl = false;

@@ -7,7 +7,7 @@
 #include "MFCApplication1.h"
 #include "MapDlg.h"
 #include "MainFrm.h"
-#include "MapEditor.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_COMMAND(ID_TOOL_MAPTOOL, &CMainFrame::OnToolMaptool)
 	ON_COMMAND(ID_TOOL_MAPEDITOR, &CMainFrame::OnToolMapeditor)
+	ON_COMMAND(ID_TOOL_OBJECTEDITOR, &CMainFrame::OnToolObjecteditor)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -329,5 +330,16 @@ void CMainFrame::OnToolMapeditor()
 		m_MapEditor.Create(IDD_SMapEditor);
 	}
 	m_MapEditor.ShowWindow(SW_SHOW);
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMainFrame::OnToolObjecteditor()
+{
+	if (m_ObjDlg.GetSafeHwnd() == NULL)
+	{
+		m_ObjDlg.Create(IDD_ObjLog);
+	}
+	m_ObjDlg.ShowWindow(SW_SHOW);
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
