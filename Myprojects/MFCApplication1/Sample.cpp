@@ -6,8 +6,10 @@ bool Sample::Init()
 	m_EditorData.Radius = 10.0f;
 	m_EditorData.Speed = 10.0f;
 	m_EditorData.mapEditorB = UP;
-	m_pObj.Init();
-	m_pObj.m_pMainCamera = m_pMainCamera;
+
+	//m_pObj.Init();
+
+	//m_pObj.m_pMainCamera = m_pMainCamera;
 	m_MinMap.Width = 512;
 	m_MinMap.Height = 512;
 
@@ -41,7 +43,7 @@ bool Sample::Frame()
 		m_QuadTree.Frame();
 		//m_Map->Frame();
 	}	
-	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH || (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD && ObjPinck))
+	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH || (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD && ObjPinckB))
 	{
 		m_Mouse.RayFrame(m_pMainCamera->m_matWorld, m_pMainCamera->m_matView, m_pMainCamera->m_matProj);
 		BoolColl = true;
@@ -50,8 +52,15 @@ bool Sample::Frame()
 	{
 		m_Textrue.m_pSRV = m_Textrue.StagingCopyTextureFromSV(g_pd3dDevice, g_pImmediateContext, m_Map);
 	}
+	if (!ObjPinckB)
+	{
+		ObjPinck = nullptr;
+	}
 
-	m_pObj.Frame();
+	for (auto data : m_SRT)
+	{
+		data.m_pObj->Frame();
+	}
 	return true;
 }
 bool Sample::Render()
@@ -71,10 +80,15 @@ bool Sample::Render()
 			m_MinMap.End(g_pImmediateContext);
 		}
 
-		for (auto data : m_MatrixList)
+		for (auto data : m_SRT)
 		{
-			m_pObj.SetMatrix(&data, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-			m_pObj.Render(g_pImmediateContext);
+			for (int i = 0; i < data.m_MatrixList.size(); i++)
+			{
+				Matrix mat;
+				mat = Matrix::Transform(data.m_MatrixList[i], data.m_Quaternion[i]);
+				data.m_pObj->SetMatrix(&mat, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+				data.m_pObj->Render(g_pImmediateContext);
+			}
 		}
 
 		m_Map->SetMatrix(NULL,
@@ -127,7 +141,6 @@ bool Sample::Render()
 
 		if (BoolColl == true)
 		{
-			ObjPinck = false;
 			BoolColl = false;
 			float Max = 99999;
 			float f = 5.0f;
@@ -158,62 +171,97 @@ bool Sample::Render()
 					{
 					case 0 :
 					{
+						ObjPinckB = false;
 						Matrix mat;
+						
+						mat._11 = m_Scale.x;
+						mat._22 = m_Scale.y;
+						mat._33 = m_Scale.z;
 						mat._41 = Pick.x;
 						mat._42 = Pick.y;
 						mat._43 = Pick.z;
-						m_MatrixList.push_back(mat);
-					}break;
-					case 1 :
-					{
-						S_BOX Box;
-						for (int i = 0; i < m_MatrixList.size(); i++)
+						bool end = true;
+						for (auto data : m_SRT)
 						{
-							Box = m_pObj.m_Box;
-
-							Matrix a = m_MatrixList[i];
-
-							Box.vMax = Vector3::Transform(m_pObj.m_Box.vMax, a);
-							Box.vMin = Vector3::Transform(m_pObj.m_Box.vMin, a);
-							Box.vCenter = Vector3::Transform(m_pObj.m_Box.vCenter, a);
-							
-							Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
-							Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
-							Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
-
-							if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+							if (data.name == objname)
 							{
-								m_MatrixList.erase(m_MatrixList.begin() + i);
+								data.m_MatrixList.push_back(mat);
+								data.m_Quaternion.push_back(m_baseQuaterniion);
+								end = false;
 								break;
 							}
 						}
+						if (end)
+						{
+							SRT srt;
+							srt.name = objname;
+							srt.m_MatrixList.push_back(mat);
+							srt.m_Quaternion.push_back(m_baseQuaterniion);
+							srt.m_pObj = new SModel;
+							srt.m_pObj->Build(objname, m_pMainCamera);
+							m_SRT.push_back(srt);
+						}
+					}break;
+					case 1 :
+					{
+						ObjPinckB = false;
+						S_BOX Box;
+
+						for (auto data : m_SRT)
+						{
+							for (int i = 0; i < data.m_MatrixList.size(); i++)
+							{
+								Box = data.m_pObj->m_Box;
+
+								Matrix a = data.m_MatrixList[i];
+
+								Box.vMax = Vector3::Transform(data.m_pObj->m_Box.vMax, a);
+								Box.vMin = Vector3::Transform(data.m_pObj->m_Box.vMin, a);
+								Box.vCenter = Vector3::Transform(data.m_pObj->m_Box.vCenter, a);
+
+								Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
+								Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
+								Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
+
+								if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+								{
+									data.m_MatrixList.erase(data.m_MatrixList.begin() + i);
+									data.m_Quaternion.erase(data.m_Quaternion.begin() + i);
+									break;
+								}
+							}
+						}
+
 					}break;
 					case 2:
 					{
-						Matrix mat;
-						mat._41 = Pick.x;
-						mat._42 = Pick.y;
-						mat._43 = Pick.z;
-						S_BOX Box;
-						for (int i = 0; i < m_MatrixList.size(); i++)
+						for (auto data : m_SRT)
 						{
-							Box = m_pObj.m_Box;
-
-							Matrix a = m_MatrixList[i];
-
-							Box.vMax = Vector3::Transform(m_pObj.m_Box.vMax, a);
-							Box.vMin = Vector3::Transform(m_pObj.m_Box.vMin, a);
-							Box.vCenter = Vector3::Transform(m_pObj.m_Box.vCenter, a);
-
-							Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
-							Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
-							Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
-
-							if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+							S_BOX Box;
+							for (int i = 0; i < data.m_MatrixList.size(); i++)
 							{
-								ObjPinck = &m_MatrixList[i];
-								m_MatrixList[i] = mat;
-								break;
+								Box = data.m_pObj->m_Box;
+
+								Matrix a = data.m_MatrixList[i];
+
+								Box.vMax = Vector3::Transform(data.m_pObj->m_Box.vMax, a);
+								Box.vMin = Vector3::Transform(data.m_pObj->m_Box.vMin, a);
+								Box.vCenter = Vector3::Transform(data.m_pObj->m_Box.vCenter, a);
+
+								Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
+								Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
+								Box.fExtent[2] = Box.vMax.z - Box.vCenter.z;
+
+								if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
+								{
+									ObjPinckB = true;
+									ObjPinck = &data.m_MatrixList[i];
+									objQuate = &data.m_Quaternion[i];
+									data.m_MatrixList[i]._41 = Pick.x;
+									data.m_MatrixList[i]._42 = Pick.y;
+									data.m_MatrixList[i]._43 = Pick.z;
+									break;
+								}
 							}
 						}
 					}break;
@@ -223,6 +271,7 @@ bool Sample::Render()
 				}
 				else
 				{
+					ObjPinckB = false;
 					for (int i = 0; i < m_Map->m_VertexList.size(); i++)
 				{
 					float fDist = (m_Map->m_VertexList[i].p - Pick).Length();
@@ -304,8 +353,12 @@ bool Sample::Render()
 }
 bool Sample::Release()
 {
+	for (auto data : m_SRT)
+	{
+		data.m_pObj->Release();
+	}
 	if(m_Map != nullptr)m_Map->Release();
-	m_pObj.Release();
+	//m_pObj.Release();
 	m_QuadTree.Release();
 	return true;
 }
@@ -432,6 +485,23 @@ bool Sample::SetLayer()
 	m_MultiTextureSRV[3].Attach(g_TextMgr.SRVLoad(g_pd3dDevice, m_MapData.m_LayerList[3].c_str()));
 	return true;
 }
+
+bool Sample::setSRT(Vector3 scale, Quaternion rotation)
+{
+	m_Scale = scale;
+	m_baseQuaterniion = rotation;
+	if (ObjPinckB)
+	{
+		ObjPinck->_11 = scale.x;
+		ObjPinck->_22 = scale.y;
+		ObjPinck->_33 = scale.z;
+		objQuate->x = rotation.x;
+		objQuate->y = rotation.y;
+		objQuate->z = rotation.z;
+	}
+	return true;
+}
+
 Sample::Sample()
 {
 	m_MapData.m_LayerList.push_back(L"../../data/map/Terrain1_Mask.dds");

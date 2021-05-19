@@ -187,6 +187,81 @@ bool	SModel::Render(ID3D11DeviceContext* pd3dContext)
 	}
 	return true;
 }
+bool	SModel::Build(string name, SCamera* Camera)
+{
+	m_pMainCamera = Camera;
+	if (Load(name))
+	{
+		for (auto data : m_sNodeList)
+		{
+			SModelObj* pObject = data;
+			for (int iSub = 0; iSub < pObject->subMesh.size(); iSub++)
+			{
+				SSubMesh* pSub = &pObject->subMesh[iSub];
+				if (pSub->m_iNumFace <= 0) continue;
+
+				ID3D11Buffer* vb =
+					TBASIS_CORE_LIB::CreateVertexBuffer(TBASIS_CORE_LIB::g_pd3dDevice,
+						&pSub->m_VertexList.at(0),
+						pSub->m_VertexList.size(),
+						sizeof(PNCT_VERTEX));
+				pSub->m_pVertexBuffer.Attach(vb);
+
+				ID3D11Buffer* vbiw =
+					TBASIS_CORE_LIB::CreateVertexBuffer(TBASIS_CORE_LIB::g_pd3dDevice,
+						&pSub->m_VertexListIW.at(0),
+						pSub->m_VertexListIW.size(),
+						sizeof(IW_VERTEX));
+				pSub->m_pVertexBufferIW.Attach(vbiw);
+
+				ID3D11Buffer* ib =
+					TBASIS_CORE_LIB::CreateIndexBuffer(TBASIS_CORE_LIB::g_pd3dDevice,
+						&pSub->m_IndexArray.at(0),
+						pSub->m_IndexArray.size(),
+						sizeof(DWORD));
+				pSub->m_pIndexBuffer.Attach(ib);
+
+				wstring loadTex = L"../../data/3DS/";
+				loadTex += pObject->fbxMaterialList[iSub].c_str();
+				pSub->m_pTexture = g_TextMgr.Load(TBASIS_CORE_LIB::g_pd3dDevice, loadTex.c_str());
+			}
+		}
+		if (!Create(TBASIS_CORE_LIB::g_pd3dDevice,
+			L"../../data/shader/objecVS.txt",
+			L"../../data/shader/objecPS.txt",
+			L""))
+		{
+			return false;
+		}
+		m_Box.vMax = Max;
+		m_Box.vMin = Min;
+		m_Box.vMax.y = Boxy.x;
+		m_Box.vMin.y = Boxy.y;
+		m_Box.vAxis[0] = { 1.0f, 0.0f ,0.0f };
+		m_Box.vAxis[1] = { 0.0f, 1.0f ,0.0f };
+		m_Box.vAxis[2] = { 0.0f, 0.0f ,1.0f };
+		m_Box.vCenter = (m_Box.vMax + m_Box.vMin) / 2.0f;
+		m_Box.fExtent[0] = m_Box.vMax.x - m_Box.vCenter.x;
+		m_Box.fExtent[1] = m_Box.vMax.y - m_Box.vCenter.y;
+		m_Box.fExtent[2] = m_Box.vMax.z - m_Box.vCenter.z;
+
+		m_Sphere.vCenter = m_Box.vCenter;
+		m_Sphere.fRadius = (m_Box.vMax - m_Box.vCenter).Length();
+	}
+
+
+	D3D11_BUFFER_DESC vbdesc =
+	{
+		MAX_BONE_MATRICES * sizeof(Matrix),
+		D3D11_USAGE_DYNAMIC,
+		D3D11_BIND_CONSTANT_BUFFER, //D3D11_BIND_SHADER_RESOURCE,
+		D3D11_CPU_ACCESS_WRITE,
+		0
+	};
+	TBASIS_CORE_LIB::g_pd3dDevice->CreateBuffer(&vbdesc, NULL, m_BoneBuffer.GetAddressOf());
+
+	return true;
+}
 bool	SModel::Release()
 {
 	for (auto data : m_sNodeList)

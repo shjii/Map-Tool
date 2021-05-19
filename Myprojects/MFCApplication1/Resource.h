@@ -33,6 +33,7 @@
 #define IDD_SMapToolForm                312
 #define IDD_DIALOG1                     313
 #define IDD_SMapEditor                  313
+#define IDD_ObjLog                      315
 #define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1002
 #define IDC_EDIT4                       1003
@@ -43,26 +44,36 @@
 #define IDC_RADIO3                      1008
 #define IDC_EDIT1                       1009
 #define IDC_RADIO4                      1010
+#define IDC_EDIT5                       1010
 #define IDC_RADIO5                      1011
+#define IDC_EDIT6                       1011
 #define IDC_RADIO6                      1012
+#define IDC_EDIT7                       1012
 #define IDC_RADIO7                      1013
+#define IDC_EDIT8                       1013
 #define IDC_BUTTON3                     1014
 #define IDC_BUTTON4                     1015
 #define IDC_BUTTON5                     1016
 #define IDC_BUTTON6                     1017
+#define IDC_EDIT9                       1017
+#define IDC_FBX_LIST                    1018
+#define IDC_SLIDER1                     1020
+#define IDC_SPIN2                       1022
 #define ID_TOOL                         32771
 #define ID_TOOL_MAPTOOL                 32772
 #define ID_TOOL_CHARACTERTOOL           32773
 #define ID_Menu                         32774
 #define ID_TOOL_MAPEDITOR               32775
+#define ID_TOOL_OBJECTTOOL              32776
+#define ID_TOOL_OBJECTEDITOR            32777
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        315
-#define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1018
+#define _APS_NEXT_RESOURCE_VALUE        317
+#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           313
 #endif
 #endif

@@ -13,6 +13,7 @@ public:
 	bool	Frame()	override;
 	bool	Render(ID3D11DeviceContext* pd3dContext)override;
 	bool	Release() override;
+	bool	Build(string name, SCamera* Camera);
 public:
 	SModel();
 	virtual ~SModel();

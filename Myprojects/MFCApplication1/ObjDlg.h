@@ -28,4 +28,11 @@ public:
 	afx_msg void OnBnObjAdd();
 	afx_msg void OnBnObjDel();
 	afx_msg void OnBnClickedButton3();
+	float SX;
+	float SY;
+	float SZ;
+	afx_msg void OnBnClickedOk();
+	float QX;
+	float QY;
+	float QZ;
 };

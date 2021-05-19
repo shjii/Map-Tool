@@ -19,6 +19,15 @@ struct MapEditorData
 	float Speed;
 	MapEditorBuffer mapEditorB;
 };
+
+struct SRT
+{
+	string			name;
+	SModel*			m_pObj;
+	vector<Matrix>	m_MatrixList;
+	vector<Quaternion>  m_Quaternion;
+};
+
 class Sample : public TCore
 {
 public:
@@ -27,8 +36,7 @@ public:
 public:
 	FileIO			FileIO;
 	ComPtr<ID3D11Buffer>			m_ConstantBuffer;
-	SModel			m_pObj;
-	vector<Matrix>	m_MatrixList;
+	vector<SRT>		m_SRT;
 	SMap*			m_Map;
 	SQuadTree		m_QuadTree;
 	bool			BoolColl;
@@ -42,6 +50,11 @@ public:
 	vector<ComPtr<ID3D11ShaderResourceView>> m_MultiTextureSRV;
 	MapFileData		m_MapData;
 	Matrix*			ObjPinck;
+	Quaternion*		objQuate;
+	Quaternion     m_baseQuaterniion = {0.0f, 0.0f, 0.0f, 1.0f};
+	bool			ObjPinckB;
+	Vector3			m_Scale = { 1.0f, 1.0f, 1.0f };
+	string			objname = "../../data/3DS/Turret_Deploy1.fbx";
 public:
 	bool Init() override;
 	bool Frame() override;
@@ -51,6 +64,7 @@ public:
 	bool GetIntersection(SNode* pNode);
 	bool SetEditor();
 	bool SetLayer();
+	bool setSRT(Vector3 scale ,Quaternion rotation);
 public:
 	Sample();
 	~Sample();
