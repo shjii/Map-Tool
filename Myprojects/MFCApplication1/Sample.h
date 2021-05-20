@@ -20,13 +20,7 @@ struct MapEditorData
 	MapEditorBuffer mapEditorB;
 };
 
-struct SRT
-{
-	string			name;
-	SModel*			m_pObj;
-	vector<Matrix>	m_MatrixList;
-	vector<Quaternion>  m_Quaternion;
-};
+
 
 class Sample : public TCore
 {
@@ -54,7 +48,7 @@ public:
 	Quaternion     m_baseQuaterniion = {0.0f, 0.0f, 0.0f, 1.0f};
 	bool			ObjPinckB;
 	Vector3			m_Scale = { 1.0f, 1.0f, 1.0f };
-	string			objname = "../../data/3DS/Turret_Deploy1.fbx";
+	wstring			objname = L"../../data/3DS/Turret_Deploy1.fbx";
 public:
 	bool Init() override;
 	bool Frame() override;

@@ -32,11 +32,16 @@ void ObjDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_FBX_LIST, m_FBXList);
 	DDX_Text(pDX, IDC_EDIT1, SX);
-	DDX_Text(pDX, IDC_EDIT5, SY);
-	DDX_Text(pDX, IDC_EDIT6, SZ);
-	DDX_Text(pDX, IDC_EDIT7, QX);
-	DDX_Text(pDX, IDC_EDIT8, QY);
-	DDX_Text(pDX, IDC_EDIT9, QZ);
+	//DDX_Text(pDX, IDC_EDIT5, SY);
+	//DDX_Text(pDX, IDC_EDIT6, SZ);
+	//DDX_Text(pDX, IDC_EDIT7, QX);
+	//DDX_Text(pDX, IDC_EDIT8, QY);
+	//DDX_Text(pDX, IDC_EDIT9, QZ);
+	DDX_Text(pDX, IDC_EDIT2, SY);
+	DDX_Text(pDX, IDC_EDIT3, SZ);
+	DDX_Text(pDX, IDC_EDIT4, QX);
+	DDX_Text(pDX, IDC_EDIT5, QY);
+	DDX_Text(pDX, IDC_EDIT6, QZ);
 }
 
 
@@ -54,7 +59,8 @@ END_MESSAGE_MAP()
 BOOL ObjDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	m_FBXList.AddString(L"alsdkfj");
+	SX = SY = SZ = 1.0f;
+	m_FBXList.AddString(L"Turret_Deploy1.fbx");
 	UpdateData(FALSE);
 	return TRUE;
 }
@@ -118,6 +124,12 @@ void ObjDlg::OnBnClickedOk()
 	Vector3 a = {SX, SY, SZ};
 	Quaternion b = {QX, QY, QZ, 1.0f};
 	theApp.m_Sample.setSRT(a, b);
+	int c = m_FBXList.GetCurSel();
+	CString st;
+	m_FBXList.GetText(c,st);
+	wstring qwe = L"../../data/3DS/";
+	qwe += st;
+	theApp.m_Sample.objname = qwe;
 	//UpdateData(FALSE);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	// CDialogEx::OnOK();

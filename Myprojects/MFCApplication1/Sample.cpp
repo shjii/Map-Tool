@@ -57,16 +57,18 @@ bool Sample::Frame()
 		ObjPinck = nullptr;
 	}
 
-	for (auto data : m_SRT)
+	for (int i = 0; i < m_SRT.size(); i++)
 	{
-		data.m_pObj->Frame();
+		m_SRT[i].m_pObj->Frame();
+		for (int j = 0; j < m_SRT[i].m_MatrixList.size(); j++)
+		{
+			m_SRT[i].m_MatrixList[j]._42 = m_Map->GetHeightMap(m_SRT[i].m_MatrixList[j]._41, m_SRT[i].m_MatrixList[j]._43);
+		}
 	}
 	return true;
 }
 bool Sample::Render()
 {
-
-
 	if (m_Map != nullptr) 
 	{
 		if (m_MinMap.Begin(g_pImmediateContext))
@@ -84,9 +86,25 @@ bool Sample::Render()
 		{
 			for (int i = 0; i < data.m_MatrixList.size(); i++)
 			{
-				Matrix mat;
-				mat = Matrix::Transform(data.m_MatrixList[i], data.m_Quaternion[i]);
-				data.m_pObj->SetMatrix(&mat, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+				Matrix matRot, matScale, matTranslation;
+				
+				matRot.Identity;
+				matScale.Identity;
+				matTranslation.Identity;
+
+				matTranslation._41 = data.m_MatrixList[i]._41;
+				matTranslation._42 = data.m_MatrixList[i]._42;
+				matTranslation._43 = data.m_MatrixList[i]._43;
+
+				matScale._11 = data.m_MatrixList[i]._11;
+				matScale._22 = data.m_MatrixList[i]._22;
+				matScale._33 = data.m_MatrixList[i]._33;
+				Quaternion ac;
+				ac = Quaternion::CreateFromYawPitchRoll(data.m_Quaternion[i].x, data.m_Quaternion[i].y, data.m_Quaternion[i].z);
+				matRot = Matrix::CreateFromQuaternion(ac);
+				Matrix matWorld = matScale * matRot * matTranslation;
+
+				data.m_pObj->SetMatrix(&matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 				data.m_pObj->Render(g_pImmediateContext);
 			}
 		}
@@ -181,14 +199,14 @@ bool Sample::Render()
 						mat._42 = Pick.y;
 						mat._43 = Pick.z;
 						bool end = true;
-						for (auto data : m_SRT)
+						for (int i = 0; i < m_SRT.size(); i++)
 						{
-							if (data.name == objname)
+							if (m_SRT[i].name == objname)
 							{
-								data.m_MatrixList.push_back(mat);
-								data.m_Quaternion.push_back(m_baseQuaterniion);
+								m_SRT[i].m_MatrixList.push_back(mat);
+								m_SRT[i].m_Quaternion.push_back(m_baseQuaterniion);
 								end = false;
-								break;
+								//break;
 							}
 						}
 						if (end)
@@ -198,7 +216,7 @@ bool Sample::Render()
 							srt.m_MatrixList.push_back(mat);
 							srt.m_Quaternion.push_back(m_baseQuaterniion);
 							srt.m_pObj = new SModel;
-							srt.m_pObj->Build(objname, m_pMainCamera);
+							srt.m_pObj->Build(to_wm(objname), m_pMainCamera);
 							m_SRT.push_back(srt);
 						}
 					}break;
@@ -206,18 +224,17 @@ bool Sample::Render()
 					{
 						ObjPinckB = false;
 						S_BOX Box;
-
-						for (auto data : m_SRT)
+						for (int i = 0; i < m_SRT.size(); i++)
 						{
-							for (int i = 0; i < data.m_MatrixList.size(); i++)
+							for (int j = 0; j < m_SRT[i].m_MatrixList.size(); j++)
 							{
-								Box = data.m_pObj->m_Box;
+								Box = m_SRT[i].m_pObj->m_Box;
 
-								Matrix a = data.m_MatrixList[i];
+								Matrix a = m_SRT[i].m_MatrixList[j];
 
-								Box.vMax = Vector3::Transform(data.m_pObj->m_Box.vMax, a);
-								Box.vMin = Vector3::Transform(data.m_pObj->m_Box.vMin, a);
-								Box.vCenter = Vector3::Transform(data.m_pObj->m_Box.vCenter, a);
+								Box.vMax = Vector3::Transform(m_SRT[i].m_pObj->m_Box.vMax, a);
+								Box.vMin = Vector3::Transform(m_SRT[i].m_pObj->m_Box.vMin, a);
+								Box.vCenter = Vector3::Transform(m_SRT[i].m_pObj->m_Box.vCenter, a);
 
 								Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
 								Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
@@ -225,28 +242,27 @@ bool Sample::Render()
 
 								if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
 								{
-									data.m_MatrixList.erase(data.m_MatrixList.begin() + i);
-									data.m_Quaternion.erase(data.m_Quaternion.begin() + i);
+									m_SRT[i].m_MatrixList.erase(m_SRT[i].m_MatrixList.begin() + j);
+									m_SRT[i].m_Quaternion.erase(m_SRT[i].m_Quaternion.begin() + j);
 									break;
 								}
 							}
 						}
-
 					}break;
 					case 2:
 					{
-						for (auto data : m_SRT)
+						for (int j = 0; j < m_SRT.size(); j++)
 						{
 							S_BOX Box;
-							for (int i = 0; i < data.m_MatrixList.size(); i++)
+							for (int i = 0; i < m_SRT[j].m_MatrixList.size(); i++)
 							{
-								Box = data.m_pObj->m_Box;
+								Box = m_SRT[j].m_pObj->m_Box;
 
-								Matrix a = data.m_MatrixList[i];
+								Matrix a = m_SRT[j].m_MatrixList[i];
 
-								Box.vMax = Vector3::Transform(data.m_pObj->m_Box.vMax, a);
-								Box.vMin = Vector3::Transform(data.m_pObj->m_Box.vMin, a);
-								Box.vCenter = Vector3::Transform(data.m_pObj->m_Box.vCenter, a);
+								Box.vMax = Vector3::Transform(m_SRT[j].m_pObj->m_Box.vMax, a);
+								Box.vMin = Vector3::Transform(m_SRT[j].m_pObj->m_Box.vMin, a);
+								Box.vCenter = Vector3::Transform(m_SRT[j].m_pObj->m_Box.vCenter, a);
 
 								Box.fExtent[0] = Box.vMax.x - Box.vCenter.x;
 								Box.fExtent[1] = Box.vMax.y - Box.vCenter.y;
@@ -255,11 +271,12 @@ bool Sample::Render()
 								if (m_Mouse.OBBtoRay(&Box, m_Mouse.Orig, m_Mouse.Dir))
 								{
 									ObjPinckB = true;
-									ObjPinck = &data.m_MatrixList[i];
-									objQuate = &data.m_Quaternion[i];
-									data.m_MatrixList[i]._41 = Pick.x;
-									data.m_MatrixList[i]._42 = Pick.y;
-									data.m_MatrixList[i]._43 = Pick.z;
+									ObjPinck = &m_SRT[j].m_MatrixList[i];
+									objQuate = &m_SRT[j].m_Quaternion[i];
+									m_SRT[j].m_MatrixList[i]._41 = Pick.x;
+									m_SRT[j].m_MatrixList[i]._42 = m_Map->GetHeightMap(Pick.x, Pick.y);
+									m_SRT[j].m_MatrixList[i]._43 = Pick.z;
+
 									break;
 								}
 							}
@@ -434,6 +451,7 @@ bool Sample::Build(int tel, int cel, int ces, wstring tex)
 		g_pImmediateContext->Unmap(m_ConstantBuffer.Get(), 0);
 	}
 	//
+	//m_SRT.clear();
 	return true;
 }
 
@@ -463,7 +481,7 @@ bool Sample::GetIntersection(SNode* pNode)
 }
 bool Sample::SetEditor()
 {
-	FileIO.Load(&m_MapData,g_pd3dDevice, g_pImmediateContext);
+	FileIO.Load(&m_MapData,g_pd3dDevice, g_pImmediateContext, &m_SRT, *m_pMainCamera);
 	if (m_Map != nullptr)m_Map->Release();
 	Build(m_MapData.fTile, m_MapData.fCell, m_MapData.fCellSize, m_MapData.fTexture);
 	m_BlendingTextrue.m_pSRV = m_MapData.ResourceView;
