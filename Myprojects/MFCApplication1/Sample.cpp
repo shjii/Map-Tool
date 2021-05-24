@@ -41,7 +41,7 @@ bool Sample::Frame()
 	if (m_Map != nullptr)
 	{
 		m_QuadTree.Frame();
-		//m_Map->Frame();
+		//m_Map->Frame(); 
 	}	
 	if (g_Input.GetKey(VK_MBUTTON) == KEY_PUSH || (g_Input.GetKey(VK_MBUTTON) == KEY_HOLD && ObjPinckB))
 	{

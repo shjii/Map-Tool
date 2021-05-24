@@ -2,6 +2,7 @@
 #include "TCore.h"
 #include "SMousePicking.h"
 #include "FileIO.h"
+#include "ComputeShader.h"
 enum MapEditorBuffer
 {
 	UP = 0,
@@ -28,6 +29,8 @@ public:
 	bool			objp = false;
 	int				objEd;
 public:
+	ComputeShader   m_CS;
+	BufType			m_SelectData;
 	FileIO			FileIO;
 	ComPtr<ID3D11Buffer>			m_ConstantBuffer;
 	vector<SRT>		m_SRT;

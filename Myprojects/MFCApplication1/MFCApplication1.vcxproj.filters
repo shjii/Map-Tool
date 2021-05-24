@@ -69,6 +69,9 @@
     <ClInclude Include="ObjDlg.h">
       <Filter>Dlg</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCApplication1.cpp">
@@ -107,6 +110,9 @@
     <ClCompile Include="ObjDlg.cpp">
       <Filter>Dlg</Filter>
     </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCApplication1.rc">
@@ -140,6 +146,9 @@
       <Filter>shder</Filter>
     </Text>
     <Text Include="PS.txt">
+      <Filter>shder</Filter>
+    </Text>
+    <Text Include="CS.txt">
       <Filter>shder</Filter>
     </Text>
   </ItemGroup>

@@ -54,6 +54,8 @@
 #define IDC_FBX_LIST                    1018
 #define IDC_SLIDER1                     1020
 #define IDC_SPIN2                       1022
+#define IDC_EDIT5                       1023
+#define IDC_EDIT6                       1024
 #define ID_TOOL                         32771
 #define ID_TOOL_MAPTOOL                 32772
 #define ID_TOOL_CHARACTERTOOL           32773
@@ -68,7 +70,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        317
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1023
+#define _APS_NEXT_CONTROL_VALUE         1025
 #define _APS_NEXT_SYMED_VALUE           313
 #endif
 #endif
