@@ -5,7 +5,7 @@ class TDevice : public TWindow
 {
 public:
 	ComPtr<IDXGIFactory>			m_pGIFactory;
-	ComPtr < ID3D11Device>			m_pd3dDevice;
+	ComPtr<ID3D11Device>			m_pd3dDevice;
 	ComPtr<ID3D11DeviceContext>		m_pImmediateContext;
 	ComPtr<IDXGISwapChain>			m_pSwapChain;
 	ComPtr<ID3D11RenderTargetView>	m_pRednerTargetView;

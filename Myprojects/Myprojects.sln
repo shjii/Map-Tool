@@ -201,6 +201,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleLOD2", "SampleLOD2\SampleLOD2.vcxproj", "{0029BF0C-5346-4028-AE7C-B0904C698609}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KBaseDLL", "KBaseDLL\KBaseDLL.vcxproj", "{3B32CB08-BEB9-4A33-A508-DB4046BECB27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1071,6 +1073,16 @@ Global
 		{0029BF0C-5346-4028-AE7C-B0904C698609}.Release|x64.Build.0 = Release|x64
 		{0029BF0C-5346-4028-AE7C-B0904C698609}.Release|x86.ActiveCfg = Release|Win32
 		{0029BF0C-5346-4028-AE7C-B0904C698609}.Release|x86.Build.0 = Release|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Debug|x64.ActiveCfg = Debug|x64
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Debug|x64.Build.0 = Debug|x64
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Debug|x86.ActiveCfg = Debug|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Debug|x86.Build.0 = Debug|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Release|Any CPU.ActiveCfg = Release|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Release|x64.ActiveCfg = Release|x64
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Release|x64.Build.0 = Release|x64
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Release|x86.ActiveCfg = Release|Win32
+		{3B32CB08-BEB9-4A33-A508-DB4046BECB27}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
