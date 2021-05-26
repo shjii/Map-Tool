@@ -19,11 +19,14 @@
     <Filter Include="DX">
       <UniqueIdentifier>{24467a6c-1307-41b6-83ae-982edd16d413}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{591eeb68-9f53-459e-a8dc-8c624bf30c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fomd">
+      <UniqueIdentifier>{613fc358-3ed9-4f6a-8a3c-c88ab6233699}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="KStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="dxtk\DDS.h">
       <Filter>dxtk</Filter>
     </ClInclude>
@@ -48,6 +51,69 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>dxtk</Filter>
     </ClInclude>
+    <ClInclude Include="KInPut.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KCore.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="KDevice.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="KWindow.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="KCoreStd.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="KDxState.h">
+      <Filter>DX</Filter>
+    </ClInclude>
+    <ClInclude Include="KTimer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KWrite.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KTexture.h">
+      <Filter>DX</Filter>
+    </ClInclude>
+    <ClInclude Include="KTextureManager.h">
+      <Filter>DX</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod.hpp">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_codec.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_common.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_dsp.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_dsp_effects.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_errors.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="fomd\fmod_output.h">
+      <Filter>fomd</Filter>
+    </ClInclude>
+    <ClInclude Include="KStd.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="KSound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KSoundManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dxtk\DDSTextureLoader.cpp">
@@ -59,10 +125,52 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>dxtk</Filter>
     </ClCompile>
+    <ClCompile Include="KInPut.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KCore.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="KDevice.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="KWindow.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="KDxState.cpp">
+      <Filter>DX</Filter>
+    </ClCompile>
+    <ClCompile Include="KTimer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KWrite.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KTextureManager.cpp">
+      <Filter>DX</Filter>
+    </ClCompile>
+    <ClCompile Include="KTexture.cpp">
+      <Filter>DX</Filter>
+    </ClCompile>
+    <ClCompile Include="KSound.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KSoundManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>dxtk</Filter>
+    </None>
+    <None Include="fomd\fmod.cs">
+      <Filter>fomd</Filter>
+    </None>
+    <None Include="fomd\fmod_dsp.cs">
+      <Filter>fomd</Filter>
+    </None>
+    <None Include="fomd\fmod_errors.cs">
+      <Filter>fomd</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -91,6 +91,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;KBASEDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,15 +158,49 @@
     <ClInclude Include="dxtk\pch.h" />
     <ClInclude Include="dxtk\PlatformHelpers.h" />
     <ClInclude Include="dxtk\WICTextureLoader.h" />
+    <ClInclude Include="fomd\fmod.h" />
+    <ClInclude Include="fomd\fmod.hpp" />
+    <ClInclude Include="fomd\fmod_codec.h" />
+    <ClInclude Include="fomd\fmod_common.h" />
+    <ClInclude Include="fomd\fmod_dsp.h" />
+    <ClInclude Include="fomd\fmod_dsp_effects.h" />
+    <ClInclude Include="fomd\fmod_errors.h" />
+    <ClInclude Include="fomd\fmod_output.h" />
+    <ClInclude Include="KCore.h" />
+    <ClInclude Include="KCoreStd.h" />
+    <ClInclude Include="KDevice.h" />
+    <ClInclude Include="KDxState.h" />
+    <ClInclude Include="KInPut.h" />
+    <ClInclude Include="KSound.h" />
+    <ClInclude Include="KSoundManager.h" />
     <ClInclude Include="KStd.h" />
+    <ClInclude Include="KTexture.h" />
+    <ClInclude Include="KTextureManager.h" />
+    <ClInclude Include="KTimer.h" />
+    <ClInclude Include="KWindow.h" />
+    <ClInclude Include="KWrite.h" />
     <ClInclude Include="SimpleMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dxtk\DDSTextureLoader.cpp" />
     <ClCompile Include="dxtk\WICTextureLoader.cpp" />
+    <ClCompile Include="KCore.cpp" />
+    <ClCompile Include="KDevice.cpp" />
+    <ClCompile Include="KDxState.cpp" />
+    <ClCompile Include="KInPut.cpp" />
+    <ClCompile Include="KSound.cpp" />
+    <ClCompile Include="KSoundManager.cpp" />
+    <ClCompile Include="KTexture.cpp" />
+    <ClCompile Include="KTextureManager.cpp" />
+    <ClCompile Include="KTimer.cpp" />
+    <ClCompile Include="KWindow.cpp" />
+    <ClCompile Include="KWrite.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fomd\fmod.cs" />
+    <None Include="fomd\fmod_dsp.cs" />
+    <None Include="fomd\fmod_errors.cs" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

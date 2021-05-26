@@ -31,7 +31,11 @@ using namespace SimpleMath;
 using namespace Microsoft::WRL;
 using namespace std;
 
-
+#ifdef KBASEDLL_EXPORTS
+#define MATHFUNCSDLL_API __declspec(dllexport)
+#else
+#define MATHFUNCSDLL_API __declspec(dllimport)
+#endif
 enum K_POSITION
 {
 	P_BACK = 0,    // 뒤
@@ -47,7 +51,7 @@ namespace KBASIS_CORE_LIB
 	typedef std::vector<T_STR>				T_STR_VECTOR;
 
 	template<class T>
-	class KSingleton
+	class  KSingleton
 	{
 	public:
 		static T& GetInstance()
@@ -56,95 +60,6 @@ namespace KBASIS_CORE_LIB
 			return theSingle;
 		}
 	};
-	static std::wstring to_mw(const std::string& _src)
-	{
-		USES_CONVERSION;
-		return std::wstring(A2W(_src.c_str()));
-	};
-
-	static std::string to_wm(const std::wstring& _src)
-	{
-		USES_CONVERSION;
-		return std::string(W2A(_src.c_str()));
-	};
-
-	static char* GetWtM(WCHAR* data)
-	{
-		char retData[4096] = { 0 };
-		// 변형되는 문자열의 크기가 반환된다.
-		int iLength = WideCharToMultiByte(CP_ACP, 0,
-			data, -1, 0, 0, NULL, NULL);
-		int iRet = WideCharToMultiByte(CP_ACP, 0,
-			data, -1,  //  소스
-			retData, iLength, // 대상
-			NULL, NULL);
-		return retData;
-	}
-	static bool GetWtM(WCHAR* src, char* pDest)
-	{
-		// 변형되는 문자열의 크기가 반환된다.
-		int iLength = WideCharToMultiByte(CP_ACP, 0,
-			src, -1, 0, 0, NULL, NULL);
-		int iRet = WideCharToMultiByte(CP_ACP, 0,
-			src, -1,  //  소스
-			pDest, iLength, // 대상
-			NULL, NULL);
-		if (iRet == 0) return false;
-		return true;
-	}
-
-	static void PRINT(char* fmt, ...) // 나열연산자
-	{
-		va_list arg;
-		va_start(arg, fmt);
-		char buf[256] = { 0, };
-		vsprintf_s(buf, fmt, arg);
-		printf("\n=====> %s", buf);
-		va_end(arg);
-	}
-	static void Error(const CHAR* msg = 0, const char* lpData = 0)
-	{
-		LPVOID* lpMsg = 0;
-		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-			FORMAT_MESSAGE_FROM_SYSTEM,
-			NULL, WSAGetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(CHAR*)&lpMsg, 0, NULL);
-
-		std::string szBuffer = (lpData != nullptr) ? lpData : "";
-		szBuffer += "\n";
-		szBuffer += (CHAR*)lpMsg;
-
-		MessageBoxA(NULL, szBuffer.c_str(), msg, MB_ICONERROR);
-		LocalFree(lpMsg);
-	}
-	static void Check(int iRet, int line)
-	{
-		if (iRet == SOCKET_ERROR)
-		{
-			CHAR	szBuffer[256] = { 0, };
-			sprintf_s(szBuffer,
-				"%s[%d]",
-				__FILE__,
-				line);
-			Error("ERROR", szBuffer);
-			exit(1);
-		}
-	}
-	inline void OutputDebug(const char* format, ...)
-	{
-#ifdef _DEBUG
-		va_list args;
-		va_start(args, format);
-
-		char buff[1024] = {};
-		vsprintf_s(buff, format, args);
-		OutputDebugStringA(buff);
-		va_end(args);
-#else
-		UNREFERENCED_PARAMETER(format);
-#endif
-	}
 	template <typename T>
 	inline void SafeRelease(T *&p)
 	{
@@ -154,29 +69,129 @@ namespace KBASIS_CORE_LIB
 			p = NULL;
 		}
 	}
-	struct KKeyMap
+
+#ifdef __cplusplus
+	extern "C" 
 	{
-		bool   m_bFront; // up, w
-		bool   m_bLeft;  // left, a
-		bool   m_bRight; // right. d
-		bool   m_bBack;  // down, s
-		bool   m_bAttack;// enter, lbutton
-		bool   m_bJump;  // space, rbutton
-		bool   m_bHangul;
-		bool   m_bCapsLock;
-		bool   m_bNumLock;
-	};
+#endif
+		static wstring to_mw(const std::string& _src)
+		{
+			USES_CONVERSION;
+			return std::wstring(A2W(_src.c_str()));
+		};
+
+		static std::string to_wm(const std::wstring& _src)
+		{
+			USES_CONVERSION;
+			return std::string(W2A(_src.c_str()));
+		};
+
+		static char* GetWtM(WCHAR* data)
+		{
+			char retData[4096] = { 0 };
+			// 변형되는 문자열의 크기가 반환된다.
+			int iLength = WideCharToMultiByte(CP_ACP, 0,
+				data, -1, 0, 0, NULL, NULL);
+			int iRet = WideCharToMultiByte(CP_ACP, 0,
+				data, -1,  //  소스
+				retData, iLength, // 대상
+				NULL, NULL);
+			return retData;
+		}
+		static bool GetWtM(WCHAR* src, char* pDest)
+		{
+			// 변형되는 문자열의 크기가 반환된다.
+			int iLength = WideCharToMultiByte(CP_ACP, 0,
+				src, -1, 0, 0, NULL, NULL);
+			int iRet = WideCharToMultiByte(CP_ACP, 0,
+				src, -1,  //  소스
+				pDest, iLength, // 대상
+				NULL, NULL);
+			if (iRet == 0) return false;
+			return true;
+		}
+
+		static void PRINT(char* fmt, ...) // 나열연산자
+		{
+			va_list arg;
+			va_start(arg, fmt);
+			char buf[256] = { 0, };
+			vsprintf_s(buf, fmt, arg);
+			printf("\n=====> %s", buf);
+			va_end(arg);
+		}
+		static void Error(const CHAR* msg = 0, const char* lpData = 0)
+		{
+			LPVOID* lpMsg = 0;
+			FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+				FORMAT_MESSAGE_FROM_SYSTEM,
+				NULL, WSAGetLastError(),
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				(CHAR*)&lpMsg, 0, NULL);
+
+			std::string szBuffer = (lpData != nullptr) ? lpData : "";
+			szBuffer += "\n";
+			szBuffer += (CHAR*)lpMsg;
+
+			MessageBoxA(NULL, szBuffer.c_str(), msg, MB_ICONERROR);
+			LocalFree(lpMsg);
+		}
+		static void Check(int iRet, int line)
+		{
+			if (iRet == SOCKET_ERROR)
+			{
+				CHAR	szBuffer[256] = { 0, };
+				sprintf_s(szBuffer,
+					"%s[%d]",
+					__FILE__,
+					line);
+				Error("ERROR", szBuffer);
+				exit(1);
+			}
+		}
+		inline void OutputDebug(const char* format, ...)
+		{
+#ifdef _DEBUG
+			va_list args;
+			va_start(args, format);
+
+			char buff[1024] = {};
+			vsprintf_s(buff, format, args);
+			OutputDebugStringA(buff);
+			va_end(args);
+#else
+			UNREFERENCED_PARAMETER(format);
+#endif
+		}
+
+		struct KKeyMap
+		{
+			bool   m_bFront; // up, w
+			bool   m_bLeft;  // left, a
+			bool   m_bRight; // right. d
+			bool   m_bBack;  // down, s
+			bool   m_bAttack;// enter, lbutton
+			bool   m_bJump;  // space, rbutton
+			bool   m_bHangul;
+			bool   m_bCapsLock;
+			bool   m_bNumLock;
+		};
 
 
-	extern ID3D11Device*  g_pd3dDevice;
-	extern ID3D11DeviceContext* g_pImmediateContext;
-	extern KKeyMap  g_KeyMap;
-	extern float	g_fGameTimer;
-	extern float    g_fSecondPerFrame;
-	extern HWND     g_hWnd;
-	extern HINSTANCE     g_hInstance;
-	extern RECT		g_rtClient;
-	extern bool		g_bActive;
+		extern ID3D11Device*  g_pd3dDevice;
+		extern ID3D11DeviceContext* g_pImmediateContext;
+		extern KKeyMap  g_KeyMap;
+		extern float	g_fGameTimer;
+		extern float    g_fSecondPerFrame;
+		extern HWND     g_hWnd;
+		extern HINSTANCE     g_hInstance;
+		extern RECT		g_rtClient;
+		extern bool		g_bActive;
+
+#ifdef __cplusplus
+	}
+#endif
+
 }
 
 /////////////////////////////////////////  반환하지 않는다. ////////////////////////////////////////////////////////
